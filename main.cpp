@@ -1,4 +1,4 @@
-#include "FrameAfterFrame.h"
+#include "Header.h"
 
 // Problems: 1 The time that should be written on the file is Incorrect .lines: 261 ,263 ,296 ,114 ,124,209 227.
 //           2 The header should be written on the file to writing every time when program get start . lines: 256 , 228.
@@ -19,7 +19,7 @@ const vector<Scalar> colors = {
 vector<string> load_class_list()
 {
 	vector<string> class_list;
-	ifstream ifs("classes.txt");
+	ifstream ifs("./assets/classes.txt");
 	string line;
 	while (getline(ifs, line))
 	{
@@ -30,7 +30,7 @@ vector<string> load_class_list()
 
 void load_net(cv::dnn::Net& net)
 {
-	auto result = dnn::readNet("yolov5s.onnx");
+	auto result = dnn::readNet("./assets/yolov5s.onnx");
 
 	cout << "Running on CPU\n";
 	result.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
@@ -206,7 +206,7 @@ void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R) {
 }
 
 void writeHeaderToFile() {
-	ofstream csvfile(R"(C:\Users\1\Desktop\project_files\my_file.csv)", ios::app);
+	ofstream csvfile("./assets/my_file.csv", ios::app);
 	csvfile << "Time, Top, Left, Width, Height,object type , AvgR, AvgG, AvgB" << std::endl;
 	csvfile.close();
 }
@@ -225,7 +225,7 @@ void writeRectOnCSV(const Mat& org, Rect rect, double timestamp, string objectTy
 	float R = 0, G = 0, B = 0;
 	calcAvgPerChanel(imgFromRect, &R, &G, &B);
 
-	string path = R"(C:\Users\1\Desktop\project_files\my_file.csv)";
+	string path = "./assets/my_file.csv";
 
 	ofstream csvfile(path, ios::app);
 	//          
@@ -241,7 +241,7 @@ int main() {
 
 	Mat frame;
 	//VideoCapture capture(R"(C:\Users\1\Pictures\Camera Roll\WIN_20230724_18_39_27_Pro.mp4)");
-	VideoCapture capture(R"(C:\Users\1\Desktop\project_files\police.mp4)");
+	VideoCapture capture("./assets/Camera_Parkng.mp4");
 	//VideoCapture capture(R"(C:\Users\1\Desktop\project_files\parking.mp4)");
 	//VideoCapture capture(0);
 
@@ -273,7 +273,7 @@ int main() {
 			cout << "End of stream\n";
 			break;
 		}
-		
+
 		if (calcAbsDiff(dataFromCamera.back(), frame))
 		{
 			dataFromCamera.push(frame.clone());
