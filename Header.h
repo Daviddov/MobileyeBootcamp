@@ -2,14 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <opencv2/opencv.hpp>
 #include <filesystem>
 #include <vector>
 #include <queue>
 #include <chrono>
 #include <thread>
+#include <opencv2/opencv.hpp>
 #include "sqlite_build/src/sqlite3.h"
-#include <format>
+
 
 using namespace cv;
 using namespace std;
@@ -23,9 +23,9 @@ struct Detection
 
 bool calcAbsDiff(const  Mat& image1, const Mat& image2);
 
-void detect_with_YOLO5(Mat currFrame, double timestamp);
+void detect_with_YOLO5(Mat currFrame, string timestamp, int frameNumber);
 
-void writeRectOnDB(const Mat& org, Rect rect, double timestamp, string objectType);
+void writeRectOnDB(const Mat& org, Rect rect, string timestamp, string objectType, int frameNumber);
 
 bool handleDBError(int failed, sqlite3* db, string what);
 
@@ -35,8 +35,12 @@ Mat format_yolov5(const Mat& src);
 
 void detect(cv::Mat& image, dnn::Net& net, vector<Detection>& output, const vector<string>& className);
 
-void toDrawRect(Mat& image, vector<Detection>& output, const vector<string>& className, double timestamp);
+void toDrawRect(Mat& image, vector<Detection>& output, const vector<string>& className, string timestamp, int frameNumber);
 
 vector<string> load_class_list();
 
 void load_net(cv::dnn::Net& net);
+
+static int callbackFunction(void* data, int argc, char** argv, char** azColName); 
+
+string currentTime();
