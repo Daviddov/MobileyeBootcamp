@@ -185,7 +185,7 @@ static int callbackFunction(void* data, int argc, char** argv, char** azColName)
 	return 0;
 }
 
-bool handleDBError (int failed , sqlite3* db, string what) {
+bool handleDBError(int failed, sqlite3* db, string what) {
 	if (failed != SQLITE_OK) {
 		cerr << "Failed to " << what << endl;
 		sqlite3_close(db);
@@ -205,14 +205,10 @@ void writeRectOnDB(const Mat& org, Rect rect, double timestamp1, string objectTy
 
 	string timestamp = "10:32";
 
-	
-
-	
 
 	int rc = sqlite3_open("rect_data.db", &db);
 
 	if (handleDBError(rc, db, "open db")) { return; }
-
 
 
 	const char* createTableQuery = "CREATE TABLE IF NOT EXISTS MyTable ("
@@ -230,7 +226,7 @@ void writeRectOnDB(const Mat& org, Rect rect, double timestamp1, string objectTy
 	rc = sqlite3_exec(db, createTableQuery, nullptr, nullptr, nullptr);
 
 	if (handleDBError(rc, db, "creat table")) { return; }
-	
+
 	char insertDataQuery[256];
 	sprintf_s(insertDataQuery, sizeof(insertDataQuery),
 		"INSERT INTO MyTable (timestamp,"
@@ -282,15 +278,12 @@ int main() {
 			break;
 		}
 
-		if (count_frames % 30 == 0 && calcAbsDiff(dataFromCamera.back(), frame))
+		count_frames++;
+		if (count_frames % 30 != 0 && calcAbsDiff(dataFromCamera.back(), frame))
 		{
-			dataFromCamera.push(frame.clone());
-		}
-		else
-		{
-			count_frames++;
 			continue;
 		}
+		dataFromCamera.push(frame.clone());
 
 		Mat currFrame = dataFromCamera.front();
 

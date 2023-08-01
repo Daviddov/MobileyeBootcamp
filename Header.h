@@ -14,7 +14,7 @@
 #include <queue>
 #include <chrono>
 #include <thread>
-#include "./assets/sqlite/sqlite3.h"
+#include "sqlite_build/src/sqlite3.h"
 #include <format>
 
 using namespace cv;
