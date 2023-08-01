@@ -1,8 +1,8 @@
 
-#hi hi hi
-
 # MobileyeBootcamp_ABUS
 
-##hello my first commit
-##i am second
-##shimon's commit...........
+
+## open the folder MobileyeBootcamp_ABUS 
+## click on the right button and open with visual studio and run
+### need to add to PATH the loction of openCV/Build
+
