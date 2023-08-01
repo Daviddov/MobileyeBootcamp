@@ -1,20 +1,20 @@
 #include "Header.h"
-
 // Problems: 1 The time that should be written on the file is Incorrect .lines: 261 ,263 ,296 ,114 ,124,209 227.
-//           2 The header should be written on the file to writing every time when program get start . lines: 256 , 228.
 
-const float INPUT_WIDTH = 640.0;
-const float INPUT_HEIGHT = 640.0;
-const float SCORE_THRESHOLD = 0.2;
-const float NMS_THRESHOLD = 0.4;
-const float CONFIDENCE_THRESHOLD = 0.4;
+void detect_with_YOLO5(Mat currFrame, double timestamp) {
 
-const vector<Scalar> colors = {
-	Scalar(255, 255, 0),
-	Scalar(0, 255, 0),
-	Scalar(0, 255, 255),
-	Scalar(255, 0, 0)
-};
+	dnn::Net net;
+
+	load_net(net);
+
+	vector<string> class_list = load_class_list();
+
+	vector<Detection> output;
+
+	detect(currFrame, net, output, class_list);
+
+	toDrawRect(currFrame, output, class_list, timestamp);
+}
 
 vector<string> load_class_list()
 {
@@ -48,6 +48,12 @@ Mat format_yolov5(const Mat& src) {
 }
 
 void detect(Mat& image, dnn::Net& net, vector<Detection>& output, const vector<string>& className) {
+
+	const float INPUT_WIDTH = 640.0;
+	const float INPUT_HEIGHT = 640.0;
+	const float SCORE_THRESHOLD = 0.2;
+	const float NMS_THRESHOLD = 0.4;
+	const float CONFIDENCE_THRESHOLD = 0.4;
 
 	Mat blob;
 
@@ -94,6 +100,7 @@ void detect(Mat& image, dnn::Net& net, vector<Detection>& output, const vector<s
 				float y = data[1];
 				float w = data[2];
 				float h = data[3];
+
 				int left = int((x - 0.5 * w) * x_factor);
 				int top = int((y - 0.5 * h) * y_factor);
 				int width = int(w * x_factor);
@@ -117,71 +124,36 @@ void detect(Mat& image, dnn::Net& net, vector<Detection>& output, const vector<s
 }
 
 void toDrawRect(Mat& image, vector<Detection>& output, const vector<string>& className, double timestamp) {
+
+	const vector<Scalar> colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
+
 	for (int i = 0; i < output.size(); ++i)
 	{
 		auto box = output[i].box;
 		auto classId = output[i].class_id;
 		const auto color = colors[classId % colors.size()];
 		rectangle(image, box, color, 3);
-		rectangle(image, Point(box.x, box.y - 20), Point(box.x + box.width, box.y), color, FILLED);
-		putText(image, className[classId].c_str(), Point(box.x, box.y - 5), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
+		rectangle(image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
+		putText(image, className[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
 
-		writeRectOnCSV(image, box, timestamp, className[classId]);
+		//Modify x and y for don't overflow from original frame.
+		box.x > 20 ? box.x -= 20 : box.x = box.x;
+		box.y > 20 ? box.y -= 20 : box.y = box.y;
+		writeRectOnDB(image, box, timestamp, className[classId]);
 	}
-
-	cout << "output.size: " << output.size() << endl;
 }
 
 bool calcAbsDiff(const Mat& image1, const Mat& image2) {
 
-	for (size_t i = 0; i < 8; i++)
-	{
-		cout << "?????????????????????????????????????????????????????????????????????????????????\n";
-	}
-	cout << "\n";
 	Mat diff;
 	absdiff(image1, image2, diff);
-	//convert diff to gray for countNonZero func can to read it 
+
+	//convert diff to gray because countNonZero func can't to resive COLOR_IMG 
 	cvtColor(diff, diff, COLOR_BGR2GRAY);
-	return 0.8 < ((double)(countNonZero(diff)) / (double)(image1.cols * image1.rows));
+
+	return 0.9 < ((double)(countNonZero(diff)) / (double)(image1.cols * image1.rows));
 
 }
-
-//void cameraPart(queue<Mat>& queue) {
-//
-//	Mat frame;
-//
-//	//queue<Mat> queue;
-//
-//	//VideoCapture capture(R"(C:\Users\1\Pictures\Camera Roll\WIN_20230724_18_39_27_Pro.mp4)");
-//	//VideoCapture capture(R"(C:\Users\1\Desktop\movie\parking.mp4)");
-//	VideoCapture capture(R"(C:\Users\1\Desktop\movie\police.mp4)");
-//
-//	if (!capture.isOpened())
-//	{
-//		cerr << "Error opening video file\n";
-//		return;
-//	}
-//
-//	char key = 0;
-//
-//	while (key != 27) {
-//		capture.read(frame);
-//		if (frame.empty())
-//		{
-//			cout << "End of stream\n";
-//			break;
-//		}
-//
-//		if (queue.empty() || (calcAbsDiff(queue.back(), frame)) > 3.0);
-//		{
-//			queue.push(frame.clone());
-//		}
-//		this_thread::sleep_for(chrono::milliseconds(1));
-//
-//		key = waitKey(1);
-//	}
-//}
 
 void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R) {
 
@@ -205,68 +177,108 @@ void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R) {
 	*R = sumR / size;
 }
 
-void writeHeaderToFile() {
-	ofstream csvfile("./assets/my_file.csv", ios::app);
-	csvfile << "Time, Top, Left, Width, Height,object type , AvgR, AvgG, AvgB" << std::endl;
-	csvfile.close();
+static int callbackFunction(void* data, int argc, char** argv, char** azColName) {
+	for (int i = 0; i < argc; ++i) {
+		cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
+	}
+	cout << endl;
+	return 0;
 }
 
-void writeRectOnCSV(const Mat& org, Rect rect, double timestamp, string objectType) {
-	cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+bool handleDBError (int failed , sqlite3* db, string what) {
+	if (failed != SQLITE_OK) {
+		cerr << "Failed to " << what << endl;
+		sqlite3_close(db);
+		return true;
+	}
+	return false;
+}
 
-	cout << "rect.y" << rect.y << "rect.x " << rect.x << "rect.width" << rect.width << "rect.height" << rect.height << endl;
-	cout << "org.cols" << org.cols << "org.rows" << org.rows << objectType << endl;
-
-	rect.x > 20 ? rect.x -= 20 : rect.x = rect.x;
-	rect.y > 20 ? rect.y -= 20 : rect.y = rect.y;
+void writeRectOnDB(const Mat& org, Rect rect, double timestamp1, string objectType) {
 
 	Mat imgFromRect = org(rect);
 
 	float R = 0, G = 0, B = 0;
 	calcAvgPerChanel(imgFromRect, &R, &G, &B);
 
-	string path = "./assets/my_file.csv";
+	sqlite3* db;
 
-	ofstream csvfile(path, ios::app);
-	//          
-	csvfile << timestamp << "," << rect.y << "," << rect.x << "," << rect.width << "," << rect.height << "," << objectType << "," << R << "," << G << "," << B << endl;
+	string timestamp = "10:32";
 
-	csvfile.close();
+	
+
+	
+
+	int rc = sqlite3_open("rect_data.db", &db);
+
+	if (handleDBError(rc, db, "open db")) { return; }
+
+
+
+	const char* createTableQuery = "CREATE TABLE IF NOT EXISTS MyTable ("
+		"ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+		"timestamp TEXT NOT NULL,"
+		"\"Top left X\" INTEGER NOT NULL,"
+		"\"Top left Y\" INTEGER NOT NULL,"
+		"width INTEGER NOT NULL,"
+		"height INTEGER NOT NULL,"
+		"\"object type\" TEXT NOT NULL,"
+		"\"R avg\" REAL NOT NULL,"
+		"\"G avg\" REAL NOT NULL,"
+		"\"B avg\" REAL NOT NULL);";
+
+	rc = sqlite3_exec(db, createTableQuery, nullptr, nullptr, nullptr);
+
+	if (handleDBError(rc, db, "creat table")) { return; }
+	
+	char insertDataQuery[256];
+	sprintf_s(insertDataQuery, sizeof(insertDataQuery),
+		"INSERT INTO MyTable (timestamp,"
+		" \"Top left X\",\"Top left Y\","
+		"width, height, \"object type\", "
+		"\"R avg\", \"G avg\", \"B avg\") "
+		"VALUES ('%s', %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
+		timestamp.c_str(), rect.x, rect.y, rect.width, rect.height, objectType.c_str(), R, G, B);
+
+	rc = sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr);
+
+	if (handleDBError(rc, db, "insert")) { return; }
+
+	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
+
+	//!!!this line to print all the DB evrey time that function called!!!.
+	rc = sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
+
+	if (handleDBError(rc, db, "select query")) { return; }
+
+	sqlite3_close(db);
 }
 
 int main() {
 
 	queue<Mat> dataFromCamera;
 
-
 	Mat frame;
 	//VideoCapture capture(R"(C:\Users\1\Pictures\Camera Roll\WIN_20230724_18_39_27_Pro.mp4)");
-	VideoCapture capture("./assets/Camera_Parkng.mp4");
-	//VideoCapture capture(R"(C:\Users\1\Desktop\project_files\parking.mp4)");
+	//VideoCapture capture(R"(C:\Users\1\Desktop\project_files\police.mp4)");
+	VideoCapture capture(R"(./assets/parking.mp4)");
+	//VideoCapture capture(R"(C:\Users\1\Desktop\project_files\sample.mp4)");
 	//VideoCapture capture(0);
-
 	if (!capture.isOpened())
 	{
 		cerr << "Error opening video file\n";
 		return 1;
 	}
+
 	capture.read(frame);
 	dataFromCamera.push(frame.clone());
 
-	auto start = chrono::high_resolution_clock::now();
-	int total_frames = 0;
-
-	writeHeaderToFile();
-
-	int countDenied = 0;
+	int count_frames = 0;
 
 	while (true)
 	{
 		capture.read(frame);
-
-		auto currentTime = chrono::system_clock::now();
-
-		auto timestamp = chrono::duration_cast<chrono::milliseconds>(currentTime.time_since_epoch()).count();
+		auto timestamp = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
 		if (frame.empty())
 		{
@@ -274,35 +286,22 @@ int main() {
 			break;
 		}
 
-		if (calcAbsDiff(dataFromCamera.back(), frame))
+		if (count_frames % 30 == 0 && calcAbsDiff(dataFromCamera.back(), frame))
 		{
+			count_frames = 0;
 			dataFromCamera.push(frame.clone());
-			cout << "Denied: " << countDenied << endl;
-			countDenied = 0;
 		}
 		else
 		{
-			countDenied++;
+			count_frames++;
 			continue;
 		}
-
-		total_frames++;
 
 		Mat currFrame = dataFromCamera.front();
 
 		dataFromCamera.pop();
 
-		dnn::Net net;
-
-		load_net(net);
-
-		vector<string> class_list = load_class_list();
-
-		vector<Detection> output;
-
-		detect(currFrame, net, output, class_list);
-
-		toDrawRect(currFrame, output, class_list, timestamp);
+		detect_with_YOLO5(currFrame, timestamp);
 
 		imshow("output", currFrame);
 
@@ -312,7 +311,6 @@ int main() {
 			cout << "finished by user\n";
 			break;
 		}
-		cout << "Total frames: " << total_frames << "\n";
 	}
 	return 0;
 }

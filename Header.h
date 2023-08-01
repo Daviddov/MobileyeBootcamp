@@ -14,6 +14,8 @@
 #include <queue>
 #include <chrono>
 #include <thread>
+#include "./assets/sqlite/sqlite3.h"
+#include <format>
 
 using namespace cv;
 using namespace std;
@@ -27,9 +29,11 @@ struct Detection
 
 bool calcAbsDiff(const  Mat& image1, const Mat& image2);
 
-void writeHeaderToFile();
+void detect_with_YOLO5(Mat currFrame, double timestamp);
 
-void writeRectOnCSV(const Mat& org, Rect rect, double timestamp, string objectType);
+void writeRectOnDB(const Mat& org, Rect rect, double timestamp, string objectType);
+
+bool handleDBError(int failed, sqlite3* db, string what);
 
 void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R);
 
