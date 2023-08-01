@@ -278,12 +278,14 @@ int main() {
 			break;
 		}
 
-		count_frames++;
-		if (count_frames % 30 != 0 && calcAbsDiff(dataFromCamera.back(), frame))
+		if (count_frames % 30 == 0 && calcAbsDiff(dataFromCamera.back(), frame))
 		{
-			continue;
-		}
 		dataFromCamera.push(frame.clone());
+		}
+		else {
+			continue;
+
+		}
 
 		Mat currFrame = dataFromCamera.front();
 
