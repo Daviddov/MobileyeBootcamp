@@ -29,11 +29,12 @@ target_link_libraries(main PRIVATE Threads::Threads)
 
 
 # Define the directory for copying assets
-set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
+# set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 # Custom command to copy the entire "assets" folder during the build process
 add_custom_command(TARGET main POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:main>/assets
+    #COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:main>/assets
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR} $<TARGET_FILE_DIR:main>
 )
 
 # Set the working directory to the build directory so that the assets are accessible during runtime
