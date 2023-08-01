@@ -259,14 +259,10 @@ int main() {
 	queue<Mat> dataFromCamera;
 
 	Mat frame;
-	//VideoCapture capture(R"(C:\Users\1\Pictures\Camera Roll\WIN_20230724_18_39_27_Pro.mp4)");
-	//VideoCapture capture(R"(C:\Users\1\Desktop\project_files\police.mp4)");
 	VideoCapture capture(R"(./assets/parking.mp4)");
-	//VideoCapture capture(R"(C:\Users\1\Desktop\project_files\sample.mp4)");
-	//VideoCapture capture(0);
 	if (!capture.isOpened())
 	{
-		cerr << "Error opening video file\n";
+		cerr << "\nError opening video file\n";
 		return 1;
 	}
 
@@ -288,7 +284,6 @@ int main() {
 
 		if (count_frames % 30 == 0 && calcAbsDiff(dataFromCamera.back(), frame))
 		{
-			count_frames = 0;
 			dataFromCamera.push(frame.clone());
 		}
 		else
