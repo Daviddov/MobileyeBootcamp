@@ -1,7 +1,7 @@
 #include "Header.h"
-// Problems: 1 The time that should be written on the file is Incorrect .lines: 261 ,263 ,296 ,114 ,124,209 227.
 
-void detect_with_YOLO5(Mat currFrame, double timestamp) {
+
+void detect_with_YOLO5(Mat currFrame, string timestamp, int frameNumber) {
 
 	dnn::Net net;
 
@@ -13,7 +13,7 @@ void detect_with_YOLO5(Mat currFrame, double timestamp) {
 
 	detect(currFrame, net, output, class_list);
 
-	toDrawRect(currFrame, output, class_list, timestamp);
+	toDrawRect(currFrame, output, class_list, timestamp, frameNumber);
 }
 
 vector<string> load_class_list()
@@ -123,7 +123,7 @@ void detect(Mat& image, dnn::Net& net, vector<Detection>& output, const vector<s
 	}
 }
 
-void toDrawRect(Mat& image, vector<Detection>& output, const vector<string>& className, double timestamp) {
+void toDrawRect(Mat& image, vector<Detection>& output, const vector<string>& className, string timestamp, int frameNumber) {
 
 	const vector<Scalar> colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 
@@ -139,8 +139,98 @@ void toDrawRect(Mat& image, vector<Detection>& output, const vector<string>& cla
 		//Modify x and y for don't overflow from original frame.
 		box.x > 20 ? box.x -= 20 : box.x = box.x;
 		box.y > 20 ? box.y -= 20 : box.y = box.y;
-		writeRectOnDB(image, box, timestamp, className[classId]);
+		writeRectOnDB(image, box, timestamp, className[classId], frameNumber);
 	}
+}
+
+void writeRectOnDB(const Mat& org, Rect rect, string timestamp, string objectType, int frameNumber) {
+
+	Mat imgFromRect = org(rect);
+
+	float R = 0, G = 0, B = 0;
+	calcAvgPerChanel(imgFromRect, &R, &G, &B);
+
+	sqlite3* db;
+
+	int rc = sqlite3_open("rect_data.db", &db);
+
+	if (handleDBError(rc, db, "open db")) { return; }
+
+	const char* createTableQuery = "CREATE TABLE IF NOT EXISTS MyTable ("
+		"ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+		"timestamp TEXT NOT NULL,"
+		"\"frame number\" INT NOT NULL,"
+		"\"Top left X\" INTEGER NOT NULL,"
+		"\"Top left Y\" INTEGER NOT NULL,"
+		"width INTEGER NOT NULL,"
+		"height INTEGER NOT NULL,"
+		"\"object type\" TEXT NOT NULL,"
+		"\"R avg\" REAL NOT NULL,"
+		"\"G avg\" REAL NOT NULL,"
+		"\"B avg\" REAL NOT NULL);";
+
+	rc = sqlite3_exec(db, createTableQuery, nullptr, nullptr, nullptr);
+
+	if (handleDBError(rc, db, "creat table")) { return; }
+
+	char insertDataQuery[256];
+	sprintf_s(insertDataQuery, sizeof(insertDataQuery),
+		"INSERT INTO MyTable (timestamp,\"frame number\","
+		" \"Top left X\",\"Top left Y\","
+		"width, height, \"object type\", "
+		"\"R avg\", \"G avg\", \"B avg\") "
+		"VALUES ('%s', %d, %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
+		timestamp.c_str(), frameNumber, rect.x, rect.y, rect.width, rect.height, objectType.c_str(), R, G, B);
+
+	rc = sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr);
+
+	if (handleDBError(rc, db, "insert")) { return; }
+
+	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
+	rc = sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
+
+	if (handleDBError(rc, db, "select query")) { return; }
+
+	sqlite3_close(db);
+}
+
+void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R) {
+
+	float sumB = 0, sumG = 0, sumR = 0;
+	for (int row = 0; row < img.rows; row++) {
+		for (int col = 0; col < img.cols; col++) {
+			const uchar* row_data = img.ptr(row);
+			sumB += row_data[(col * 3) + 0];
+			sumG += row_data[(col * 3) + 1];
+			sumR += row_data[(col * 3) + 2];
+		}
+	}
+	int size = img.rows * img.cols;
+	*B = sumB / size;
+	*G = sumG / size;
+	*R = sumR / size;
+}
+
+string currentTime() {
+
+	auto timestamp = chrono::duration_cast<chrono::milliseconds>(
+		chrono::system_clock::now().time_since_epoch()
+	).count();
+
+	int milliseconds = timestamp % 1000;
+
+	time_t time_t_timestamp = timestamp / 1000;
+
+	tm timeinfo;
+	localtime_s(&timeinfo, &time_t_timestamp);
+
+	char buffer[28];
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
+
+	sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", milliseconds);
+
+	string formatted_time = buffer;
+	return formatted_time;
 }
 
 bool calcAbsDiff(const Mat& image1, const Mat& image2) {
@@ -155,27 +245,6 @@ bool calcAbsDiff(const Mat& image1, const Mat& image2) {
 
 }
 
-void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R) {
-
-	float sumB = 0, sumG = 0, sumR = 0;
-	//
-	for (int row = 0; row < img.rows; row++) {
-
-		for (int col = 0; col < img.cols; col++) {
-
-			const uchar* row_data = img.ptr(row);
-
-			sumB += row_data[(col * 3) + 0];
-			sumG += row_data[(col * 3) + 1];
-			sumR += row_data[(col * 3) + 2];
-		}
-	}
-	int size = img.rows * img.cols;
-
-	*B = sumB / size;
-	*G = sumG / size;
-	*R = sumR / size;
-}
 
 static int callbackFunction(void* data, int argc, char** argv, char** azColName) {
 	for (int i = 0; i < argc; ++i) {
@@ -194,61 +263,6 @@ bool handleDBError(int failed, sqlite3* db, string what) {
 	return false;
 }
 
-void writeRectOnDB(const Mat& org, Rect rect, double timestamp1, string objectType) {
-
-	Mat imgFromRect = org(rect);
-
-	float R = 0, G = 0, B = 0;
-	calcAvgPerChanel(imgFromRect, &R, &G, &B);
-
-	sqlite3* db;
-
-	string timestamp = "10:32";
-
-
-	int rc = sqlite3_open("rect_data.db", &db);
-
-	if (handleDBError(rc, db, "open db")) { return; }
-
-
-	const char* createTableQuery = "CREATE TABLE IF NOT EXISTS MyTable ("
-		"ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-		"timestamp TEXT NOT NULL,"
-		"\"Top left X\" INTEGER NOT NULL,"
-		"\"Top left Y\" INTEGER NOT NULL,"
-		"width INTEGER NOT NULL,"
-		"height INTEGER NOT NULL,"
-		"\"object type\" TEXT NOT NULL,"
-		"\"R avg\" REAL NOT NULL,"
-		"\"G avg\" REAL NOT NULL,"
-		"\"B avg\" REAL NOT NULL);";
-
-	rc = sqlite3_exec(db, createTableQuery, nullptr, nullptr, nullptr);
-
-	if (handleDBError(rc, db, "creat table")) { return; }
-
-	char insertDataQuery[256];
-	sprintf_s(insertDataQuery, sizeof(insertDataQuery),
-		"INSERT INTO MyTable (timestamp,"
-		" \"Top left X\",\"Top left Y\","
-		"width, height, \"object type\", "
-		"\"R avg\", \"G avg\", \"B avg\") "
-		"VALUES ('%s', %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
-		timestamp.c_str(), rect.x, rect.y, rect.width, rect.height, objectType.c_str(), R, G, B);
-
-	rc = sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr);
-
-	if (handleDBError(rc, db, "insert")) { return; }
-
-	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
-
-	//!!!this line to print all the DB evrey time that function called!!!.
-	rc = sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
-
-	if (handleDBError(rc, db, "select query")) { return; }
-
-	sqlite3_close(db);
-}
 
 int main() {
 
@@ -265,12 +279,15 @@ int main() {
 	capture.read(frame);
 	dataFromCamera.push(frame.clone());
 
-	int count_frames = 0;
+	int frameNumber = 0;
 
 	while (true)
 	{
 		capture.read(frame);
-		auto timestamp = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
+
+		string timestamp = currentTime();
+
+		frameNumber++;
 
 		if (frame.empty())
 		{
@@ -278,20 +295,22 @@ int main() {
 			break;
 		}
 
-		if (count_frames % 30 == 0 && calcAbsDiff(dataFromCamera.back(), frame))
+		if (frameNumber % 30 == 0 && calcAbsDiff(dataFromCamera.back(), frame))
 		{
-		dataFromCamera.push(frame.clone());
+			dataFromCamera.push(frame.clone());
 		}
 		else {
-			continue;
 
+			continue;
 		}
+
+
 
 		Mat currFrame = dataFromCamera.front();
 
 		dataFromCamera.pop();
 
-		detect_with_YOLO5(currFrame, timestamp);
+		detect_with_YOLO5(currFrame, timestamp, frameNumber);
 
 		imshow("output", currFrame);
 
