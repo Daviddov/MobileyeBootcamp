@@ -1,7 +1,7 @@
-#include "Header.h"
+﻿#include "Header.h"
 
 
-void detect_with_YOLO5( FrameWrap& currFrame) {
+void detect_with_YOLO5(FrameWrap& currFrame) {
 
 	dnn::Net net;
 
@@ -180,7 +180,7 @@ void writeRectOnDB(const FrameWrap& currFrame, Rect rect, string objectType) {
 		"width, height, \"object type\", "
 		"\"R avg\", \"G avg\", \"B avg\") "
 		"VALUES ('%s', %d, %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
-		currFrame.timestamp.c_str(), currFrame.frameNamber, rect.x, rect.y, rect.width, rect.height, objectType.c_str(), R, G, B);
+		currFrame.timestamp.c_str(), currFrame.frameNumber, rect.x, rect.y, rect.width, rect.height, objectType.c_str(), R, G, B);
 
 	rc = sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr);
 
@@ -260,5 +260,130 @@ bool handleDBError(int failed, sqlite3* db, string what) {
 		return true;
 	}
 	return false;
+}
+
+
+//void serverPart(queue<FrameWrap>& dataFromCamera) {
+//
+//	while (true)
+//	{
+//		if (dataFromCamera.empty()) {
+//			cout << "End of stream\n";
+//			break;
+//		}
+//		else
+//		{
+//			FrameWrap currFrame = dataFromCamera.front();
+//
+//
+//			detect_with_YOLO5(currFrame);
+//
+//			cv::imshow("output", currFrame.image);
+//			dataFromCamera.pop();
+//
+//			if (waitKey(1) == 27)
+//			{
+//				cout << "part server finished by user\n";
+//				break;
+//			}
+//		}
+//	}
+//}
+//
+//void cameraPart(std::queue<FrameWrap>& dataFromCamera) {
+//	cv::VideoCapture capture("./assets/parking.mp4");
+//	if (!capture.isOpened()) {
+//		std::cerr << "\nError opening video file\n";
+//		return;
+//	}
+//
+//	int count_frames = 0;
+//
+//	while (count_frames < 1000) {
+//		FrameWrap frame;
+//		capture.read(frame.image);
+//
+//		if (frame.image.empty()) {
+//			std::cout << "End of stream\n";
+//			break;
+//		}
+//
+//		frame.timestamp = currentTime();
+//		frame.frameNumber = ++count_frames;
+//
+//		if (count_frames == 1 || (count_frames % 30 == 0 && calcAbsDiff(dataFromCamera.back().image, frame.image))) {
+//			FrameWrap temp = frame;
+//			temp.image = frame.image.clone();
+//			dataFromCamera.push(temp);
+//			std::cout << "push\n";
+//		}
+//		else {
+//			std::cout << "unpush\n";
+//		}
+//
+//		if (cv::waitKey(1) == 27) {
+//			std::cout << "Camera processing finished by user\n";
+//			break;
+//		}
+//	}
+//}
+
+void cameraPart(std::queue<FrameWrap>& dataFromCamera, std::mutex& queueMutex) {
+	cv::VideoCapture capture("./assets/parking.mp4");
+	if (!capture.isOpened()) {
+		std::cerr << "\nError opening video file\n";
+		return;
+	}
+
+	int count_frames = 0;
+
+	while (true) {
+		FrameWrap frame;
+		capture.read(frame.image);
+
+		if (frame.image.empty()) {
+			std::cout << "End of stream\n";
+			break;
+		}
+
+		frame.timestamp = cv::getTickCount() / cv::getTickFrequency();
+		frame.frameNumber = ++count_frames;
+
+		{
+			std::lock_guard<std::mutex> lock(queueMutex);
+			dataFromCamera.push(frame);
+		std::cout << "push\n";
+		}
+
+		if (cv::waitKey(1) == 27) {
+			std::cout << "Camera processing finished by user\n";
+			break;
+		}
+	}
+}
+
+void serverPart(std::queue<FrameWrap>& dataFromCamera, std::mutex& queueMutex) {
+	while (true) {
+		FrameWrap currFrame;
+
+		{
+			std::lock_guard<std::mutex> lock(queueMutex);
+			if (!dataFromCamera.empty()) {
+				currFrame = dataFromCamera.front();
+				dataFromCamera.pop();
+				std::cout << "pop\n";
+			}
+		}
+
+		if (!currFrame.image.empty()) {
+			detect_with_YOLO5(currFrame);
+			cv::imshow("output", currFrame.image);
+		}
+
+		if (cv::waitKey(1) == 27) {
+			std::cout << "Server processing finished by user\n";
+			break;
+		}
+	}
 }
 
