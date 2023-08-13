@@ -8,8 +8,12 @@
 #include <chrono>
 #include <thread>
 #include <opencv2/opencv.hpp>
+<<<<<<< HEAD:lib/Header.h
 #include "../sqlite3/sqlite3.h"
 
+=======
+#include "sqlite_build/src/sqlite3.h"
+>>>>>>> main:Header.h
 
 
 using namespace cv;
@@ -29,11 +33,28 @@ struct FrameWrap
     int frameNamber;
 };
 
+<<<<<<< HEAD:lib/Header.h
 void detect_with_YOLO5( FrameWrap& currFrame);
+=======
+void detect_with_YOLO5(Mat currFrame, string timestamp, int frameNumber);
+
+void writeRectOnDB(const Mat& org, Rect rect, string timestamp, string objectType, int frameNumber);
+
+bool handleDBError(int failed, sqlite3* db, string what);
+
+void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R);
+
+Mat format_yolov5(const Mat& src);
+
+void detect(cv::Mat& image, dnn::Net& net, vector<Detection>& output, const vector<string>& className);
+
+void toDrawRect(Mat& image, vector<Detection>& output, const vector<string>& className, string timestamp, int frameNumber);
+>>>>>>> main:Header.h
 
 vector<string> load_class_list();
 
 void load_net(cv::dnn::Net& net);
+<<<<<<< HEAD:lib/Header.h
 Mat format_yolov5(const Mat& src);
 void detect(Mat& image, dnn::Net& net, vector<Detection>& output, const vector<string>& className);
 void toDrawRect(const FrameWrap& currFrame, vector<Detection>& output, const vector<string>& className);
@@ -52,3 +73,9 @@ bool handleDBError(int failed, sqlite3* db, string what);
 
 
 
+=======
+
+static int callbackFunction(void* data, int argc, char** argv, char** azColName); 
+
+string currentTime();
+>>>>>>> main:Header.h
