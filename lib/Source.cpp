@@ -349,11 +349,21 @@ void cameraPart(std::queue<FrameWrap>& dataFromCamera, std::mutex& queueMutex) {
 		frame.timestamp = cv::getTickCount() / cv::getTickFrequency();
 		frame.frameNumber = ++count_frames;
 
-		{
-			std::lock_guard<std::mutex> lock(queueMutex);
-			dataFromCamera.push(frame);
-		std::cout << "push\n";
+		if (count_frames == 1 || (count_frames % 30 == 0 && calcAbsDiff(dataFromCamera.back().image, frame.image))) {
+			FrameWrap temp = frame;
+			temp.image = frame.image.clone();
+			dataFromCamera.push(temp);
+			std::cout << "push\n";
+			{
+				std::lock_guard<std::mutex> lock(queueMutex);
+				dataFromCamera.push(frame);
+				std::cout << "push\n";
+			}
 		}
+		else {
+			//std::cout << "unpush\n";
+		}
+
 
 		if (cv::waitKey(1) == 27) {
 			std::cout << "Camera processing finished by user\n";
