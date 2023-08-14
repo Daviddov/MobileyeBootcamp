@@ -3,7 +3,7 @@ project(lib)
 set(lib_Src
 	Header.h
 	"Source.cpp"	
-)
+ "Camera.cpp" "Server.cpp")
 
 add_library(${PROJECT_NAME} ${lib_Src})
 
