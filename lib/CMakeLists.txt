@@ -3,8 +3,8 @@ project(lib)
 set(lib_Src
 	Header.h
 	"Source.cpp"	
- "Camera.cpp" "Server.cpp")
-)
+ "Camera.cpp" "Server.cpp" "Camera.h" "Server.h")
+
 set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
 
 
