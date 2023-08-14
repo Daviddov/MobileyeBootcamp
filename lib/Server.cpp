@@ -2,8 +2,9 @@
 
 
 void serverPart(queue<FrameWrap>& dataFromCamera) {
+	bool active = true;
 
-	while (true)
+	while (active)
 	{
 		cout << dataFromCamera.size() << "\n";
 		if (!dataFromCamera.empty())
@@ -18,6 +19,7 @@ void serverPart(queue<FrameWrap>& dataFromCamera) {
 
 			if (waitKey(1) == 27)
 			{
+				active = false;
 				cout << "part server finished by user\n";
 				break;
 			}
