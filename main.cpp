@@ -7,9 +7,7 @@ void cameraPart(queue<FrameWrap>&dataFromCamera) {
 
 	FrameWrap frame;
 
-	//VideoCapture capture(R"(./assets/parking.mp4)");
-	VideoCapture capture(R"(C:\Users\1\Desktop\project_files\police.mp4)");
-	//VideoCapture capture(0);
+	VideoCapture capture(R"(./assets/parking.mp4)");
 	if (!capture.isOpened())
 	{
 		cerr << "\nError opening video file\n";
