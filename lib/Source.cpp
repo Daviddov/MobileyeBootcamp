@@ -242,7 +242,7 @@ bool calcAbsDiff(const Mat& image1, const Mat& image2) {
 	cvtColor(diff, diff, COLOR_BGR2GRAY);
 
 	return 0.9 < ((double)(countNonZero(diff)) / (double)(image1.cols * image1.rows));
-
+	
 }
 
 static int callbackFunction(void* data, int argc, char** argv, char** azColName) {

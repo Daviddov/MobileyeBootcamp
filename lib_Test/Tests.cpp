@@ -46,9 +46,6 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
     ASSERT_TRUE(calcAbsDiff(testImage3, testImage4));
 }
 
-
-
-
 TEST(CurrentTimeTest, TestCurrentTime) {
     // Get the current system time using the C++ standard library
     auto now = chrono::system_clock::now();
@@ -65,6 +62,7 @@ TEST(CurrentTimeTest, TestCurrentTime) {
     sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", static_cast<int>(milliseconds));
 
     string expected_formatted_time = buffer;
+
 
     // Call the currentTime function to get the result
     string actual_formatted_time = currentTime();

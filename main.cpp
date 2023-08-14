@@ -1,9 +1,9 @@
 #include "lib/Header.h"
 
-int main() {
+//something instead waitKey for exit from while(true) in camera part.
+//mutex!!!!!!!!!!!!
 
-
-	queue<FrameWrap> dataFromCamera;
+void cameraPart(queue<FrameWrap>&dataFromCamera) {
 
 	FrameWrap frame;
 
@@ -11,7 +11,7 @@ int main() {
 	if (!capture.isOpened())
 	{
 		cerr << "\nError opening video file\n";
-		return 1;
+		return;
 	}
 
 	capture.read(frame.image);
@@ -21,58 +21,82 @@ int main() {
 	frame.frameNamber = count_frames;
 	frame.timestamp = currentTime();
 
-	FrameWrap temp;
-	temp = frame;
-	temp.image = frame.image.clone();
-	dataFromCamera.push(temp);
+	dataFromCamera.push(frame); 
 
+	Mat prev = frame.image;
 
 	while (true)
 	{
-		capture.read(frame.image);
+		FrameWrap frame;
 
+		capture.read(frame.image);
 
 		frame.timestamp = currentTime();
 
-		count_frames++;
-		frame.frameNamber = count_frames;
+		frame.frameNamber = ++count_frames;
+
 		if (frame.image.empty())
 		{
 			cout << "End of stream\n";
 			break;
 		}
 
-		if (frame.frameNamber % 30 == 0 && calcAbsDiff(dataFromCamera.back().image, frame.image))
+		if (frame.frameNamber % 30 == 0 && calcAbsDiff(prev, frame.image))
 		{
-			temp = frame;
-			temp.image = frame.image.clone();
-			dataFromCamera.push(temp);
+			prev = frame.image;
+			dataFromCamera.push(frame);
+			cout << "pushing!!!!!!!!!!!" << endl;
 		}
 		else {
+			//cout << "rejected!!!!!!!!!!!" << endl;
 			continue;
 		}
-
-		FrameWrap currFrame = dataFromCamera.front();
-
-		dataFromCamera.pop();
-
-		detect_with_YOLO5(currFrame);
-
-		cv::imshow("output", currFrame.image);
 
 		if (waitKey(1) == 27)
 		{
 			capture.release();
-			cout << "finished by user\n";
+			cout << "part camera finished by user\n";
 			break;
 		}
+		cout << "part camera\n";
 	}
-	return 0;
 }
 
+void serverPart(queue<FrameWrap>&dataFromCamera) {
 
+	while (true)
+	{
+		cout << dataFromCamera.size()<< "\n";
+		if (!dataFromCamera.empty())
+		{
+			FrameWrap currFrame = dataFromCamera.front();
 
+			dataFromCamera.pop();
 
+			detect_with_YOLO5(currFrame);
 
+			cv::imshow("output", currFrame.image);
 
+			if (waitKey(1) == 27)
+			{
+				cout << "part server finished by user\n";
+				break;
+			}
+		}
+	}
+}
+
+int main() {
+
+	queue<FrameWrap> dataFromCamera;
+
+	thread cameraThread(cameraPart, ref(dataFromCamera));
+
+	thread serverThread(serverPart, ref(dataFromCamera));
+
+	cameraThread.join();
+	serverThread.join();
+	
+	return 0;
+}
 
