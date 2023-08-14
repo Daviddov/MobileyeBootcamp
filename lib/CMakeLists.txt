@@ -4,6 +4,7 @@ set(lib_Src
 	Header.h
 	"Source.cpp"	
 )
+set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
 
 add_library(${PROJECT_NAME} ${lib_Src})
 

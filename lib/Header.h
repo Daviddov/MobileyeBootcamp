@@ -6,10 +6,10 @@
 #include <vector>
 #include <queue>
 #include <chrono>
+#include <thread>
 #include <opencv2/opencv.hpp>
 #include "../sqlite3/sqlite3.h"
-#include <thread>
-#include <mutex>
+
 
 
 using namespace cv;
@@ -26,7 +26,7 @@ struct FrameWrap
 {
     Mat image;
     string timestamp;
-    int frameNumber;
+    int frameNamber;
 };
 
 void detect_with_YOLO5( FrameWrap& currFrame);
@@ -46,11 +46,10 @@ static int callbackFunction(void* data, int argc, char** argv, char** azColName)
 
 bool handleDBError(int failed, sqlite3* db, string what);
 
-//void cameraPart(queue<FrameWrap>& dataFromCamera);
-//
-//void serverPart(queue<FrameWrap>&dataFromCamera);
+void cameraPart(queue<FrameWrap>&dataFromCamera);
 
-void cameraPart(std::queue<FrameWrap>& dataFromCamera, std::mutex& queueMutex);
+void serverPart(queue<FrameWrap>&dataFromCamera);
 
-void serverPart(std::queue<FrameWrap>& dataFromCamera, std::mutex& queueMutex);
+
+
 
