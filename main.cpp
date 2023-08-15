@@ -2,7 +2,7 @@
 #include "lib/Camera.h"
 #include "lib/Server.h"
 
-//something instead waitKey for exit from while(true) in camera part.
+//something instead waitKey for exit from while(true) in camera part and server part(if size == 0).
 //mutex!!!!!!!!!!!!
 
 

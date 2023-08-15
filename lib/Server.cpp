@@ -1,15 +1,33 @@
-#include "Server.h" 
+#include "Server.h"
 
+ServerProcessor::ServerProcessor(queue<FrameWrap>& queue):dataFromCamera(queue){
 
-void serverPart(queue<FrameWrap>& dataFromCamera) {
-	bool active = true;
+	active = true;
+}
+
+void ServerProcessor::detect_with_YOLO5(FrameWrap& currFrame) {
+
+	dnn::Net net;
+
+	load_net(net);
+
+	vector<string> class_list = load_class_list();
+
+	vector<Detection> output;
+
+	detect(currFrame.image, net, output, class_list);
+
+	toDrawRect(currFrame, output, class_list);
+}
+
+void ServerProcessor::run() {
 
 	while (active)
 	{
 		cout << dataFromCamera.size() << "\n";
 		if (!dataFromCamera.empty())
 		{
-			FrameWrap currFrame = dataFromCamera.front();
+		    currFrame = dataFromCamera.front();
 
 			dataFromCamera.pop();
 
@@ -19,10 +37,17 @@ void serverPart(queue<FrameWrap>& dataFromCamera) {
 
 			if (waitKey(1) == 27)
 			{
-				active = false;
 				cout << "part server finished by user\n";
 				break;
 			}
 		}
+
 	}
+}
+
+void serverPart(queue<FrameWrap>& dataFromCamera) {
+
+	ServerProcessor server(dataFromCamera);
+
+	server.run();
 }
