@@ -24,6 +24,10 @@ if (NOT googletest) # is googletest defined if already built?
 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 	FetchContent_MakeAvailable(googletest)
 endif()
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
