@@ -48,25 +48,22 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 
 TEST(CurrentTimeTest, TestCurrentTime) {
     // Get the current system time using the C++ standard library
-    auto now = chrono::system_clock::now();
-    std::time_t timestamp = chrono::system_clock::to_time_t(now);
+    auto now = std::chrono::system_clock::now();
+    std::time_t timestamp = std::chrono::system_clock::to_time_t(now);
     std::tm timeinfo;
     localtime_s(&timeinfo, &timestamp);
-
 
     char buffer[28];
     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
-
-    auto milliseconds = chrono::duration_cast<chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
     sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", static_cast<int>(milliseconds));
 
-    string expected_formatted_time = buffer;
-
+    std::string expected_formatted_time = buffer;
 
     // Call the currentTime function to get the result
-    string actual_formatted_time = currentTime();
-
+    std::string actual_formatted_time = currentTime();
+    cout << (expected_formatted_time[expected_formatted_time.length() - 1] - actual_formatted_time[actual_formatted_time.length() - 1]) << endl;
     // Check if the result matches the expected formatted time
     ASSERT_EQ(expected_formatted_time, actual_formatted_time);
 }

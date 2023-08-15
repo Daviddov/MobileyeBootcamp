@@ -3,8 +3,7 @@
 
 
 
-void cameraPart(queue<FrameWrap>& dataFromCamera) {
-    bool active = true;
+void cameraPart(queue<FrameWrap>& dataFromCamera, bool &active) {
     FrameWrap frame;
 
     VideoCapture capture(R"(./assets/parking.mp4)");
@@ -49,10 +48,6 @@ void cameraPart(queue<FrameWrap>& dataFromCamera) {
         }
         cout << "part camera\n";
        
-        // Check for Esc key press
-        int keyPressed =  _getch(); // Wait for 1 millisecond
-        if (keyPressed == 27) { // ASCII code for Esc key
-            active = false; // Exit the loop if Esc is pressed
-        }
+       
     }
 }

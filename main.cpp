@@ -10,10 +10,11 @@
 int main() {
 
 	queue<FrameWrap> dataFromCamera;
+	bool isActive = true;
 
-	thread cameraThread(cameraPart, ref(dataFromCamera));
+	thread cameraThread(cameraPart, ref(dataFromCamera), ref(isActive));
 
-	thread serverThread(serverPart, ref(dataFromCamera));
+	thread serverThread(serverPart, ref(dataFromCamera), ref(isActive));
 
 	cameraThread.join();
 	serverThread.join();
