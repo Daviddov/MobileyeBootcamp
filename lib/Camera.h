@@ -37,11 +37,14 @@ public:
 
     void setPrev(Mat p);
 
+    void setActive(bool isActive);
+
 	void init(int id ,string path,int numFrames, double frame_diff);
 
     void insertToQueue();
 
     void run();
+
 };
 
 void cameraPart(CameraProcessor& camera);

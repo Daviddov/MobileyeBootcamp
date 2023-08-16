@@ -35,16 +35,20 @@ void ServerProcessor::run() {
 
 			cv::imshow("output", currFrame.image);
 
+		}
 			if (waitKey(1) == 27)
 			{
 				cout << "part server finished by user\n";
+				setActive(false);
 				break;
 			}
-		}
-
 	}
 }
 
 void serverPart(ServerProcessor& server) {
 	server.run();
+}
+
+void ServerProcessor::setActive(bool isActive) {
+	active = isActive;
 }

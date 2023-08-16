@@ -10,7 +10,7 @@
 int main() {
 
 	queue<FrameWrap> dataFromCamera;
-	bool isActive = true;
+	
 
 	CameraProcessor camera(dataFromCamera);
 

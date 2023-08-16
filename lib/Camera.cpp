@@ -8,6 +8,10 @@ void CameraProcessor::setPrev(Mat p) {
     prev = p;
 }
 
+void CameraProcessor::setActive(bool isActive) {
+    active = isActive;
+}
+
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
     countFrame = 0;
     active = true;
