@@ -110,8 +110,8 @@ void cameraPart(CameraProcessor& camera) {
     double frameDiffThreshold = 0.9;
 
     //the user input it using Qt
-    //string path = R"(./assets/parking.mp4)";
-    string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+    string path = R"(./assets/parking.mp4)";
+  //  string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
