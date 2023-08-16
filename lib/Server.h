@@ -3,7 +3,6 @@
 #include <conio.h>
 
 
-void serverPart(queue<FrameWrap>& dataFromCamera);
 
 class ServerProcessor {
 
@@ -24,3 +23,5 @@ public:
 
 	void run();
 };
+
+void serverPart(ServerProcessor& server);

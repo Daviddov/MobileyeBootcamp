@@ -31,21 +31,30 @@ TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
     EXPECT_EQ(expectedR, R);
 }
 
-//TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
-//
-//    Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
-//    Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
-//
-//
-//    ASSERT_FALSE(calcAbsDiff(testImage1, testImage2));
-//
-//
-//    Mat testImage3(3, 3, CV_8UC3, Scalar(100, 150, 200));
-//    Mat testImage4(3, 3, CV_8UC3, Scalar(110, 160, 210));
-//
-//
-//    ASSERT_TRUE(calcAbsDiff(testImage3, testImage4));
-//}
+TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
+
+    Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
+    Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
+
+    queue<FrameWrap> queue;
+    CameraProcessor camera(queue);
+    camera.init(1, "ee", 30, 0.9);
+
+    camera.setFrame(testImage1);
+    camera.setPrev(testImage2);
+
+
+    ASSERT_FALSE(calcAbsDiff(testImage1, testImage2));
+
+    Mat testImage3(3, 3, CV_8UC3, Scalar(100, 150, 200));
+    Mat testImage4(3, 3, CV_8UC3, Scalar(110, 160, 210));
+
+
+    camera.setFrame(testImage3);
+    camera.setPrev(testImage4);
+
+    ASSERT_TRUE(camera.calcAbsDiff());
+}
 
 TEST(CurrentTimeTest, TestCurrentTime) {
     // Get the current system time using the C++ standard library

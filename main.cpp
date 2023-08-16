@@ -11,9 +11,13 @@ int main() {
 
 	queue<FrameWrap> dataFromCamera;
 
-	thread cameraThread(cameraPart, ref(dataFromCamera));
+	CameraProcessor camera(dataFromCamera);
 
-	thread serverThread(serverPart, ref(dataFromCamera));
+	ServerProcessor server(dataFromCamera);
+
+	thread cameraThread(cameraPart, ref(camera));
+
+	thread serverThread(serverPart, ref(server));
 
 	cameraThread.join();
 	serverThread.join();

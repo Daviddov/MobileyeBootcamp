@@ -1,5 +1,12 @@
 #include "Camera.h" 
 
+void CameraProcessor::setFrame(Mat f) {
+    frame.image = f;
+}
+
+void CameraProcessor::setPrev(Mat p) {
+    prev = p;
+}
 
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
     countFrame = 0;
@@ -12,6 +19,7 @@ CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue
 bool CameraProcessor:: calcAbsDiff() {
     Mat diff;
     absdiff(prev, frame.image, diff);
+
     //convert diff to gray because countNonZero func can't to resive COLOR_IMG 
     cvtColor(diff, diff, COLOR_BGR2GRAY);
     double normalRes = (double)(countNonZero(diff)) / (double)(frame.image.cols * frame.image.rows);
@@ -90,7 +98,7 @@ string currentTime() {
     return formatted_time;
 }
 
-void cameraPart(queue<FrameWrap>& dataFromCamera) {
+void cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     int id = 123;
@@ -104,8 +112,6 @@ void cameraPart(queue<FrameWrap>& dataFromCamera) {
     //the user input it using Qt
     //string path = R"(./assets/parking.mp4)";
     string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
-
-    CameraProcessor camera(dataFromCamera);
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 

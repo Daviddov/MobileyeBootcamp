@@ -45,9 +45,6 @@ void ServerProcessor::run() {
 	}
 }
 
-void serverPart(queue<FrameWrap>& dataFromCamera) {
-
-	ServerProcessor server(dataFromCamera);
-
+void serverPart(ServerProcessor& server) {
 	server.run();
 }
