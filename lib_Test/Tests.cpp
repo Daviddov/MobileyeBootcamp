@@ -44,7 +44,7 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
     camera.setPrev(testImage2);
 
 
-    ASSERT_FALSE(calcAbsDiff(testImage1, testImage2));
+    ASSERT_FALSE(camera.calcAbsDiff());
 
     Mat testImage3(3, 3, CV_8UC3, Scalar(100, 150, 200));
     Mat testImage4(3, 3, CV_8UC3, Scalar(110, 160, 210));
