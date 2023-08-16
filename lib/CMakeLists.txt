@@ -5,7 +5,6 @@ set(lib_Src
 	"Source.cpp"	
  "Camera.cpp" "Server.cpp" "Camera.h" "Server.h")
 
-set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
 
 
 add_library(${PROJECT_NAME} ${lib_Src})
