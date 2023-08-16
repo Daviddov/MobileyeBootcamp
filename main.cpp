@@ -2,7 +2,7 @@
 #include "lib/Camera.h"
 #include "lib/Server.h"
 
-//something instead waitKey for exit from while(true) in camera part.
+//something instead waitKey for exit from while(true) in camera part and server part(if size == 0).
 //mutex!!!!!!!!!!!!
 
 
@@ -12,9 +12,13 @@ int main() {
 	queue<FrameWrap> dataFromCamera;
 	bool isActive = true;
 
-	thread cameraThread(cameraPart, ref(dataFromCamera), ref(isActive));
+	CameraProcessor camera(dataFromCamera);
 
-	thread serverThread(serverPart, ref(dataFromCamera), ref(isActive));
+	ServerProcessor server(dataFromCamera);
+
+	thread cameraThread(cameraPart, ref(camera));
+
+	thread serverThread(serverPart, ref(server));
 
 	cameraThread.join();
 	serverThread.join();
