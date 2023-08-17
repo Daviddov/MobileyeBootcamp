@@ -1,20 +1,7 @@
 #include "Header.h"
 
 
-void detect_with_YOLO5( FrameWrap& currFrame) {
 
-	dnn::Net net;
-
-	load_net(net);
-
-	vector<string> class_list = load_class_list();
-
-	vector<Detection> output;
-
-	detect(currFrame.image, net, output, class_list);
-
-	toDrawRect(currFrame, output, class_list);
-}
 
 vector<string> load_class_list()
 {
@@ -209,40 +196,6 @@ void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R) {
 	*B = sumB / size;
 	*G = sumG / size;
 	*R = sumR / size;
-}
-
-string currentTime() {
-
-	auto timestamp = chrono::duration_cast<chrono::milliseconds>(
-		chrono::system_clock::now().time_since_epoch()
-	).count();
-
-	int milliseconds = timestamp % 1000;
-
-	time_t time_t_timestamp = timestamp / 1000;
-
-	tm timeinfo;
-	localtime_s(&timeinfo, &time_t_timestamp);
-
-	char buffer[28];
-	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
-
-	sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", milliseconds);
-
-	string formatted_time = buffer;
-	return formatted_time;
-}
-
-bool calcAbsDiff(const Mat& image1, const Mat& image2) {
-
-	Mat diff;
-	absdiff(image1, image2, diff);
-
-	//convert diff to gray because countNonZero func can't to resive COLOR_IMG 
-	cvtColor(diff, diff, COLOR_BGR2GRAY);
-
-	return 0.9 < ((double)(countNonZero(diff)) / (double)(image1.cols * image1.rows));
-	
 }
 
 static int callbackFunction(void* data, int argc, char** argv, char** azColName) {
