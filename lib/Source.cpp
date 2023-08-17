@@ -178,6 +178,9 @@ void writeRectOnDB(const FrameWrap& currFrame, Rect rect, string objectType) {
 
 	if (handleDBError(rc, db, "select query")) { return; }
 
+	const char* deleteTableQuery = "DELETE FROM MyTable;";
+
+	rc = sqlite3_exec(db, deleteTableQuery, nullptr, nullptr, nullptr);
 	sqlite3_close(db);
 }
 

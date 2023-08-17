@@ -1,11 +1,15 @@
 #include "Camera.h" 
-
+//this nedded for test.cpp 
 void CameraProcessor::setFrame(Mat f) {
     frame.image = f;
 }
-
+//this nedded for test.cpp 
 void CameraProcessor::setPrev(Mat p) {
     prev = p;
+}
+//this nedded for test.cpp 
+void CameraProcessor::setNumFramesCheck(double p) {
+    numFramesCheck = p;
 }
 
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
@@ -110,8 +114,8 @@ void cameraPart(CameraProcessor& camera) {
     double frameDiffThreshold = 0.9;
 
     //the user input it using Qt
-    //string path = R"(./assets/parking.mp4)";
-    string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+    string path = R"(./assets/parking.mp4)";
+   // string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 

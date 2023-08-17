@@ -3,12 +3,12 @@ project(lib)
 set(lib_Src
 	Header.h
 	"Source.cpp"	
- "Camera.cpp" "Server.cpp" "Camera.h" "Server.h")
+ "Camera.cpp" "Server.cpp" "Camera.h" "Server.h" "Yolo.cpp")
 
 set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
 
 
-add_library(${PROJECT_NAME} ${lib_Src})
+add_library(${PROJECT_NAME} ${lib_Src} "Yolo.h")
 
 
 # Find and link OpenCV
