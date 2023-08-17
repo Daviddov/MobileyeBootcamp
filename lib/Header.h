@@ -30,21 +30,6 @@ struct FrameWrap
 };
 
 
-vector<string> load_class_list();
-
-void load_net(cv::dnn::Net& net);
-Mat format_yolov5(const Mat& src);
-void detect(Mat& image, dnn::Net& net, vector<Detection>& output, const vector<string>& className);
-void toDrawRect(const FrameWrap& currFrame, vector<Detection>& output, const vector<string>& className);
-void writeRectOnDB(const FrameWrap& currFrame, Rect rect, string objectType);
-void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R);
-bool calcAbsDiff(const  Mat& image1, const Mat& image2);
-
-static int callbackFunction(void* data, int argc, char** argv, char** azColName);
-
-bool handleDBError(int failed, sqlite3* db, string what);
-
-
 
 
 

@@ -1,4 +1,6 @@
 #include "Server.h"
+#include "Yolo.h"
+#include "Rect.h"
 
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue):dataFromCamera(queue){
 
@@ -7,17 +9,11 @@ ServerProcessor::ServerProcessor(queue<FrameWrap>& queue):dataFromCamera(queue){
 
 void ServerProcessor::detect_with_YOLO5(FrameWrap& currFrame) {
 
-	dnn::Net net;
+	Yolo5 yolo(currFrame);
+	yolo.detect();
 
-	load_net(net);
-
-	vector<string> class_list = load_class_list();
-
-	vector<Detection> output;
-
-	detect(currFrame.image, net, output, class_list);
-
-	toDrawRect(currFrame, output, class_list);
+	YoloRect rect(currFrame,yolo.getOutput(), yolo.getClassList());
+	rect.toDrawRect();
 }
 
 void ServerProcessor::run() {

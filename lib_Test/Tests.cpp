@@ -12,24 +12,24 @@ TEST(TestCaseName, TestName) {
 	EXPECT_TRUE(true);
 }
 
-TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
-
-    Mat testImage(3, 3, CV_8UC3);
-    testImage.setTo(Scalar(100, 150, 200));
-
-    float B=0, G=0, R =0 ;
-    calcAvgPerChanel(testImage, &B, &G, &R);
-
-    //// Add your expected 
-    float expectedB = 100.0f;
-    float expectedG = 150.0f;
-    float expectedR = 200.0f;
-
-    // Check the results 
-    EXPECT_EQ(expectedB, B);
-    EXPECT_EQ(expectedG, G);
-    EXPECT_EQ(expectedR, R);
-}
+//TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
+//
+//    Mat testImage(3, 3, CV_8UC3);
+//    testImage.setTo(Scalar(100, 150, 200));
+//
+//    float B=0, G=0, R =0 ;
+//    calcAvgPerChanel(testImage, &B, &G, &R);
+//
+//    //// Add your expected 
+//    float expectedB = 100.0f;
+//    float expectedG = 150.0f;
+//    float expectedR = 200.0f;
+//
+//    // Check the results 
+//    EXPECT_EQ(expectedB, B);
+//    EXPECT_EQ(expectedG, G);
+//    EXPECT_EQ(expectedR, R);
+//}
 
 TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 

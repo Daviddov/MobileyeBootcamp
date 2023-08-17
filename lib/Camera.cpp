@@ -12,6 +12,7 @@ void CameraProcessor::setNumFramesCheck(double p) {
     numFramesCheck = p;
 }
 
+//c'tor
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
     countFrame = 0;
     active = true;
