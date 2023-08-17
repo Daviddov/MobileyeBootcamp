@@ -2,7 +2,7 @@
 #include "Yolo.h"
 #include "Rect.h"
 
-ServerProcessor::ServerProcessor(queue<FrameWrap>& queue):dataFromCamera(queue){
+ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
 
 	active = true;
 }
@@ -12,7 +12,7 @@ void ServerProcessor::detect_with_YOLO5(FrameWrap& currFrame) {
 	Yolo5 yolo(currFrame);
 	yolo.detect();
 
-	YoloRect rect(currFrame,yolo.getOutput(), yolo.getClassList());
+	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList());
 	rect.toDrawRect();
 }
 
@@ -23,7 +23,7 @@ void ServerProcessor::run() {
 		cout << dataFromCamera.size() << "\n";
 		if (!dataFromCamera.empty())
 		{
-		    currFrame = dataFromCamera.front();
+			currFrame = dataFromCamera.front();
 
 			dataFromCamera.pop();
 

@@ -12,6 +12,8 @@ TEST(TestCaseName, TestName) {
 	EXPECT_TRUE(true);
 }
 
+//because change OOP design the function calcAvgPerChanel() has been  a member of YoloRect class . will need to use in moke here
+
 //TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
 //
 //    Mat testImage(3, 3, CV_8UC3);
@@ -31,6 +33,7 @@ TEST(TestCaseName, TestName) {
 //    EXPECT_EQ(expectedR, R);
 //}
 
+//this test can to get improve if using in moke
 TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 
     Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
