@@ -24,7 +24,7 @@ CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue
 bool CameraProcessor:: calcAbsDiff() {
     Mat diff;
     absdiff(prev, frame.image, diff);
-
+    
     //convert diff to gray because countNonZero func can't to resive COLOR_IMG 
     cvtColor(diff, diff, COLOR_BGR2GRAY);
     double normalRes = (double)(countNonZero(diff)) / (double)(frame.image.cols * frame.image.rows);
