@@ -3,7 +3,6 @@
 
 
 
-string currentTime();
 
 class CameraProcessor {
 
@@ -37,6 +36,8 @@ public:
 
     void setPrev(Mat p);
 
+    void  setNumFramesCheck(double p);
+
 	void init(int id ,string path,int numFrames, double frame_diff);
 
     void insertToQueue();
@@ -45,3 +46,5 @@ public:
 };
 
 void cameraPart(CameraProcessor& camera);
+
+string currentTime();

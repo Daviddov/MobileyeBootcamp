@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Main executable
-add_executable(${PROJECT_NAME} Main.cpp)
+add_executable(${PROJECT_NAME} Main.cpp "lib_logger/Logger.h")
 
 # Link lib
 add_subdirectory(lib)

@@ -38,8 +38,8 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 
     queue<FrameWrap> queue;
     CameraProcessor camera(queue);
-    camera.init(1, "ee", 30, 0.9);
 
+    camera.setNumFramesCheck(0.9);
     camera.setFrame(testImage1);
     camera.setPrev(testImage2);
 

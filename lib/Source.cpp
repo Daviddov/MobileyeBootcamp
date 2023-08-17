@@ -12,6 +12,7 @@ vector<string> load_class_list()
 	{
 		class_list.push_back(line);
 	}
+	Logger::Info("the class list of yolo is readed");
 	return class_list;
 }
 
