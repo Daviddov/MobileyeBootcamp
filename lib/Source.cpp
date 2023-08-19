@@ -24,7 +24,7 @@ void load_net(cv::dnn::Net& net)
 	result.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
 	result.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
 
-	net = result;
+	net = result;z
 }
 
 Mat format_yolov5(const Mat& src) {
