@@ -16,6 +16,7 @@ void YoloRect::toDrawRect() {
 		rectangle(frame.image, box, color, 3);
 		rectangle(frame.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
 		putText(frame.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
+		//add logre??
 		cout << "width" <<frame.image.cols  << "hight" << frame.image.rows << "x" << box.x << "y"<<box.y<<endl;	
 		
 		//Modify x and y for don't overflow from original frame.

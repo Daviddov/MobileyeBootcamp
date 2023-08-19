@@ -1,14 +1,13 @@
 #include "Camera.h" 
-//this nedded for test.cpp 
+
 void CameraProcessor::setFrame(Mat f) {
     frame.image = f;
 }
-//this nedded for test.cpp 
+
 void CameraProcessor::setPrev(Mat p) {
     prev = p;
 }
-//this nedded for test.cpp 
-void CameraProcessor::setNumFramesCheck(double p) {
+void  CameraProcessor::setNumFramesCheck(double p) {
     numFramesCheck = p;
 }
 
@@ -24,7 +23,7 @@ CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue
 bool CameraProcessor:: calcAbsDiff() {
     Mat diff;
     absdiff(prev, frame.image, diff);
-    
+
     //convert diff to gray because countNonZero func can't to resive COLOR_IMG 
     cvtColor(diff, diff, COLOR_BGR2GRAY);
     double normalRes = (double)(countNonZero(diff)) / (double)(frame.image.cols * frame.image.rows);
@@ -116,7 +115,7 @@ void cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     string path = R"(./assets/parking.mp4)";
-   // string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+    //string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
