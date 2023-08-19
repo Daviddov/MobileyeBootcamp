@@ -102,7 +102,7 @@ string currentTime() {
     return formatted_time;
 }
 
-void cameraPart(CameraProcessor& camera) {
+void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     int id = 123;

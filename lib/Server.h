@@ -23,6 +23,5 @@ public:
 
 	void run();
 
+    void static serverPart(ServerProcessor& server);
 };
-
-    void serverPart(ServerProcessor& server);

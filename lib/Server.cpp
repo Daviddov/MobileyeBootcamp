@@ -41,6 +41,6 @@ void ServerProcessor::run() {
 	}
 }
 
-void serverPart(ServerProcessor& server) {
+void ServerProcessor::serverPart(ServerProcessor& server) {
 	server.run();
 }
