@@ -16,7 +16,7 @@ void YoloRect::toDrawRect() {
 		rectangle(frame.image, box, color, 3);
 		rectangle(frame.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
 		putText(frame.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
-		//add logre??
+		//add logger??
 		cout << "width" <<frame.image.cols  << "hight" << frame.image.rows << "x" << box.x << "y"<<box.y<<endl;	
 		
 		//Modify x and y for don't overflow from original frame.
@@ -33,7 +33,7 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 	Mat imgFromRect = frame.image(rect);
 
 	float R = 0, G = 0, B = 0;
-	calcAvgPerChanel(imgFromRect, &R, &G, &B);
+	calcAvgPerChannel(imgFromRect, &R, &G, &B);
 
 	sqlite3* db;
 
@@ -82,7 +82,7 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 	sqlite3_close(db);
 }
 
-void YoloRect::calcAvgPerChanel(const Mat& img, float* B, float* G, float* R) {
+void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
 	float sumB = 0, sumG = 0, sumR = 0;
 	for (int row = 0; row < img.rows; row++) {

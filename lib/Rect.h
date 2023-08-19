@@ -27,7 +27,7 @@ public:
 
 	void toDrawRect();
 
-	void calcAvgPerChanel(const Mat& img, float* B, float* G, float* R);
+	void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
 
 };
 
