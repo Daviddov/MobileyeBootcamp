@@ -7,8 +7,9 @@ void CameraProcessor::setFrame(Mat f) {
 void CameraProcessor::setPrev(Mat p) {
     prev = p;
 }
-void  CameraProcessor::setNumFramesCheck(double p) {
-    numFramesCheck = p;
+
+void CameraProcessor::setNumFramesCheck(int numFrames) {
+    numFramesCheck = numFrames;
 }
 
 //c'tor

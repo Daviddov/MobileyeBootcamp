@@ -36,7 +36,7 @@ public:
 
     void setPrev(Mat p);
 
-    void  setNumFramesCheck(double p);
+    void  setNumFramesCheck(int numFrames);
 
 	void init(int id ,string path,int numFrames, double frame_diff);
 
