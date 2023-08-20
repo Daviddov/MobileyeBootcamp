@@ -48,15 +48,9 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frame, const string& objectTyp
 	return sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
-
 void SQLHandler::selectMaxID() {
 	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
 	sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
-}
-
-void SQLHandler::deleteTable() {
-	const char* deleteTableQuery = "DELETE FROM MyTable;";
-	sqlite3_exec(db, deleteTableQuery, nullptr, nullptr, nullptr);
 }
 
 int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azColName) {
@@ -69,6 +63,5 @@ int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azCol
 
 void SQLHandler::printTable() {
 	const char* selectAllQuery = "SELECT * FROM MyTable;";
-	sqlite3_exec(db, selectAllQuery, nullptr, nullptr, nullptr);
-	
+	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }

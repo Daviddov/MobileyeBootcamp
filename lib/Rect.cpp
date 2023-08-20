@@ -16,21 +16,20 @@ void YoloRect::toDrawRect() {
 		rectangle(frame.image, box, color, 3);
 		rectangle(frame.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
 		putText(frame.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
-		
+
 		Logger::Debug("origin frame width is %d hight is %d ", frame.image.cols, frame.image.rows);
 		Logger::Debug("Top left x is %d Top left y is %d ", box.x, box.y);
 		Logger::Debug("Box width is %d Box hight is %d ", box.width, box.height);
 
 		//Modify x and y for don't overflow from original frame.
-		box.x < 0 ? box.x = 0 : box.x ;
-		box.y < 0 ? box.y = 0 : box.y ;
+		box.x < 0 ? box.x = 0 : box.x;
+		box.y < 0 ? box.y = 0 : box.y;
 		box.x > 20 ? box.x -= 20 : box.x;
 		box.y > 20 ? box.y -= 20 : box.y;
 
-		writeRectOnDB( box, class_list[classId]);
+		writeRectOnDB(box, class_list[classId]);
 	}
 }
-
 
 void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
@@ -49,30 +48,12 @@ void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 	*R = sumR / size;
 }
 
-int YoloRect::callbackFunction(void* data, int argc, char** argv, char** azColName) {
-	for (int i = 0; i < argc; ++i) {
-		cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
-	}
-	cout << endl;
-	return 0;
-}
-
-bool YoloRect::handleDBError(int failed, sqlite3* db, string what) {
-	if (failed != SQLITE_OK) {
-		Logger::Error("Failed to %s", what);
-		sqlite3_close(db);
-		return true;
-	}
-	return false;
-}
-///
-
-
 void YoloRect::writeRectOnDB(Rect rect, string objectType) {
+
 	Mat imgFromRect = frame.image(rect);
 
 	if (imgFromRect.empty()) {
-		cerr << "Failed to extract image from rectangle." << endl;
+		Logger::Error("Failed to extract rectangle from image.");
 		return;
 	}
 
@@ -80,20 +61,19 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 	calcAvgPerChannel(imgFromRect, &R, &G, &B);
 
 	if (!sqlHandler.open("rect_data.db")) {
-		cerr << "Failed to open database." << endl;
+		Logger::Error("Failed to open database.");
 		return;
 	}
 
-	bool success = false;
 	if (sqlHandler.createTableIfNotExists()) {
-		success = sqlHandler.insertData(rect, frame, objectType, R, G, B);
+		if (sqlHandler.insertData(rect, frame, objectType, R, G, B)) {
+			sqlHandler.selectMaxID();
+		}
+		else {
+			Logger::Error("Failed to insert data.");
+		}
 	}
+	sqlHandler.printTable();
 
-	if (success) {
-		sqlHandler.selectMaxID();
-	}
-
-	//sqlHandler.printTable();
-	sqlHandler.deleteTable();
 	sqlHandler.close();
 }

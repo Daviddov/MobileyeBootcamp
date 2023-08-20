@@ -19,9 +19,6 @@ private:
 
 	void writeRectOnDB(Rect rect, string objectType);
 
-	static int callbackFunction(void* data, int argc, char** argv, char** azColName);
-
-	bool handleDBError(int failed, sqlite3* db, string what);
 
 public:
 
