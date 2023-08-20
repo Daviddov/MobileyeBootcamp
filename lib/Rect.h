@@ -1,5 +1,5 @@
 #include "Header.h"
-
+#include "SQLHandler.h"
 
 
 
@@ -15,6 +15,8 @@ private:
 
 	vector<Scalar> colors;
 
+	SQLHandler sqlHandler;
+
 	void writeRectOnDB(Rect rect, string objectType);
 
 	static int callbackFunction(void* data, int argc, char** argv, char** azColName);
@@ -28,6 +30,12 @@ public:
 	void toDrawRect();
 
 	void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
+
+
+	//bool createTableIfNotExists(sqlite3* db);
+	//bool insertData(sqlite3* db, Rect rect, string objectType, float R, float G, float B);
+	//void selectMaxID(sqlite3* db);
+	//void deleteTable(sqlite3 * db);
 
 };
 

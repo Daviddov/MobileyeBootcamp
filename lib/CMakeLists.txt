@@ -10,7 +10,7 @@ set(lib_Src
  "Yolo.cpp" 
  "Yolo.h"
  "Rect.h" 
- "Rect.cpp")
+ "Rect.cpp"   "SQLHandler.cpp" "SQLHandler.h")
 
 set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
 

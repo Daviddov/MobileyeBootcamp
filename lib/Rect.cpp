@@ -28,59 +28,6 @@ void YoloRect::toDrawRect() {
 	}
 }
 
-void YoloRect::writeRectOnDB(Rect rect, string objectType) {
-
-	Mat imgFromRect = frame.image(rect);
-
-	float R = 0, G = 0, B = 0;
-	calcAvgPerChannel(imgFromRect, &R, &G, &B);
-
-	sqlite3* db;
-
-	int rc = sqlite3_open("rect_data.db", &db);
-
-	if (handleDBError(rc, db, "open db")) { return; }
-
-	const char* createTableQuery = "CREATE TABLE IF NOT EXISTS MyTable ("
-		"ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-		"timestamp TEXT NOT NULL,"
-		"\"frame number\" INT NOT NULL,"
-		"\"Top left X\" INTEGER NOT NULL,"
-		"\"Top left Y\" INTEGER NOT NULL,"
-		"width INTEGER NOT NULL,"
-		"height INTEGER NOT NULL,"
-		"\"object type\" TEXT NOT NULL,"
-		"\"R avg\" REAL NOT NULL,"
-		"\"G avg\" REAL NOT NULL,"
-		"\"B avg\" REAL NOT NULL);";
-
-	rc = sqlite3_exec(db, createTableQuery, nullptr, nullptr, nullptr);
-
-	if (handleDBError(rc, db, "creat table")) { return; }
-
-	char insertDataQuery[256];
-	sprintf_s(insertDataQuery, sizeof(insertDataQuery),
-		"INSERT INTO MyTable (timestamp,\"frame number\","
-		" \"Top left X\",\"Top left Y\","
-		"width, height, \"object type\", "
-		"\"R avg\", \"G avg\", \"B avg\") "
-		"VALUES ('%s', %d, %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
-		frame.timestamp.c_str(), frame.frameNamber, rect.x, rect.y, rect.width, rect.height, objectType.c_str(), R, G, B);
-
-	rc = sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr);
-
-	if (handleDBError(rc, db, "insert")) { return; }
-
-	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
-	rc = sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
-
-	if (handleDBError(rc, db, "select query")) { return; }
-
-	const char* deleteTableQuery = "DELETE FROM MyTable;";
-
-	rc = sqlite3_exec(db, deleteTableQuery, nullptr, nullptr, nullptr);
-	sqlite3_close(db);
-}
 
 void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
@@ -114,4 +61,35 @@ bool YoloRect::handleDBError(int failed, sqlite3* db, string what) {
 		return true;
 	}
 	return false;
+}
+///
+
+
+void YoloRect::writeRectOnDB(Rect rect, string objectType) {
+	Mat imgFromRect = frame.image(rect);
+
+	if (imgFromRect.empty()) {
+		cerr << "Failed to extract image from rectangle." << endl;
+		return;
+	}
+
+	float R = 0, G = 0, B = 0;
+	calcAvgPerChannel(imgFromRect, &R, &G, &B);
+
+	if (!sqlHandler.open("rect_data.db")) {
+		cerr << "Failed to open database." << endl;
+		return;
+	}
+
+	bool success = false;
+	if (sqlHandler.createTableIfNotExists()) {
+		success = sqlHandler.insertData(rect, frame, objectType, R, G, B);
+	}
+
+	if (success) {
+		sqlHandler.selectMaxID();
+	}
+
+	sqlHandler.deleteTable();
+	sqlHandler.close();
 }

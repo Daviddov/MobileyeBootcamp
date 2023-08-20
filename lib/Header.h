@@ -27,7 +27,7 @@ struct FrameWrap
 {
     Mat image;
     string timestamp;
-    int frameNamber;
+    int frameNumber;
 };
 
 
