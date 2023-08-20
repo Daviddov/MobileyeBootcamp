@@ -21,6 +21,11 @@ CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue
     frameDiffThreshold = 0.0;
 }
 
+//d'tor
+CameraProcessor::~CameraProcessor() {
+    capture.release();
+}
+
 bool CameraProcessor:: calcAbsDiff() {
     Mat diff;
     absdiff(prev, frame.image, diff);
@@ -119,11 +124,11 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
     int numFrames = 30;
 
     //the user input it using Qt
-    double frameDiffThreshold = 1.0;
+    double frameDiffThreshold = 0.9;
 
     //the user input it using Qt
-    //string path = R"(./assets/parking.mp4)";
-    string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+    string path = R"(./assets/parking.mp4)";
+    //string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
