@@ -9,8 +9,12 @@
 
 int main() {
 
+	LogPriority priority = InfoPriority;
+	mutex log_mutex;
+	Logger::EnableFileOutput();
+	Logger::Info("the programe is started");
+
 	queue<FrameWrap> dataFromCamera;
-	
 
 	CameraProcessor camera(dataFromCamera);
 
@@ -22,7 +26,8 @@ int main() {
 
 	cameraThread.join();
 	serverThread.join();
-	
+	Logger::Info("the programe is finised");
+
 	return 0;
 }
 

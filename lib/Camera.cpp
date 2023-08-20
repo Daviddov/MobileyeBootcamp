@@ -1,15 +1,15 @@
 #include "Camera.h" 
-
+//this nedded for test.cpp 
 void CameraProcessor::setFrame(Mat f) {
     frame.image = f;
 }
-
+//this nedded for test.cpp 
 void CameraProcessor::setPrev(Mat p) {
     prev = p;
 }
-
-void CameraProcessor::setActive(bool isActive) {
-    active = isActive;
+//this nedded for test.cpp 
+void CameraProcessor::setNumFramesCheck(double p) {
+    numFramesCheck = p;
 }
 
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
@@ -27,6 +27,7 @@ bool CameraProcessor:: calcAbsDiff() {
     //convert diff to gray because countNonZero func can't to resive COLOR_IMG 
     cvtColor(diff, diff, COLOR_BGR2GRAY);
     double normalRes = (double)(countNonZero(diff)) / (double)(frame.image.cols * frame.image.rows);
+
     return frameDiffThreshold < normalRes;
 }
 
@@ -42,8 +43,10 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
 
     if (!capture.isOpened()) {
         cerr << "\nError opening video file\n";
+        Logger::Error("Error opening video file");
         return;
     }
+    Logger::Info("Video file is opening ");
     capture.read(frame.image);
 }
 
@@ -58,6 +61,7 @@ void CameraProcessor::insertToQueue() {
     dataFromCamera.push(temp);
 
      prev = frame.image.clone();
+
 }
 
 void CameraProcessor::run() {
@@ -68,6 +72,7 @@ void CameraProcessor::run() {
       
         if (frame.image.empty()) {
             cout << "End of stream\n";
+            Logger::Info("End of stream");
             break;
         }
         if (++countFrame % numFramesCheck == 0 &&calcAbsDiff()) {
@@ -77,6 +82,7 @@ void CameraProcessor::run() {
             continue;
         }
         cout << "part camera\n";
+        Logger::Info("part camera");
     }
 }
 
@@ -99,6 +105,7 @@ string currentTime() {
     sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", milliseconds);
 
     string formatted_time = buffer;
+    Logger::Info("the time camera is %s", formatted_time);
     return formatted_time;
 }
 
@@ -115,7 +122,7 @@ void cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     string path = R"(./assets/parking.mp4)";
-  //  string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+   // string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
