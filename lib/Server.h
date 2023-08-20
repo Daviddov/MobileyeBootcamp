@@ -22,6 +22,6 @@ public:
 	void detect_with_YOLO5(FrameWrap& currFrame);
 
 	void run();
-};
 
-void serverPart(ServerProcessor& server);
+  static void  serverPart(ServerProcessor& server);
+};

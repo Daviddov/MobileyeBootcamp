@@ -12,6 +12,7 @@ void CameraProcessor::setNumFramesCheck(double p) {
     numFramesCheck = p;
 }
 
+//c'tor
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
     countFrame = 0;
     active = true;
@@ -109,7 +110,7 @@ string currentTime() {
     return formatted_time;
 }
 
-void cameraPart(CameraProcessor& camera) {
+void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     int id = 123;

@@ -31,6 +31,7 @@ struct FrameWrap
 };
 
 
+
 vector<string> load_class_list();
 
 void load_net(cv::dnn::Net& net);
@@ -44,6 +45,7 @@ bool calcAbsDiff(const  Mat& image1, const Mat& image2);
 static int callbackFunction(void* data, int argc, char** argv, char** azColName);
 
 bool handleDBError(int failed, sqlite3* db, string what);
+
 
 
 

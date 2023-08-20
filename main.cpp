@@ -6,7 +6,6 @@
 //mutex!!!!!!!!!!!!
 
 
-
 int main() {
 
 	LogPriority priority = InfoPriority;
@@ -20,9 +19,9 @@ int main() {
 
 	ServerProcessor server(dataFromCamera);
 
-	thread cameraThread(cameraPart, ref(camera));
-
-	thread serverThread(serverPart, ref(server));
+	thread cameraThread(CameraProcessor::cameraPart, ref(camera));
+	
+	thread serverThread(ServerProcessor::serverPart, ref(server));
 
 	cameraThread.join();
 	serverThread.join();

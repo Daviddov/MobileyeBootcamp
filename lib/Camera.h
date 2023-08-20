@@ -43,8 +43,9 @@ public:
     void insertToQueue();
 
     void run();
+
+    static void  cameraPart(CameraProcessor& camera);
 };
 
-void cameraPart(CameraProcessor& camera);
 
 string currentTime();
