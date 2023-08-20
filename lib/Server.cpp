@@ -1,13 +1,12 @@
 #include "Server.h"
-#include "Yolo.h"
-#include "Rect.h"
+
 
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
 
 	active = true;
 }
 
-void ServerProcessor::detect_with_YOLO5(FrameWrap& currFrame) {
+void ServerProcessor::detect_with_YOLO5() {
 
 	Yolo5 yolo(currFrame);
 	yolo.detect();
@@ -27,7 +26,7 @@ void ServerProcessor::run() {
 
 			dataFromCamera.pop();
 
-			detect_with_YOLO5(currFrame);
+			detect_with_YOLO5();
 
 			cv::imshow("output", currFrame.image);
 

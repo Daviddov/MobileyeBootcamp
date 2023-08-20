@@ -16,14 +16,17 @@ void YoloRect::toDrawRect() {
 		rectangle(frame.image, box, color, 3);
 		rectangle(frame.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
 		putText(frame.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
-		//add logger??
-		cout << "width" <<frame.image.cols  << "hight" << frame.image.rows << "x" << box.x << "y"<<box.y<<endl;	
 		
+		Logger::Debug("origin frame width is %d hight is %d ", frame.image.cols, frame.image.rows);
+		Logger::Debug("Top left x is %d Top left y is %d ", box.x, box.y);
+		Logger::Debug("Box width is %d Box hight is %d ", box.width, box.height);
+
 		//Modify x and y for don't overflow from original frame.
-		box.x < 0 ? box.x = 0 : box.x = box.x;
-		box.y < 0 ? box.y = 0 : box.y = box.y;
-		box.x > 20 ? box.x -= 20 : box.x = box.x;
-		box.y > 20 ? box.y -= 20 : box.y = box.y;
+		box.x < 0 ? box.x = 0 : box.x ;
+		box.y < 0 ? box.y = 0 : box.y ;
+		box.x > 20 ? box.x -= 20 : box.x;
+		box.y > 20 ? box.y -= 20 : box.y;
+
 		writeRectOnDB( box, class_list[classId]);
 	}
 }
@@ -56,7 +59,7 @@ int YoloRect::callbackFunction(void* data, int argc, char** argv, char** azColNa
 
 bool YoloRect::handleDBError(int failed, sqlite3* db, string what) {
 	if (failed != SQLITE_OK) {
-		cerr << "Failed to " << what << endl;
+		Logger::Error("Failed to %s", what);
 		sqlite3_close(db);
 		return true;
 	}
