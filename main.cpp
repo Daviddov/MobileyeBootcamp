@@ -25,7 +25,8 @@ int main() {
 
 	cameraThread.join();
 	serverThread.join();
-	Logger::Info("the programe is finised");
+
+	Logger::Info("the programme is finised");
 
 	return 0;
 }

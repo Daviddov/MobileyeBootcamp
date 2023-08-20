@@ -14,6 +14,7 @@ void Yolo5::load_class_list()
 	{
 		class_list.push_back(line);
 	}
+	Logger::Info("the class list of yolo is readed");
 }
 
 void Yolo5::load_net()
@@ -36,11 +37,11 @@ Mat Yolo5::format_yolov5() {
 
 void Yolo5::detect() {
 
-	const float INPUT_WIDTH = 640.0;
-	const float INPUT_HEIGHT = 640.0;
-	const float SCORE_THRESHOLD = 0.2;
-	const float NMS_THRESHOLD = 0.4;
-	const float CONFIDENCE_THRESHOLD = 0.4;
+	const float INPUT_WIDTH = 640.0f;
+	const float INPUT_HEIGHT = 640.0f;
+	const float SCORE_THRESHOLD = 0.2f;
+	const float NMS_THRESHOLD = 0.4f;
+	const float CONFIDENCE_THRESHOLD = 0.4f;
 
 	Mat blob;
 
