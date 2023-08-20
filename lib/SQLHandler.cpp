@@ -66,3 +66,9 @@ int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azCol
 	cout << endl;
 	return 0;
 }
+
+void SQLHandler::printTable() {
+	const char* selectAllQuery = "SELECT * FROM MyTable;";
+	sqlite3_exec(db, selectAllQuery, nullptr, nullptr, nullptr);
+	
+}

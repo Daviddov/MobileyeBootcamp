@@ -15,7 +15,7 @@ public:
 		void selectMaxID();
     void deleteTable();
     static int callbackFunction(void* data, int argc, char** argv, char** azColName);
-
+    void SQLHandler::printTable();
 private:
     sqlite3* db;
 };

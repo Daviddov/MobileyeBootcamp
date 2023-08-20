@@ -90,6 +90,7 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 		sqlHandler.selectMaxID();
 	}
 
+	//sqlHandler.printTable();
 	sqlHandler.deleteTable();
 	sqlHandler.close();
 }
