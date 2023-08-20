@@ -44,7 +44,7 @@ public:
 
     void run();
 
-    void static  cameraPart(CameraProcessor& camera);
+    static void  cameraPart(CameraProcessor& camera);
 };
 
 

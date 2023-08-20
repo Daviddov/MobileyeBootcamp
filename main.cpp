@@ -15,9 +15,9 @@ int main() {
 
 	ServerProcessor server(dataFromCamera);
 
-	thread cameraThread(camera.cameraPart, ref(camera));
+	thread cameraThread(CameraProcessor::cameraPart, ref(camera));
 	
-	thread serverThread(server.serverPart, ref(server));
+	thread serverThread(ServerProcessor::serverPart, ref(server));
 
 	cameraThread.join();
 	serverThread.join();
