@@ -24,7 +24,6 @@ if (NOT googletest) # is googletest defined if already built?
 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 	FetchContent_MakeAvailable(googletest)
 endif()
-set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
 
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
