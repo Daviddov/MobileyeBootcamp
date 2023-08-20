@@ -33,6 +33,7 @@ void ServerProcessor::run() {
 
 			if (waitKey(1) == 27)
 			{
+				Logger::Info("part server finished by user");
 				cout << "part server finished by user\n";
 				break;
 			}
@@ -43,4 +44,5 @@ void ServerProcessor::run() {
 
 void ServerProcessor::serverPart(ServerProcessor& server) {
 	server.run();
+	Logger::Info("server is runing");
 }

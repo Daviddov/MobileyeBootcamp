@@ -8,11 +8,11 @@ class CameraProcessor {
 
 private:
 
-    int numFramesCheck;
-
     int countFrame;
 
     int cameraId;
+
+    int numFramesCheck;
 
     double frameDiffThreshold;
 
@@ -36,7 +36,7 @@ public:
 
     void setPrev(Mat p);
 
-    void  setNumFramesCheck(int numFrames);
+    void  setFrameDiffThreshold(double frameDiff);
 
 	void init(int id ,string path,int numFrames, double frame_diff);
 

@@ -1,24 +1,24 @@
 #include "Camera.h" 
-
+//this nedded for test.cpp 
 void CameraProcessor::setFrame(Mat f) {
     frame.image = f;
 }
-
+//this nedded for test.cpp 
 void CameraProcessor::setPrev(Mat p) {
     prev = p;
 }
 
-void CameraProcessor::setNumFramesCheck(int numFrames) {
-    numFramesCheck = numFrames;
+void CameraProcessor::setFrameDiffThreshold(double frameDiff){
+    frameDiffThreshold = frameDiff;
 }
 
 //c'tor
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
     countFrame = 0;
     active = true;
-    cameraId = 0;
+    cameraId = -1;
     numFramesCheck = 0;
-    frameDiffThreshold = 0;
+    frameDiffThreshold = 0.0;
 }
 
 bool CameraProcessor:: calcAbsDiff() {
@@ -28,6 +28,7 @@ bool CameraProcessor:: calcAbsDiff() {
     //convert diff to gray because countNonZero func can't to resive COLOR_IMG 
     cvtColor(diff, diff, COLOR_BGR2GRAY);
     double normalRes = (double)(countNonZero(diff)) / (double)(frame.image.cols * frame.image.rows);
+
     return frameDiffThreshold < normalRes;
 }
 
@@ -43,9 +44,12 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
 
     if (!capture.isOpened()) {
         cerr << "\nError opening video file\n";
+        Logger::Error("Error opening video file");
         return;
     }
+    Logger::Info("Video file is opening ");
     capture.read(frame.image);
+
 }
 
 void CameraProcessor::insertToQueue() {
@@ -69,6 +73,7 @@ void CameraProcessor::run() {
       
         if (frame.image.empty()) {
             cout << "End of stream\n";
+            Logger::Info("End of stream");
             break;
         }
         if (++countFrame % numFramesCheck == 0 &&calcAbsDiff()) {
@@ -78,6 +83,7 @@ void CameraProcessor::run() {
             continue;
         }
         cout << "part camera\n";
+        Logger::Info("part camera");
     }
 }
 
@@ -100,6 +106,7 @@ string currentTime() {
     sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", milliseconds);
 
     string formatted_time = buffer;
+    Logger::Info("the time camera is %s", formatted_time);
     return formatted_time;
 }
 
