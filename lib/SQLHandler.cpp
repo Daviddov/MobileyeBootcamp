@@ -65,3 +65,28 @@ void SQLHandler::printTable() {
 	const char* selectAllQuery = "SELECT * FROM MyTable;";
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }
+
+void SQLHandler::cleanDataBase(const char* dbName) {
+	SQLHandler sqlHandler; // Instantiate the SQLHandler class
+
+	if (sqlHandler.open(dbName)) { // Open the database
+		const char* deleteTableQuery = "DELETE FROM MyTable;";
+		int rc = sqlite3_exec(sqlHandler.getDB(), deleteTableQuery, nullptr, nullptr, nullptr);
+
+		if (rc == SQLITE_OK) {
+			std::cout << "Table successfully deleted." << std::endl;
+		}
+		else {
+			std::cerr << "Failed to delete table." << std::endl;
+		}
+
+		sqlHandler.close(); // Close the database
+	}
+	else {
+		std::cerr << "Failed to open the database." << std::endl;
+	}
+}
+
+sqlite3* SQLHandler::getDB() {
+	return db;
+}
