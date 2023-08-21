@@ -1,6 +1,6 @@
 #include "Yolo.h"
 
-Yolo5::Yolo5(FrameWrap& frameW):frame(frameW)
+Yolo5::Yolo5(FrameWrap& frameW):frameWarp(frameW)
 {
 	load_net();
 	load_class_list();
@@ -29,9 +29,9 @@ void Yolo5::load_net()
 }
 
 Mat Yolo5::format_yolov5() {
-	int _max = MAX(frame.image.cols, frame.image.rows);
+	int _max = MAX(frameWarp.image.cols, frameWarp.image.rows);
 	Mat result = Mat::zeros(_max, _max, CV_8UC3);
-	frame.image.copyTo(result(Rect(0, 0, frame.image.cols, frame.image.rows)));
+	frameWarp.image.copyTo(result(Rect(0, 0, frameWarp.image.cols, frameWarp.image.rows)));
 	return result;
 }
 

@@ -1,9 +1,13 @@
 #include "SQLHandler.h"
 
+
+//c'tor
 SQLHandler::SQLHandler() : db(nullptr) {}
 
+//d'tor
 SQLHandler::~SQLHandler() {
-	close();
+	//that close in d'tor of a server
+	//close();
 }
 
 bool SQLHandler::open(const char* dbName) {
@@ -34,7 +38,7 @@ bool SQLHandler::createTableIfNotExists() {
 	return sqlite3_exec(db, createTableQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
-bool SQLHandler::insertData(Rect rect, FrameWrap& frame, const string& objectType, float R, float G, float B) {
+bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objectType, float R, float G, float B) {
 	char insertDataQuery[256];
 	snprintf(insertDataQuery, sizeof(insertDataQuery),
 		"INSERT INTO MyTable (timestamp,\"frame number\","
@@ -42,7 +46,7 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frame, const string& objectTyp
 		"width, height, \"object type\", "
 		"\"R avg\", \"G avg\", \"B avg\") "
 		"VALUES ('%s', %d, %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
-		frame.timestamp.c_str(), frame.frameNumber, rect.x, rect.y, rect.width, rect.height,
+		frameWarp.timestamp.c_str(), frameWarp.frameNumber, rect.x, rect.y, rect.width, rect.height,
 		objectType.c_str(), R, G, B);
 
 	return sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
@@ -64,4 +68,15 @@ int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azCol
 void SQLHandler::printTable() {
 	const char* selectAllQuery = "SELECT * FROM MyTable;";
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
+}
+
+bool SQLHandler::cleanDataBase() {
+
+	const char* dropTableQuery = "DROP TABLE IF EXISTS MyTable;";
+
+	return sqlite3_exec(db, dropTableQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
+}
+
+sqlite3* SQLHandler::getDB() {
+	return db;
 }

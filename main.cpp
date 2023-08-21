@@ -7,7 +7,7 @@
 
 
 int main() {
-
+	//log init
 	LogPriority priority = InfoPriority;
 	mutex log_mutex;
 	Logger::EnableFileOutput();
