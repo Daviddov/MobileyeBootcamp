@@ -71,7 +71,5 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 			Logger::Error("Failed to insert data.");
 		}
 	}
-	
-
-
+	Logger::Info("write Rect On DB.");
 }
