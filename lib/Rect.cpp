@@ -65,15 +65,23 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 		return;
 	}
 
+	bool success = false;
 	if (sqlHandler.createTableIfNotExists()) {
+		success = sqlHandler.insertData(rect, frame, objectType, R, G, B);
+	}
+
+	if (success) {
+		sqlHandler.selectMaxID();
+	}
+
+	/*if (sqlHandler.createTableIfNotExists()) {
 		if (sqlHandler.insertData(rect, frame, objectType, R, G, B)) {
 			sqlHandler.selectMaxID();
 		}
 		else {
 			Logger::Error("Failed to insert data.");
 		}
-	}
-	sqlHandler.printTable();
-
+	}*/
+	
 	sqlHandler.close();
 }
