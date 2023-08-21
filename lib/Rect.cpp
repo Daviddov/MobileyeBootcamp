@@ -1,4 +1,5 @@
 #include "Rect.h"
+#include "SQLHandler.h"
 
 //c'tor
 YoloRect::YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP) :frameWarp(frameW), output(outputP), class_list(class_listP)
@@ -64,6 +65,7 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 		Logger::Error("Failed to open database.");
 		return;
 	}
+	SQLHandler::cleanDataBase("rect_data.db");
 
 	if (sqlHandler.createTableIfNotExists()) {
 		if (sqlHandler.insertData(rect, frameWarp, objectType, R, G, B)) {

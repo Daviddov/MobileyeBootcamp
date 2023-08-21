@@ -29,6 +29,5 @@ public:
 	void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
 
 
-
 };
 

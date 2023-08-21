@@ -66,7 +66,7 @@ void SQLHandler::printTable() {
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }
 
- void SQLHandler::cleanDataBase(const char* dbName) {
+void SQLHandler::cleanDataBase(const char* dbName) {
 	SQLHandler sqlHandler; // Instantiate the SQLHandler class
 
 	if (sqlHandler.open(dbName)) { // Open the database

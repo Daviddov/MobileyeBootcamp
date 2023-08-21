@@ -24,6 +24,7 @@ public:
 
 	void printTable();
 	sqlite3* getDB();
+
 private:
 
 	sqlite3* db;
