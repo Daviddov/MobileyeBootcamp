@@ -1,4 +1,5 @@
 #include "SQLHandler.h"
+#include "../lib_logger/Logger.h"
 
 SQLHandler::SQLHandler() : db(nullptr) {}
 
@@ -50,7 +51,7 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objec
 
 void SQLHandler::selectMaxID() {
 	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
-	sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
+	//sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
 }
 
 int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azColName) {
@@ -66,25 +67,28 @@ void SQLHandler::printTable() {
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }
 
-void SQLHandler::cleanDataBase(const char* dbName) {
-	SQLHandler sqlHandler; // Instantiate the SQLHandler class
+void SQLHandler::cleanDataBase() {
+	char* errorMsg = nullptr;
 
-	if (sqlHandler.open(dbName)) { // Open the database
-		const char* deleteTableQuery = "DELETE FROM MyTable;";
-		int rc = sqlite3_exec(sqlHandler.getDB(), deleteTableQuery, nullptr, nullptr, nullptr);
+	const char* dropTableQuery = "DROP TABLE IF EXISTS MyTable;";
+	int result = sqlite3_exec(db, dropTableQuery, nullptr, nullptr, &errorMsg);
 
-		if (rc == SQLITE_OK) {
-			std::cout << "Table successfully deleted." << std::endl;
-		}
-		else {
-			std::cerr << "Failed to delete table." << std::endl;
-		}
-
-		sqlHandler.close(); // Close the database
+	if (result != SQLITE_OK) {
+		// Handle error, print error message or log the error
+		sqlite3_free(errorMsg);
+		return;
 	}
-	else {
-		std::cerr << "Failed to open the database." << std::endl;
+
+	// Recreate the table after dropping it
+	if (!createTableIfNotExists()) {
+		// Handle error, print error message or log the error
+		return;
 	}
+
+	// Additional cleanup tasks if needed
+
+	// Print success message or log the success
+	Logger::Info("Database cleaned and table recreated.");
 }
 
 sqlite3* SQLHandler::getDB() {

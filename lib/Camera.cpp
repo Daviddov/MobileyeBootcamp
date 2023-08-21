@@ -38,7 +38,7 @@ bool CameraProcessor:: calcAbsDiff() {
     return frameDiffThreshold < normalRes;
 }
 
-void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) {
+void CameraProcessor::init(int id, string path,int numFrames ,double frame_diff) {
 
     cameraId = id;
 
@@ -48,7 +48,6 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
 
     capture.open(path);
 
-    SQLHandler::cleanDataBase("rect_data.db");
     if (!capture.isOpened()) {
         cerr << "\nError opening video file\n";
         Logger::Error("Error opening video file");
@@ -56,7 +55,7 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
     }
     Logger::Info("Video file is opening ");
     capture.read(frameWarp.image);
-
+    insertToQueue();
 }
 
 void CameraProcessor::insertToQueue() {
@@ -89,7 +88,6 @@ void CameraProcessor::run() {
         else {
             continue;
         }
-        cout << "part camera\n";
         Logger::Info("part camera");
     }
 }
@@ -120,7 +118,7 @@ string currentTime() {
 void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
-    int id = 123;
+    int id = 1;
 
     //the user input it using Qt
     int numFrames = 30;
@@ -134,7 +132,7 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
-    camera.insertToQueue();
+    
 
     camera.run();
 }

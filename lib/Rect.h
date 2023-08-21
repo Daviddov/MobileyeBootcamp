@@ -15,15 +15,14 @@ private:
 
 	vector<Scalar> colors;
 
-	SQLHandler sqlHandler;
+	SQLHandler &sqlHandler;
 
 	void writeRectOnDB(Rect rect, string objectType);
 
 
 public:
 
-	YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP);
-
+	YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler& sqlHandler);
 	void toDrawRect();
 
 	void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);

@@ -2,8 +2,9 @@
 #include "SQLHandler.h"
 
 //c'tor
-YoloRect::YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP) :frameWarp(frameW), output(outputP), class_list(class_listP)
+YoloRect::YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler &sqlHandler) :frameWarp(frameW), output(outputP), class_list(class_listP), sqlHandler(sqlHandler)
 {
+	
 	colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 }
 
@@ -61,11 +62,6 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 	float R = 0, G = 0, B = 0;
 	calcAvgPerChannel(imgFromRect, &R, &G, &B);
 
-	if (!sqlHandler.open("rect_data.db")) {
-		Logger::Error("Failed to open database.");
-		return;
-	}
-	SQLHandler::cleanDataBase("rect_data.db");
 
 	if (sqlHandler.createTableIfNotExists()) {
 		if (sqlHandler.insertData(rect, frameWarp, objectType, R, G, B)) {
@@ -75,7 +71,7 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 			Logger::Error("Failed to insert data.");
 		}
 	}
-	sqlHandler.printTable();
+	
 
-	sqlHandler.close();
+
 }

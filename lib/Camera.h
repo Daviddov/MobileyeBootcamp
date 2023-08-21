@@ -2,9 +2,6 @@
 #include <conio.h>
 #include "SQLHandler.h"
 
-
-
-
 class CameraProcessor {
 
 private:
