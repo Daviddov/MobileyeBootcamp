@@ -1,8 +1,10 @@
 #include "SQLHandler.h"
 #include "../lib_logger/Logger.h"
 
+//c'tor
 SQLHandler::SQLHandler() : db(nullptr) {}
 
+//d'tor
 SQLHandler::~SQLHandler() {
 	close();
 }
@@ -67,28 +69,11 @@ void SQLHandler::printTable() {
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }
 
-void SQLHandler::cleanDataBase() {
-	char* errorMsg = nullptr;
+bool SQLHandler::cleanDataBase() {
 
 	const char* dropTableQuery = "DROP TABLE IF EXISTS MyTable;";
-	int result = sqlite3_exec(db, dropTableQuery, nullptr, nullptr, &errorMsg);
 
-	if (result != SQLITE_OK) {
-		// Handle error, print error message or log the error
-		sqlite3_free(errorMsg);
-		return;
-	}
-
-	// Recreate the table after dropping it
-	if (!createTableIfNotExists()) {
-		// Handle error, print error message or log the error
-		return;
-	}
-
-	// Additional cleanup tasks if needed
-
-	// Print success message or log the success
-	Logger::Info("Database cleaned and table recreated.");
+	return sqlite3_exec(db, dropTableQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
 sqlite3* SQLHandler::getDB() {

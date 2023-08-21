@@ -132,7 +132,5 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
-    
-
     camera.run();
 }

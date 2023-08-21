@@ -66,10 +66,10 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 	if (sqlHandler.createTableIfNotExists()) {
 		if (sqlHandler.insertData(rect, frameWarp, objectType, R, G, B)) {
 			sqlHandler.selectMaxID();
+			Logger::Info("write Rect On DB.");
 		}
 		else {
 			Logger::Error("Failed to insert data.");
 		}
 	}
-	Logger::Info("write Rect On DB.");
 }
