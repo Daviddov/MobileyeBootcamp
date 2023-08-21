@@ -51,7 +51,7 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
 }
 
 void CameraProcessor::insertToQueue() {
-
+    
     frame.frameNamber = ++countFrame;
 
     frame.timestamp = currentTime();
