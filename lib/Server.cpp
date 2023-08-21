@@ -2,6 +2,7 @@
 
 //c'tor
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
+	active = true;
 
 	if (!sqlHandler.open("rect_data.db")) {
 		Logger::Error("Failed to open database.");
@@ -11,8 +12,7 @@ ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue)
 		Logger::Error("Failed to clean database.");
 		return;
 	}
-
-	active = true;
+	Logger::Info("To cleaned database.");
 }
 
 //d'tor

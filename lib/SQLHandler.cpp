@@ -1,12 +1,13 @@
 #include "SQLHandler.h"
-#include "../lib_logger/Logger.h"
+
 
 //c'tor
 SQLHandler::SQLHandler() : db(nullptr) {}
 
 //d'tor
 SQLHandler::~SQLHandler() {
-	close();
+	//that close in d'tor of a server
+	//close();
 }
 
 bool SQLHandler::open(const char* dbName) {
@@ -53,12 +54,12 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objec
 
 void SQLHandler::selectMaxID() {
 	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
-	//sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
+	sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
 }
 
 int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azColName) {
 	for (int i = 0; i < argc; ++i) {
-		cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
+		cout << azColName[i] << " =33 " << (argv[i] ? argv[i] : "NULL") << endl;
 	}
 	cout << endl;
 	return 0;
