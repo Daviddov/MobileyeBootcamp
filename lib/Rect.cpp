@@ -1,7 +1,7 @@
 #include "Rect.h"
 
 //c'tor
-YoloRect::YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP) :frame(frameW), output(outputP), class_list(class_listP)
+YoloRect::YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP) :frameWarp(frameW), output(outputP), class_list(class_listP)
 {
 	colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 }
@@ -13,11 +13,11 @@ void YoloRect::toDrawRect() {
 		auto box = output[i].box;
 		auto classId = output[i].class_id;
 		const auto color = colors[classId % colors.size()];
-		rectangle(frame.image, box, color, 3);
-		rectangle(frame.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
-		putText(frame.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
+		rectangle(frameWarp.image, box, color, 3);
+		rectangle(frameWarp.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
+		putText(frameWarp.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
 
-		Logger::Debug("origin frame width is %d hight is %d ", frame.image.cols, frame.image.rows);
+		Logger::Debug("origin frame width is %d hight is %d ", frameWarp.image.cols, frameWarp.image.rows);
 		Logger::Debug("Top left x is %d Top left y is %d ", box.x, box.y);
 		Logger::Debug("Box width is %d Box hight is %d ", box.width, box.height);
 
@@ -50,7 +50,7 @@ void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
 void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 
-	Mat imgFromRect = frame.image(rect);
+	Mat imgFromRect = frameWarp.image(rect);
 
 	if (imgFromRect.empty()) {
 		Logger::Error("Failed to extract rectangle from image.");
@@ -66,7 +66,7 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 	}
 
 	if (sqlHandler.createTableIfNotExists()) {
-		if (sqlHandler.insertData(rect, frame, objectType, R, G, B)) {
+		if (sqlHandler.insertData(rect, frameWarp, objectType, R, G, B)) {
 			sqlHandler.selectMaxID();
 		}
 		else {

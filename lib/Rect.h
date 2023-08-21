@@ -11,7 +11,7 @@ private:
 
 	vector<string>& class_list;
 
-	FrameWrap& frame;
+	FrameWrap& frameWarp;
 
 	vector<Scalar> colors;
 
@@ -29,10 +29,6 @@ public:
 	void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
 
 
-	//bool createTableIfNotExists(sqlite3* db);
-	//bool insertData(sqlite3* db, Rect rect, string objectType, float R, float G, float B);
-	//void selectMaxID(sqlite3* db);
-	//void deleteTable(sqlite3 * db);
 
 };
 

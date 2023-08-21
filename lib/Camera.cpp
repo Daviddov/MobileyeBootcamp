@@ -1,7 +1,7 @@
 #include "Camera.h" 
 //this nedded for test.cpp 
 void CameraProcessor::setFrame(Mat f) {
-    frame.image = f;
+    frameWarp.image = f;
 }
 //this nedded for test.cpp 
 void CameraProcessor::setPrev(Mat p) {
@@ -28,11 +28,11 @@ CameraProcessor::~CameraProcessor() {
 
 bool CameraProcessor:: calcAbsDiff() {
     Mat diff;
-    absdiff(prev, frame.image, diff);
+    absdiff(prev, frameWarp.image, diff);
 
     //convert diff to gray because countNonZero func can't to resive COLOR_IMG 
     cvtColor(diff, diff, COLOR_BGR2GRAY);
-    double normalRes = (double)(countNonZero(diff)) / (double)(frame.image.cols * frame.image.rows);
+    double normalRes = (double)(countNonZero(diff)) / (double)(frameWarp.image.cols * frameWarp.image.rows);
 
     return frameDiffThreshold < normalRes;
 }
@@ -47,36 +47,37 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
 
     capture.open(path);
 
+    SQLHandler::cleanDataBase("rect_data.db");
     if (!capture.isOpened()) {
         cerr << "\nError opening video file\n";
         Logger::Error("Error opening video file");
         return;
     }
     Logger::Info("Video file is opening ");
-    capture.read(frame.image);
+    capture.read(frameWarp.image);
 
 }
 
 void CameraProcessor::insertToQueue() {
 
-    frame.frameNumber = ++countFrame;
+    frameWarp.frameNumber = ++countFrame;
 
-    frame.timestamp = currentTime();
+    frameWarp.timestamp = currentTime();
 
-    FrameWrap temp = frame;
-    temp.image = frame.image.clone();
+    FrameWrap temp = frameWarp;
+    temp.image = frameWarp.image.clone();
     dataFromCamera.push(temp);
 
-     prev = frame.image.clone();
+     prev = frameWarp.image.clone();
 }
 
 void CameraProcessor::run() {
 
     while (active) {
        
-        capture.read(frame.image);
+        capture.read(frameWarp.image);
       
-        if (frame.image.empty()) {
+        if (frameWarp.image.empty()) {
             cout << "End of stream\n";
             Logger::Info("End of stream");
             break;

@@ -18,7 +18,7 @@ private:
 
 	bool active;
 
-	FrameWrap frame;
+	FrameWrap frameWarp;
 
 	queue<FrameWrap>& dataFromCamera;
 
