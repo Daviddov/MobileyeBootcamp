@@ -59,7 +59,7 @@ void SQLHandler::selectMaxID() {
 
 int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azColName) {
 	for (int i = 0; i < argc; ++i) {
-		cout << azColName[i] << " =33 " << (argv[i] ? argv[i] : "NULL") << endl;
+		cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
 	}
 	cout << endl;
 	return 0;
