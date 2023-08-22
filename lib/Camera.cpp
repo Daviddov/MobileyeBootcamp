@@ -111,7 +111,7 @@ void cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     //string path = R"(./assets/parking.mp4)";
-    string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+    string path = R"( C:\Users\PC\Downloads\mileStone1\MobileyeBootcamp_ABUS\assets\parking.mp4)";
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
