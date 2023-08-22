@@ -10,15 +10,17 @@ private:
 
 	vector<Detection> output;
 
-	vector<string> class_list;
+	vector<string> classList;
 
 	FrameWrap& frameWarp;
 
-	void load_net();
+	void loadNet();
 
-	void load_class_list();
 
-	Mat format_yolov5();
+	Mat formatYolov5();
+
+	void loadClassList();
+		Mat formatInputImage();
 
 public:
 
