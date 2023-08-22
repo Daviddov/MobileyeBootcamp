@@ -3,45 +3,51 @@
 
 
 
-string currentTime();
 
 class CameraProcessor {
 
 private:
 
-    int numFramesCheck;
+	int countFrame;
 
-    int countFrame;
+	int cameraId;
 
-    int cameraId;
+	int numFramesCheck;
 
-    double frameDiffThreshold;
+	double frameDiffThreshold;
 
-    bool active;
+	bool active;
 
-    FrameWrap frame;
+	FrameWrap frame;
 
-    queue<FrameWrap>& dataFromCamera;
+	queue<FrameWrap>& dataFromCamera;
 
-    Mat prev;
-   
-    VideoCapture capture;
+	Mat prev;
+
+	VideoCapture capture;
 
 public:
 
-   CameraProcessor(queue<FrameWrap>& queue);
+	CameraProcessor(queue<FrameWrap>& queue);
 
-    bool calcAbsDiff();
+	~CameraProcessor();
 
-    void setFrame(Mat f);
+	bool calcAbsDiff();
 
-    void setPrev(Mat p);
+	void setFrame(Mat f);
 
-	void init(int id ,string path,int numFrames, double frame_diff);
+	void setPrev(Mat p);
 
-    void insertToQueue();
+	void  setFrameDiffThreshold(double frameDiff);
 
-    void run();
+	void init(int id, string path, int numFrames, double frame_diff);
+
+	void insertToQueue();
+
+	void run();
+
+	static void  cameraPart(CameraProcessor& camera);
 };
 
-void cameraPart(CameraProcessor& camera);
+
+string currentTime();

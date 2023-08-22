@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.14)
 
 project(lib_Test VERSION 1.0)
 set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
-
 # Find and link OpenCV for the test executable
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
