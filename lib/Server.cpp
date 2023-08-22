@@ -4,7 +4,7 @@
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
 	active = true;
 
-	if (!sqlHandler.open("rect_data.db")) {
+	/*if (!sqlHandler.open("rect_data.db")) {
 		Logger::Error("Failed to open database.");
 		return;
 	}
@@ -12,14 +12,14 @@ ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue)
 		Logger::Error("Failed to clean database.");
 		return;
 	}
-	Logger::Info("To cleaned database.");
+	Logger::Info("To cleaned database.");*/
 }
 
 //d'tor
 ServerProcessor::~ServerProcessor() {
-	
+
 	sqlHandler.close();
- }
+}
 
 void ServerProcessor::detect_with_YOLO5() {
 
@@ -48,7 +48,6 @@ void ServerProcessor::run() {
 			if (waitKey(1) == 27)
 			{
 				Logger::Info("part server finished by user");
-				cout << "part server finished by user\n";
 				break;
 			}
 		}

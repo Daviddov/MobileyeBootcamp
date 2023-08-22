@@ -2,7 +2,17 @@
 
 
 //c'tor
-SQLHandler::SQLHandler() : db(nullptr) {}
+SQLHandler::SQLHandler() : db(nullptr) {
+	if (!open("rect_data.db")) {
+		Logger::Error("Failed to open database.");
+		return;
+	}
+	if (!cleanDataBase()) {
+		Logger::Error("Failed to clean database.");
+		return;
+	}
+	Logger::Info("To cleaned database.");
+}
 
 //d'tor
 SQLHandler::~SQLHandler() {

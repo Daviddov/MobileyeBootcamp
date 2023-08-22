@@ -83,6 +83,7 @@ void CameraProcessor::run() {
 			break;
 		}
 		if (++countFrame % numFramesCheck == 0 && calcAbsDiff()) {
+			
 			insertToQueue();
 		}
 		else {
