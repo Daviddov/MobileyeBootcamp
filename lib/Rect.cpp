@@ -4,7 +4,6 @@
 //c'tor
 YoloRect::YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler &sqlHandler) :frameWarp(frameW), output(outputP), class_list(class_listP), sqlHandler(sqlHandler)
 {
-	
 	colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 }
 

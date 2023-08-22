@@ -139,6 +139,4 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
 
     camera.run();
-
-
 }
