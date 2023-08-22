@@ -3,22 +3,6 @@
 //c'tor
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
 	active = true;
-
-	/*if (!sqlHandler.open("rect_data.db")) {
-		Logger::Error("Failed to open database.");
-		return;
-	}
-	if (!sqlHandler.cleanDataBase()) {
-		Logger::Error("Failed to clean database.");
-		return;
-	}
-	Logger::Info("To cleaned database.");*/
-}
-
-//d'tor
-ServerProcessor::~ServerProcessor() {
-
-	sqlHandler.close();
 }
 
 void ServerProcessor::detect_with_YOLO5() {
@@ -26,7 +10,7 @@ void ServerProcessor::detect_with_YOLO5() {
 	Yolo5 yolo(currFrame);
 	yolo.detect();
 
-	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
+	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 	rect.toDrawRect();
 }
 

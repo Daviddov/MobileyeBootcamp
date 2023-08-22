@@ -3,7 +3,7 @@
 
 
 
-class YoloRect {
+class RectHandler {
 
 private:
 
@@ -22,7 +22,7 @@ private:
 
 public:
 
-	YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler& sqlHandler);
+	RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler& sqlHandler);
 	
 	void toDrawRect();
 

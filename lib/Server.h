@@ -19,8 +19,6 @@ public:
 
 	ServerProcessor(queue<FrameWrap>& dataFromCamera);
 
-	~ServerProcessor();
-
 	void detect_with_YOLO5();
 
 	void run();

@@ -16,8 +16,7 @@ SQLHandler::SQLHandler() : db(nullptr) {
 
 //d'tor
 SQLHandler::~SQLHandler() {
-	//that close in d'tor of a server
-	//close();
+	close();
 }
 
 bool SQLHandler::open(const char* dbName) {
