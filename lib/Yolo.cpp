@@ -1,9 +1,6 @@
 #include "Yolo.h"
 
-Yolo5::Yolo5(FrameWrap& frameW) : frameWarp(frameW) {
-    loadNet();
-    loadClassList();
-}
+
 Yolo5::Yolo5() {
     loadNet();
     loadClassList();

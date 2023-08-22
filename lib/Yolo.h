@@ -23,16 +23,13 @@ private:
 
 	void loadNet();
 
-
-	Mat formatYolov5();
-
 	void loadClassList();
-		Mat formatInputImage();
+
+	Mat formatInputImage();
 
 public:
 
 	Yolo5();
-	Yolo5(FrameWrap& frameW);
 	void setFrame(FrameWrap& currFrame);
 	vector<Detection>& getOutput();
 
