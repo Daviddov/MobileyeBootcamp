@@ -14,7 +14,8 @@ ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue)
 
 void ServerProcessor::detect_with_YOLO5() {
 
-	Yolo5 yolo(currFrame);
+	//Yolo5 yolo(currFrame);
+	yolo.setFrame(currFrame);
 	yolo.detect();
 
 	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);

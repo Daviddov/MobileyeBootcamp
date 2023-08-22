@@ -4,6 +4,10 @@ Yolo5::Yolo5(FrameWrap& frameW) : frameWarp(frameW) {
     loadNet();
     loadClassList();
 }
+Yolo5::Yolo5() {
+    loadNet();
+    loadClassList();
+}
 
 void Yolo5::loadClassList() {
     ifstream classFile("./assets/classes.txt");
@@ -30,10 +34,6 @@ Mat Yolo5::formatInputImage() {
 }
 
 void Yolo5::detect() {
-    const float INPUT_SIZE = 640.0f;
-    const float SCORE_THRESHOLD = 0.2f;
-    const float NMS_THRESHOLD = 0.4f;
-    const float CONFIDENCE_THRESHOLD = 0.4f;
 
     Mat blob;
     Mat inputImage = formatInputImage();
@@ -50,9 +50,7 @@ void Yolo5::detect() {
     vector<float> confidences;
     vector<Rect> boxes;
 
-    const int NUM_OF_DETECT = 25200;
-    const int NUM_OF_DATA = 85;
-
+   
     float* data = (float*)outputs[0].data;
 
     for (int i = 0; i < NUM_OF_DETECT; ++i) {
@@ -102,4 +100,8 @@ vector<Detection>& Yolo5::getOutput() {
 
 vector<string>& Yolo5::getClassList() {
     return classList;
+}
+
+void Yolo5::setFrame(FrameWrap& currFrame) {
+    frameWarp = currFrame;
 }

@@ -15,6 +15,8 @@ private:
 
 	SQLHandler sqlHandler;
 
+	Yolo5 yolo;
+
 public:
 
 	ServerProcessor(queue<FrameWrap>& dataFromCamera);
