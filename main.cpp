@@ -6,8 +6,12 @@
 //mutex!!!!!!!!!!!!
 
 
-
 int main() {
+
+	LogPriority priority = InfoPriority;
+	mutex log_mutex;
+	Logger::EnableFileOutput();
+	Logger::Info("the programe is started");
 
 	queue<FrameWrap> dataFromCamera;
 
@@ -15,13 +19,15 @@ int main() {
 
 	ServerProcessor server(dataFromCamera);
 
-	thread cameraThread(cameraPart, ref(camera));
-
-	thread serverThread(serverPart, ref(server));
+	thread cameraThread(CameraProcessor::cameraPart, ref(camera));
+	
+	thread serverThread(ServerProcessor::serverPart, ref(server));
 
 	cameraThread.join();
 	serverThread.join();
-	
+
+	Logger::Info("the programme is finised");
+
 	return 0;
 }
 
