@@ -1,4 +1,5 @@
 #pragma once
+
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
@@ -17,9 +18,9 @@ class Logger
 {
 private:
     LogPriority priority = LogPriority::InfoPriority;
-    std::mutex log_mutex;
-    std::string filepath;
-    std::ofstream fileStream;
+    mutex log_mutex;
+    string filepath;
+    ofstream fileStream;
 
 public:
     static void SetPriority(LogPriority new_priority)
@@ -104,8 +105,8 @@ private:
             char buffer[80];
             strftime(buffer, 80, "%c", timestamp);
 
-            std::scoped_lock lock(log_mutex);
-            std::cout << buffer << '\t' << message_priority_str << message << '\n';
+            scoped_lock lock(log_mutex);
+            cout << buffer << '\t' << message_priority_str << message << '\n';
 
             if (fileStream.is_open())
             {
