@@ -1,9 +1,20 @@
 #include "SQLHandler.h"
-#include "../lib_logger/Logger.h"
-
-SQLHandler::SQLHandler() : db(nullptr) {}
 
 
+//c'tor
+SQLHandler::SQLHandler() : db(nullptr) {
+	if (!open("rect_data.db")) {
+		Logger::Error("Failed to open database.");
+		return;
+	}
+	if (!cleanDataBase()) {
+		Logger::Error("Failed to clean database.");
+		return;
+	}
+	Logger::Info("To cleaned database.");
+}
+
+//d'tor
 SQLHandler::~SQLHandler() {
 	close();
 }
@@ -52,14 +63,14 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objec
 
 void SQLHandler::selectMaxID() {
 	const char* selectDataQuery = "SELECT * FROM MyTable WHERE ID = (SELECT MAX(ID) FROM MyTable);";
-	//sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
+	sqlite3_exec(db, selectDataQuery, callbackFunction, nullptr, nullptr);
 }
 
 int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azColName) {
-	//for (int i = 0; i < argc; ++i) {
-	//	cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
-	//}
-	//cout << endl;
+	for (int i = 0; i < argc; ++i) {
+		cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
+	}
+	cout << endl;
 	return 0;
 }
 
@@ -68,34 +79,13 @@ void SQLHandler::printTable() {
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }
 
-void SQLHandler::cleanDataBase() {
-	char* errorMsg = nullptr;
+bool SQLHandler::cleanDataBase() {
 
 	const char* dropTableQuery = "DROP TABLE IF EXISTS MyTable;";
-	int result = sqlite3_exec(db, dropTableQuery, nullptr, nullptr, &errorMsg);
 
-	if (result != SQLITE_OK) {
-		// Handle error, print error message or log the error
-		sqlite3_free(errorMsg);
-		return;
-	}
-
-	// Recreate the table after dropping it
-	if (!createTableIfNotExists()) {
-		// Handle error, print error message or log the error
-		return;
-	}
-
-	// Additional cleanup tasks if needed
-
-	// Print success message or log the success
-	Logger::Info("Database cleaned and table recreated.");
+	return sqlite3_exec(db, dropTableQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
 sqlite3* SQLHandler::getDB() {
 	return db;
-}
-
-int SQLHandler::getValue() const {
-	return 42;
 }

@@ -2,12 +2,12 @@
 #include "SQLHandler.h"
 
 //c'tor
-YoloRect::YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler &sqlHandler) :frameWarp(frameW), output(outputP), class_list(class_listP), sqlHandler(sqlHandler)
+RectHandler::RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler &sqlHandler) :frameWarp(frameW), output(outputP), class_list(class_listP), sqlHandler(sqlHandler)
 {
 	colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 }
 
-void YoloRect::toDrawRect() {
+void RectHandler::toDrawRect() {
 
 	for (int i = 0; i < output.size(); ++i)
 	{
@@ -32,7 +32,7 @@ void YoloRect::toDrawRect() {
 	}
 }
 
-void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
+void RectHandler::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
 	float sumB = 0, sumG = 0, sumR = 0;
 	for (int row = 0; row < img.rows; row++) {
@@ -49,7 +49,7 @@ void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 	*R = sumR / size;
 }
 
-void YoloRect::writeRectOnDB(Rect rect, string objectType) {
+void RectHandler::writeRectOnDB(Rect rect, string objectType) {
 
 	Mat imgFromRect = frameWarp.image(rect);
 
@@ -64,13 +64,11 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 
 	if (sqlHandler.createTableIfNotExists()) {
 		if (sqlHandler.insertData(rect, frameWarp, objectType, R, G, B)) {
-			sqlHandler.selectMaxID();
+			//sqlHandler.selectMaxID();
+			Logger::Info("write Rect On DB.");
 		}
 		else {
 			Logger::Error("Failed to insert data.");
 		}
 	}
-	Logger::Info("write Rect On DB.");
 }
-
-

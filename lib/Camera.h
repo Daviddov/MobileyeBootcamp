@@ -16,6 +16,8 @@ private:
 
 	bool active;
 
+	bool isHaveError;
+
 	FrameWrap frameWarp;
 
 	queue<FrameWrap>& dataFromCamera;
@@ -38,7 +40,7 @@ public:
 
 	void  setFrameDiffThreshold(double frameDiff);
 
-	void init(int id, string path, int numFrames, double frame_diff);
+	bool init(int id, string path, int numFrames, double frame_diff);
 
 	void insertToQueue();
 
