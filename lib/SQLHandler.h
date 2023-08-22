@@ -23,6 +23,10 @@ public:
 
 	void printTable();
 
+
+	int getValue() const {
+		return 42;
+	}
 private:
 
 	sqlite3* db;
