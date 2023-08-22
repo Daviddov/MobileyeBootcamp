@@ -1,8 +1,7 @@
 #include "Server.h"
 
-
+//c'tor
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
-
 	active = true;
 }
 
@@ -11,7 +10,7 @@ void ServerProcessor::detect_with_YOLO5() {
 	Yolo5 yolo(currFrame);
 	yolo.detect();
 
-	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList());
+	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 	rect.toDrawRect();
 }
 
@@ -33,11 +32,12 @@ void ServerProcessor::run() {
 			if (waitKey(1) == 27)
 			{
 				Logger::Info("part server finished by user");
-				cout << "part server finished by user\n";
 				break;
 			}
 		}
-
+		else {
+			waitKey(1);
+		}
 	}
 }
 
