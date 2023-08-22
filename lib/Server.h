@@ -1,8 +1,7 @@
+#pragma once
 
 # include "Header.h"
 #include <conio.h>
-
-
 
 class ServerProcessor {
 
