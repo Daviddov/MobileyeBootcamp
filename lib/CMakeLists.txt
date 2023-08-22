@@ -15,7 +15,7 @@ set(lib_Src
 set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
 
 
-add_library(${PROJECT_NAME} ${lib_Src} )
+add_library(${PROJECT_NAME} ${lib_Src}  "queue.cpp")
 
 
 # Find and link OpenCV
