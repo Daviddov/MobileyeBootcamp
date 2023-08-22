@@ -1,4 +1,5 @@
 #include "Camera.h" 
+#include <chrono>
 
 //this nedded for test.cpp 
 void CameraProcessor::setFrame(Mat f) {
@@ -56,6 +57,9 @@ void CameraProcessor::init(int id, string path,int numFrames ,double frame_diff)
     Logger::Info("Video file is opening ");
     capture.read(frameWarp.image);
     insertToQueue();
+
+ 
+    //170734 microseconds
 }
 
 void CameraProcessor::insertToQueue() {
@@ -74,7 +78,7 @@ void CameraProcessor::insertToQueue() {
 void CameraProcessor::run() {
 
     while (active) {
-       
+
         capture.read(frameWarp.image);
       
         if (frameWarp.image.empty()) {
@@ -89,6 +93,8 @@ void CameraProcessor::run() {
             continue;
         }
         Logger::Info("part camera");
+
+        //Runtime: 172298 microseconds
     }
 }
 
@@ -116,7 +122,6 @@ string currentTime() {
 }
 
 void CameraProcessor::cameraPart(CameraProcessor& camera) {
-
     //the user input it using Qt
     int id = 1;
 
@@ -132,7 +137,8 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
-    
 
     camera.run();
+
+
 }
