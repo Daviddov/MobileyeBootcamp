@@ -54,7 +54,6 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
     }
     Logger::Info("Video file is opening ");
     capture.read(frame.image);
-
 }
 
 void CameraProcessor::insertToQueue() {

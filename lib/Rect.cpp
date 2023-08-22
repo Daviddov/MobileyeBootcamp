@@ -73,7 +73,7 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 			Logger::Error("Failed to insert data.");
 		}
 	}
-	sqlHandler.printTable();
+	//sqlHandler.printTable();
 
 	sqlHandler.close();
 }
