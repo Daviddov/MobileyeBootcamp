@@ -72,3 +72,5 @@ void YoloRect::writeRectOnDB(Rect rect, string objectType) {
 	}
 	Logger::Info("write Rect On DB.");
 }
+
+

@@ -3,6 +3,7 @@
 
 SQLHandler::SQLHandler() : db(nullptr) {}
 
+
 SQLHandler::~SQLHandler() {
 	close();
 }
@@ -93,4 +94,8 @@ void SQLHandler::cleanDataBase() {
 
 sqlite3* SQLHandler::getDB() {
 	return db;
+}
+
+int SQLHandler::getValue() const {
+	return 42;
 }
