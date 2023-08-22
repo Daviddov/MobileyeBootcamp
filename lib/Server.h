@@ -1,6 +1,6 @@
-#pragma once
-
 # include "Header.h"
+#include "Yolo.h"
+#include "Rect.h"
 #include <conio.h>
 
 class ServerProcessor {
@@ -18,9 +18,9 @@ public:
 
 	ServerProcessor(queue<FrameWrap>& dataFromCamera);
 
-	void detect_with_YOLO5(FrameWrap& currFrame);
+	void detect_with_YOLO5();
 
 	void run();
-};
 
-void serverPart(ServerProcessor& server);
+  static void  serverPart(ServerProcessor& server);
+};

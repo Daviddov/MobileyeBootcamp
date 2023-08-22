@@ -1,23 +1,18 @@
 #include "Server.h"
 
-ServerProcessor::ServerProcessor(queue<FrameWrap>& queue):dataFromCamera(queue){
+
+ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
 
 	active = true;
 }
 
-void ServerProcessor::detect_with_YOLO5(FrameWrap& currFrame) {
+void ServerProcessor::detect_with_YOLO5() {
 
-	dnn::Net net;
+	Yolo5 yolo(currFrame);
+	yolo.detect();
 
-	load_net(net);
-
-	vector<string> class_list = load_class_list();
-
-	vector<Detection> output;
-
-	detect(currFrame.image, net, output, class_list);
-
-	toDrawRect(currFrame, output, class_list);
+	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList());
+	rect.toDrawRect();
 }
 
 void ServerProcessor::run() {
@@ -27,11 +22,11 @@ void ServerProcessor::run() {
 		cout << dataFromCamera.size() << "\n";
 		if (!dataFromCamera.empty())
 		{
-		    currFrame = dataFromCamera.front();
+			currFrame = dataFromCamera.front();
 
 			dataFromCamera.pop();
 
-			detect_with_YOLO5(currFrame);
+			detect_with_YOLO5();
 
 			cv::imshow("output", currFrame.image);
 
@@ -46,7 +41,7 @@ void ServerProcessor::run() {
 	}
 }
 
-void serverPart(ServerProcessor& server) {
+void ServerProcessor::serverPart(ServerProcessor& server) {
 	server.run();
 	Logger::Info("server is runing");
 }

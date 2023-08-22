@@ -25,7 +25,6 @@ if (NOT googletest) # is googletest defined if already built?
 	FetchContent_MakeAvailable(googletest)
 endif()
 set(OpenCV_DIR "C:\\Users\\1\\Desktop\\KamaTech\\Bootcamp\\OpenCV\\opencv\\build")
-
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
 target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})

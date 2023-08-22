@@ -7,17 +7,23 @@ void CameraProcessor::setFrame(Mat f) {
 void CameraProcessor::setPrev(Mat p) {
     prev = p;
 }
-//this nedded for test.cpp 
-void CameraProcessor::setNumFramesCheck(double p) {
-    numFramesCheck = p;
+//this nedded for test.cpp
+void CameraProcessor::setFrameDiffThreshold(double frameDiff){
+    frameDiffThreshold = frameDiff;
 }
 
+//c'tor
 CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue){
     countFrame = 0;
     active = true;
-    cameraId = 0;
+    cameraId = -1;
     numFramesCheck = 0;
-    frameDiffThreshold = 0;
+    frameDiffThreshold = 0.0;
+}
+
+//d'tor
+CameraProcessor::~CameraProcessor() {
+    capture.release();
 }
 
 bool CameraProcessor:: calcAbsDiff() {
@@ -51,8 +57,8 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
 }
 
 void CameraProcessor::insertToQueue() {
-    
-    frame.frameNamber = ++countFrame;
+
+    frame.frameNumber = ++countFrame;
 
     frame.timestamp = currentTime();
 
@@ -61,7 +67,6 @@ void CameraProcessor::insertToQueue() {
     dataFromCamera.push(temp);
 
      prev = frame.image.clone();
-
 }
 
 void CameraProcessor::run() {
@@ -75,7 +80,7 @@ void CameraProcessor::run() {
             Logger::Info("End of stream");
             break;
         }
-        if (++countFrame % numFramesCheck == 0 &&calcAbsDiff()) {
+        if (++countFrame % numFramesCheck == 0 && calcAbsDiff()) {
             insertToQueue();
         }
         else {
@@ -109,7 +114,7 @@ string currentTime() {
     return formatted_time;
 }
 
-void cameraPart(CameraProcessor& camera) {
+void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     int id = 123;
@@ -122,7 +127,7 @@ void cameraPart(CameraProcessor& camera) {
 
     //the user input it using Qt
     string path = R"(./assets/parking.mp4)";
-   // string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+    //string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
