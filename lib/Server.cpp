@@ -2,7 +2,13 @@
 
 
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
+	if (!sqlHandler.open("rect_data.db")) {
+		Logger::Error("Failed to open database.");
+		return;
+	}
+	sqlHandler.cleanDataBase();
 
+	
 	active = true;
 }
 
@@ -11,10 +17,13 @@ void ServerProcessor::detect_with_YOLO5() {
 	Yolo5 yolo(currFrame);
 	yolo.detect();
 
-	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList());
+	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 	rect.toDrawRect();
 }
-
+ServerProcessor::~ServerProcessor() {
+	
+	sqlHandler.close();
+ }
 void ServerProcessor::run() {
 
 	while (active)
@@ -36,6 +45,9 @@ void ServerProcessor::run() {
 				cout << "part server finished by user\n";
 				break;
 			}
+		}
+		else {
+			waitKey(1);
 		}
 
 	}

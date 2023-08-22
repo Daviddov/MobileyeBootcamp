@@ -14,7 +14,6 @@ add_subdirectory(lib)
 add_subdirectory(lib_Test)
 target_link_libraries(${PROJECT_NAME} PRIVATE lib)
 
-
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
 target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})
@@ -45,3 +44,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 # Set the working directory to the build directory so that the assets are accessible during runtime
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
+
+
+

@@ -1,7 +1,9 @@
 #include "Camera.h" 
+#include <chrono>
+
 //this nedded for test.cpp 
 void CameraProcessor::setFrame(Mat f) {
-    frame.image = f;
+    frameWarp.image = f;
 }
 //this nedded for test.cpp 
 void CameraProcessor::setPrev(Mat p) {
@@ -28,16 +30,16 @@ CameraProcessor::~CameraProcessor() {
 
 bool CameraProcessor:: calcAbsDiff() {
     Mat diff;
-    absdiff(prev, frame.image, diff);
+    absdiff(prev, frameWarp.image, diff);
 
     //convert diff to gray because countNonZero func can't to resive COLOR_IMG 
     cvtColor(diff, diff, COLOR_BGR2GRAY);
-    double normalRes = (double)(countNonZero(diff)) / (double)(frame.image.cols * frame.image.rows);
+    double normalRes = (double)(countNonZero(diff)) / (double)(frameWarp.image.cols * frameWarp.image.rows);
 
     return frameDiffThreshold < normalRes;
 }
 
-void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) {
+void CameraProcessor::init(int id, string path,int numFrames ,double frame_diff) {
 
     cameraId = id;
 
@@ -53,29 +55,33 @@ void CameraProcessor::init(int id,string path,int numFrames ,double frame_diff) 
         return;
     }
     Logger::Info("Video file is opening ");
-    capture.read(frame.image);
+    capture.read(frameWarp.image);
+    insertToQueue();
+
+ 
+    //170734 microseconds
 }
 
 void CameraProcessor::insertToQueue() {
 
-    frame.frameNumber = ++countFrame;
+    frameWarp.frameNumber = ++countFrame;
 
-    frame.timestamp = currentTime();
+    frameWarp.timestamp = currentTime();
 
-    FrameWrap temp = frame;
-    temp.image = frame.image.clone();
+    FrameWrap temp = frameWarp;
+    temp.image = frameWarp.image.clone();
     dataFromCamera.push(temp);
 
-     prev = frame.image.clone();
+     prev = frameWarp.image.clone();
 }
 
 void CameraProcessor::run() {
 
     while (active) {
-       
-        capture.read(frame.image);
+
+        capture.read(frameWarp.image);
       
-        if (frame.image.empty()) {
+        if (frameWarp.image.empty()) {
             cout << "End of stream\n";
             Logger::Info("End of stream");
             break;
@@ -86,8 +92,9 @@ void CameraProcessor::run() {
         else {
             continue;
         }
-        cout << "part camera\n";
         Logger::Info("part camera");
+
+        //Runtime: 172298 microseconds
     }
 }
 
@@ -115,9 +122,8 @@ string currentTime() {
 }
 
 void CameraProcessor::cameraPart(CameraProcessor& camera) {
-
     //the user input it using Qt
-    int id = 123;
+    int id = 1;
 
     //the user input it using Qt
     int numFrames = 30;
@@ -131,7 +137,6 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
     camera.init(id,path, numFrames, frameDiffThreshold);
 
-    camera.insertToQueue();
 
     camera.run();
 }

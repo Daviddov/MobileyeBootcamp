@@ -1,8 +1,10 @@
 #include "../lib/Header.h"
 #include "../lib/Camera.h"
+#include "../lib/Rect.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
 #include "../sqlite3/sqlite3.h"
+#include "gmock/gmock.h"
 
 
 
@@ -12,29 +14,9 @@
 //	EXPECT_TRUE(true);
 //}
 
-//because change OOP design the function calcAvgPerChanel() has been  a member of YoloRect class . will need to use in moke here
-
-//TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
-//
-//    Mat testImage(3, 3, CV_8UC3);
-//    testImage.setTo(Scalar(100, 150, 200));
-//
-//    float B=0, G=0, R =0 ;
-//    calcAvgPerChanel(testImage, &B, &G, &R);
-//
-//    //// Add your expected 
-//    float expectedB = 100.0f;
-//    float expectedG = 150.0f;
-//    float expectedR = 200.0f;
-//
-//    // Check the results 
-//    EXPECT_EQ(expectedB, B);
-//    EXPECT_EQ(expectedG, G);
-//    EXPECT_EQ(expectedR, R);
-//}
-
-//this test can to get improve if using in moke
-
+    EXPECT_EQ(1, 1);
+    EXPECT_TRUE(true);
+}
 
 TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 

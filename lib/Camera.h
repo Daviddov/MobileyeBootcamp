@@ -1,8 +1,6 @@
 # include "Header.h"
 #include <conio.h>
-
-
-
+#include "SQLHandler.h"
 
 class CameraProcessor {
 
@@ -18,7 +16,7 @@ private:
 
 	bool active;
 
-	FrameWrap frame;
+	FrameWrap frameWarp;
 
 	queue<FrameWrap>& dataFromCamera;
 
