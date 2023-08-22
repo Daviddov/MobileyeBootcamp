@@ -3,7 +3,7 @@
 
 
 
-class YoloRect {
+class RectHandler {
 
 private:
 
@@ -11,28 +11,23 @@ private:
 
 	vector<string>& class_list;
 
-	FrameWrap& frame;
+	FrameWrap& frameWarp;
 
 	vector<Scalar> colors;
 
-	SQLHandler sqlHandler;
+	SQLHandler& sqlHandler;
 
 	void writeRectOnDB(Rect rect, string objectType);
 
 
 public:
 
-	YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP);
-
+	RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler& sqlHandler);
+	
 	void toDrawRect();
 
 	void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
 
-
-	//bool createTableIfNotExists(sqlite3* db);
-	//bool insertData(sqlite3* db, Rect rect, string objectType, float R, float G, float B);
-	//void selectMaxID(sqlite3* db);
-	//void deleteTable(sqlite3 * db);
 
 };
 

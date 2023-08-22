@@ -12,7 +12,7 @@ private:
 
 	vector<string> class_list;
 
-	FrameWrap& frame;
+	FrameWrap& frameWarp;
 
 	void load_net();
 

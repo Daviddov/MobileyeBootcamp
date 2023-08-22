@@ -12,7 +12,7 @@ TEST(TestCaseName, TestName) {
 	EXPECT_TRUE(true);
 }
 
-//because change OOP design the function calcAvgPerChanel() has been  a member of YoloRect class . will need to use in moke here
+//because change OOP design the function calcAvgPerChanel() has been  a member of RectHandler class . will need to use in moke here
 
 //TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
 //

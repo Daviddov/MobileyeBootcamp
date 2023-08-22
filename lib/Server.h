@@ -13,6 +13,7 @@ private:
 
 	queue<FrameWrap>& dataFromCamera;
 
+	SQLHandler sqlHandler;
 
 public:
 
