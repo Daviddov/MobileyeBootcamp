@@ -2,7 +2,7 @@
 #include "Yolo.h"
 #include "Rect.h"
 #include <conio.h>
-
+#include "Camera.h"
 class ServerProcessor {
 
 private:

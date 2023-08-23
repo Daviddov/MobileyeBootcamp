@@ -2,8 +2,13 @@
 
 Yolo5::Yolo5(FrameWrap& frameW):frameWarp(frameW)
 {
+	cout << "start yolo load: " << currentTime() << endl;
+
 	load_net();
 	load_class_list();
+
+	cout << "end yolo load : " << currentTime() << endl;
+
 }
 
 void Yolo5::load_class_list()
@@ -36,6 +41,7 @@ Mat Yolo5::format_yolov5() {
 }
 
 void Yolo5::detect() {
+	
 
 	const float INPUT_WIDTH = 640.0f;
 	const float INPUT_HEIGHT = 640.0f;
@@ -46,14 +52,20 @@ void Yolo5::detect() {
 	Mat blob;
 
 	auto input_image = format_yolov5();
+	cout << "blob func start: " << currentTime() << endl;
 
 	dnn::blobFromImage(input_image, blob, 1. / 255., Size(INPUT_WIDTH, INPUT_HEIGHT), Scalar(), true, false);
+	cout << "blob func end: " << currentTime() << endl;
+	cout << "setinput func start: " << currentTime() << endl;
 
 	net.setInput(blob);
+	cout << "setinput func end: " << currentTime() << endl;
 
 	vector<Mat> outputs;
+	cout << "forward func start: " << currentTime() << endl;
 
 	net.forward(outputs, net.getUnconnectedOutLayersNames());
+	cout << "forward func end: " << currentTime() << endl;
 
 	float x_factor = input_image.cols / INPUT_WIDTH;
 	float y_factor = input_image.rows / INPUT_HEIGHT;
@@ -67,6 +79,7 @@ void Yolo5::detect() {
 
 	const int NUM_OF_DETECT = 25200;
 	const int NUM_OF_DATA = 85;
+	cout << "big for start: " << currentTime() << endl;
 
 	for (int i = 0; i < NUM_OF_DETECT; ++i) {
 
@@ -100,6 +113,8 @@ void Yolo5::detect() {
 		}
 		data += NUM_OF_DATA;
 	}
+	cout << "big for end: " << currentTime() << endl;
+	cout << "mms boxxes start: " << currentTime() << endl;
 
 	vector<int> nms_result;
 	dnn::NMSBoxes(boxes, confidences, SCORE_THRESHOLD, NMS_THRESHOLD, nms_result);
@@ -111,6 +126,8 @@ void Yolo5::detect() {
 		result.box = boxes[idx];
 		output.push_back(result);
 	}
+	cout << "mms boxxes end: " << currentTime() << endl;
+
 }
 
 vector<Detection>& Yolo5::getOutput() {
