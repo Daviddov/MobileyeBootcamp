@@ -1,4 +1,5 @@
-# include "Header.h"
+#pragma once
+# include "Camera.h"
 
 enum  {
 	ZERO,
@@ -40,7 +41,9 @@ private:
 public:
 
 	Yolo5();
+
 	void setFrame(FrameWrap& currFrame);
+
 	vector<Detection>& getOutput();
 	
 	vector<string>& getClassList();

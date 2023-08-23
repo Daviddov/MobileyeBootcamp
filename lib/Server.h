@@ -1,7 +1,7 @@
-# include "Header.h"
+#pragma once
 #include "Yolo.h"
 #include "Rect.h"
-#include <conio.h>
+
 
 class ServerProcessor {
 

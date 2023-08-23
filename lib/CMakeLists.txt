@@ -6,11 +6,11 @@ set(lib_Src
  "Camera.cpp"
  "Server.cpp"
  "Camera.h"
- "Server.h" 
+ "Server.h"
  "Yolo.cpp" 
  "Yolo.h"
  "Rect.h" 
- "Rect.cpp"   "SQLHandler.cpp" "SQLHandler.h")
+ "Rect.cpp"   "SQLHandler.cpp" "SQLHandler.h" "CameraManager.cpp" "CameraManager.h")
 
 
 

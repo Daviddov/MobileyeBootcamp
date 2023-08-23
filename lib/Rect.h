@@ -1,4 +1,4 @@
-#include "Header.h"
+#pragma once
 #include "SQLHandler.h"
 
 
