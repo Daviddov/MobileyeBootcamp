@@ -6,10 +6,10 @@ ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue)
 	active = true;
 }
 
-void ServerProcessor::detect_with_YOLO5() {
+void ServerProcessor::detect_with_YOLO5(Yolo5 yolo) {
 	cout << "detact func calls: " << currentTime() << endl;
 
-	Yolo5 yolo(currFrame);
+	//Yolo5 yolo(currFrame);
 
 	yolo.detect();
 	cout << "detact func finish: " << currentTime() << endl;
@@ -23,7 +23,7 @@ void ServerProcessor::detect_with_YOLO5() {
 
 void ServerProcessor::run() {
 	cout << "while start: " << currentTime() << endl;
-
+	Yolo5 yolo(currFrame);
 	while (active)
 	{
 		cout << dataFromCamera.size() << "\n";
@@ -34,7 +34,7 @@ void ServerProcessor::run() {
 
 			dataFromCamera.pop();
 
-			detect_with_YOLO5();
+			detect_with_YOLO5(yolo);
 
 			cv::imshow("output", currFrame.image);
 

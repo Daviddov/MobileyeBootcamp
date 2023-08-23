@@ -19,7 +19,7 @@ public:
 
 	ServerProcessor(queue<FrameWrap>& dataFromCamera);
 
-	void detect_with_YOLO5();
+	void detect_with_YOLO5(Yolo5 yolo);
 
 	void run();
 
