@@ -101,6 +101,8 @@ void Yolo5::detect() {
     vector<int> nmsResult;
     dnn::NMSBoxes(boxes, confidences, SCORE_THRESHOLD, NMS_THRESHOLD, nmsResult);
   
+    output.clear();
+
 
     for (int i = 0; i < nmsResult.size(); i++) {
         int idx = nmsResult[i];
@@ -125,3 +127,5 @@ vector<string>& Yolo5::getClassList() {
 void Yolo5::setFrame(FrameWrap& currFrame) {
     frameWarp = currFrame;
 }
+
+

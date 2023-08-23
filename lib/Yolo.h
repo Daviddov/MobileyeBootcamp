@@ -37,13 +37,12 @@ private:
 	void loadClassList();
 
 	Mat formatInputImage();
-
 public:
 
 	Yolo5();
 	void setFrame(FrameWrap& currFrame);
 	vector<Detection>& getOutput();
-
+	
 	vector<string>& getClassList();
 	
 	void detect();
