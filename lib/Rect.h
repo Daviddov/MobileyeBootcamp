@@ -22,10 +22,11 @@ private:
 
 public:
 
+
 	YoloRect(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler& sqlHandler);
 	void toDrawRect();
 
-	void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
+	virtual void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
 
 
 };

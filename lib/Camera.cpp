@@ -50,7 +50,7 @@ void CameraProcessor::init(int id, string path,int numFrames ,double frame_diff)
     capture.open(path);
 
     if (!capture.isOpened()) {
-        cerr << "\nError opening video file\n";
+        
         Logger::Error("Error opening video file");
         return;
     }
@@ -82,7 +82,7 @@ void CameraProcessor::run() {
         capture.read(frameWarp.image);
       
         if (frameWarp.image.empty()) {
-            cout << "End of stream\n";
+           
             Logger::Info("End of stream");
             break;
         }
@@ -117,7 +117,7 @@ string currentTime() {
     sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", milliseconds);
 
     string formatted_time = buffer;
-    Logger::Info("the time camera is %s", formatted_time);
+    
     return formatted_time;
 }
 

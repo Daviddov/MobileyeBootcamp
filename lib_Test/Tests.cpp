@@ -4,7 +4,7 @@
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
 #include "../sqlite3/sqlite3.h"
-#include "gmock/gmock.h"
+
 
 
 
@@ -13,10 +13,10 @@
 //	EXPECT_EQ(1, 1);
 //	EXPECT_TRUE(true);
 //}
-
-    EXPECT_EQ(1, 1);
-    EXPECT_TRUE(true);
-}
+//
+//    EXPECT_EQ(1, 1);
+//    EXPECT_TRUE(true);
+//}
 
 TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 

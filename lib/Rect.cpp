@@ -32,7 +32,7 @@ void YoloRect::toDrawRect() {
 	}
 }
 
-void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
+   void YoloRect::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
 	float sumB = 0, sumG = 0, sumR = 0;
 	for (int row = 0; row < img.rows; row++) {
