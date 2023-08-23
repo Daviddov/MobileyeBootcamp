@@ -1,9 +1,18 @@
 #include "Yolo.h"
-
+#include <chrono>
+using namespace std::chrono;
 
 Yolo5::Yolo5() {
     loadNet();
     loadClassList();
+    
+     INPUT_SIZE = 640.0f;
+     SCORE_THRESHOLD = 0.2f;
+     NMS_THRESHOLD = 0.4f;
+     CONFIDENCE_THRESHOLD = 0.4f;
+
+     NUM_OF_DETECT = 25200;
+     NUM_OF_DATA = 85;
 }
 
 void Yolo5::loadClassList() {
@@ -16,7 +25,7 @@ void Yolo5::loadClassList() {
 }
 
 void Yolo5::loadNet() {
-    net = dnn::readNet("./assets/yolov5s.onnx");
+    net = dnn::readNet("./assets/yolov5n.onnx");
 
     cout << "Running on CPU\n";
     net.setPreferableBackend(dnn::DNN_BACKEND_OPENCV);
@@ -31,14 +40,24 @@ Mat Yolo5::formatInputImage() {
 }
 
 void Yolo5::detect() {
-
+ 
     Mat blob;
+
+    //const auto start = high_resolution_clock::now();
+
     Mat inputImage = formatInputImage();
     dnn::blobFromImage(inputImage, blob, 1. / 255., Size(INPUT_SIZE, INPUT_SIZE), Scalar(), true, false);
 
+    //Detect function runtime: 159 ms
     net.setInput(blob);
     vector<Mat> outputs;
+    //auto stop = high_resolution_clock::now();
+    //auto duration = duration_cast<milliseconds>(stop - start);
+    //std::cout << "Detect function runtime: " << duration.count() << " ms\n";
+
     net.forward(outputs, net.getUnconnectedOutLayersNames());
+    //Detect function runtime: 1353 ms in small module
+    //Detect function runtime: 178 ms in nano module
 
     float xFactor = inputImage.cols / INPUT_SIZE;
     float yFactor = inputImage.rows / INPUT_SIZE;
@@ -47,7 +66,9 @@ void Yolo5::detect() {
     vector<float> confidences;
     vector<Rect> boxes;
 
+
    
+
     float* data = (float*)outputs[0].data;
 
     for (int i = 0; i < NUM_OF_DETECT; ++i) {
@@ -58,8 +79,8 @@ void Yolo5::detect() {
             Point classId;
             double maxClassScore;
             minMaxLoc(scores, 0, &maxClassScore, 0, &classId);
-
-            if (maxClassScore > SCORE_THRESHOLD && (classId.x == 2 || classId.x == 3 || classId.x == 5 || classId.x == 7)) {
+           
+            if (maxClassScore > SCORE_THRESHOLD && (classId.x == CAR || classId.x == MOTORBIKE || classId.x == BUS || classId.x == TRUCK)) {
                 confidences.push_back(confidence);
                 classIds.push_back(classId.x);
 
@@ -77,9 +98,9 @@ void Yolo5::detect() {
         }
         data += NUM_OF_DATA;
     }
-
     vector<int> nmsResult;
     dnn::NMSBoxes(boxes, confidences, SCORE_THRESHOLD, NMS_THRESHOLD, nmsResult);
+  
 
     for (int i = 0; i < nmsResult.size(); i++) {
         int idx = nmsResult[i];
@@ -89,6 +110,8 @@ void Yolo5::detect() {
         result.box = boxes[idx];
         output.push_back(result);
     }
+
+
 }
 
 vector<Detection>& Yolo5::getOutput() {

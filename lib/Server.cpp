@@ -1,4 +1,6 @@
 #include "Server.h"
+#include <chrono>
+using namespace std::chrono;
 
 //c'tor
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
@@ -7,12 +9,13 @@ ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue)
 
 void ServerProcessor::detect_with_YOLO5() {
 
-
 	yolo.setFrame(currFrame);
 	yolo.detect();
-
+	//Detect function runtime : 1379 ms
 	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
+
 	rect.toDrawRect();
+	//Detect function runtime: 205 ms
 }
 
 void ServerProcessor::run() {
