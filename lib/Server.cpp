@@ -30,7 +30,8 @@ void ServerProcessor::run() {
 			dataFromCamera.pop();
 
 			detect_with_YOLO5();
-
+			Size size(600, 400);
+			resize(currFrame.image, currFrame.image, size, CV_8UC3),
 			cv::imshow("output", currFrame.image);
 
 			if (waitKey(1) == 27)
