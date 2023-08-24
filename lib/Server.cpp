@@ -22,7 +22,6 @@ void ServerProcessor::run() {
 
 	while (active)
 	{
-		cout << dataFromCamera.size() << "\n";
 		if (!dataFromCamera.empty())
 		{
 			currFrame = dataFromCamera.front();
@@ -32,16 +31,17 @@ void ServerProcessor::run() {
 			detect_with_YOLO5();
 			Size size(600, 400);
 			resize(currFrame.image, currFrame.image, size, CV_8UC3),
-			cv::imshow("output", currFrame.image);
+				cv::imshow("output", currFrame.image);
 
-			if (waitKey(1) == 27)
+			if (waitKeyEx(333) == 27)
 			{
 				Logger::Info("part server finished by user");
 				break;
 			}
 		}
 		else {
-			waitKey(1);
+			Logger::Info("data From Camera empty");
+			waitKeyEx(333);
 		}
 	}
 }
