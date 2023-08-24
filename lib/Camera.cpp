@@ -1,23 +1,12 @@
 #include "Camera.h" 
 
-//this nedded for test.cpp 
-void CameraProcessor::setFrame(Mat f) {
-	frameWarp.image = f;
-}
-//this nedded for test.cpp 
-void CameraProcessor::setPrev(Mat p) {
-	prev = p;
-}
-//this nedded for test.cpp
-void CameraProcessor::setFrameDiffThreshold(double frameDiff) {
-	frameDiffThreshold = frameDiff;
-}
 
 //c'tor
-CameraProcessor::CameraProcessor(queue<FrameWrap>& queue) : dataFromCamera(queue) {
+CameraProcessor::CameraProcessor(queue<FrameWrap>& queue, int id, string _path) : dataFromCamera(queue) {
 	countFrame = 0;
 	active = true;
-	cameraId = -1;
+	cameraId = id;
+	path = _path;
 	numFramesCheck = 0;
 	frameDiffThreshold = 0.0;
 }
@@ -38,9 +27,7 @@ bool CameraProcessor::calcAbsDiff() {
 	return frameDiffThreshold < normalRes;
 }
 
-bool CameraProcessor::init(int id, string path, int numFrames, double frame_diff) {
-
-	cameraId = id;
+bool CameraProcessor::init(int numFrames, double frame_diff) {
 
 	numFramesCheck = numFrames;
 
@@ -76,6 +63,7 @@ void CameraProcessor::run() {
 	while (active) {
 
 		capture.read(frameWarp.image);
+		//countFrame++;
 
 		if (frameWarp.image.empty()) {
 			cout << "End of stream\n";
@@ -83,13 +71,14 @@ void CameraProcessor::run() {
 			break;
 		}
 		if (++countFrame % numFramesCheck == 0 && calcAbsDiff()) {
-			
+			Logger::Info("wait 0.3 second");
+			this_thread::sleep_for(chrono::milliseconds(333));
 			insertToQueue();
+			Logger::Info("insert to queue");
 		}
 		else {
 			continue;
 		}
-		Logger::Info("part camera");
 	}
 }
 
@@ -116,10 +105,8 @@ string currentTime() {
 	return formatted_time;
 }
 
-void CameraProcessor::cameraPart(CameraProcessor& camera) {
+void CameraProcessor::cameraPart(CameraProcessor* camera) {
 
-	//the user input it using Qt
-	int id = 1;
 
 	//the user input it using Qt
 	int numFrames = 30;
@@ -127,14 +114,27 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
 	//the user input it using Qt
 	double frameDiffThreshold = 0.9;
 
-	//the user input it using Qt
-	string path = R"(./assets/parking.mp4)";
-	//string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
-
-	if (!camera.init(id, path, numFrames, frameDiffThreshold))
+	if (!camera->init(numFrames, frameDiffThreshold))
 	{
 		return;
 	}
 
-	camera.run();
+	camera->run();
+}
+
+//this nedded for test.cpp 
+void CameraProcessor::setFrame(Mat f) {
+	frameWarp.image = f;
+}
+//this nedded for test.cpp 
+void CameraProcessor::setPrev(Mat p) {
+	prev = p;
+}
+//this nedded for test.cpp
+void CameraProcessor::setFrameDiffThreshold(double frameDiff) {
+	frameDiffThreshold = frameDiff;
+}
+
+int CameraProcessor::getId() {
+	return cameraId;
 }

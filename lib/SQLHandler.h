@@ -27,6 +27,7 @@ public:
 
 	sqlite3* getDB();
 
+	int getValue() const;
 private:
 
 	sqlite3* db;

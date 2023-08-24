@@ -1,46 +1,39 @@
 #include "../lib/Header.h"
 #include "../lib/Camera.h"
+#include "../lib/Rect.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
 #include "../sqlite3/sqlite3.h"
+#include "gmock/gmock.h"
 
 
 
-TEST(TestCaseName, TestName) {
+TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
 
-	EXPECT_EQ(1, 1);
-	EXPECT_TRUE(true);
+    Mat testImage(3, 3, CV_8UC3);
+    testImage.setTo(Scalar(100, 150, 200));
+
+    float B=0, G=0, R =0 ;
+    calcAvgPerChanel(testImage, &B, &G, &R);
+
+    //// Add your expected 
+    float expectedB = 100.0f;
+    float expectedG = 150.0f;
+    float expectedR = 200.0f;
+
+    // Check the results 
+    EXPECT_EQ(expectedB, B);
+    EXPECT_EQ(expectedG, G);
+    EXPECT_EQ(expectedR, R);
 }
 
-//because change OOP design the function calcAvgPerChanel() has been  a member of RectHandler class . will need to use in moke here
-
-//TEST(CalcAvgPerChanelTest, TestCalcAvgPerChanel) {
-//
-//    Mat testImage(3, 3, CV_8UC3);
-//    testImage.setTo(Scalar(100, 150, 200));
-//
-//    float B=0, G=0, R =0 ;
-//    calcAvgPerChanel(testImage, &B, &G, &R);
-//
-//    //// Add your expected 
-//    float expectedB = 100.0f;
-//    float expectedG = 150.0f;
-//    float expectedR = 200.0f;
-//
-//    // Check the results 
-//    EXPECT_EQ(expectedB, B);
-//    EXPECT_EQ(expectedG, G);
-//    EXPECT_EQ(expectedR, R);
-//}
-
-//this test can to get improve if using in moke
 TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 
     Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
     Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
 
     queue<FrameWrap> queue;
-    CameraProcessor camera(queue);
+    CameraProcessor camera(queue,2,"123");
 
     camera.setFrameDiffThreshold(0.9);
     camera.setFrame(testImage1);
