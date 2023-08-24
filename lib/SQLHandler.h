@@ -20,9 +20,11 @@ public:
 	void selectMaxID();
 
 	static int callbackFunction(void* data, int argc, char** argv, char** azColName);
-	void cleanDataBase();
+
+	bool cleanDataBase();
 
 	void printTable();
+
 	sqlite3* getDB();
 
 	int getValue() const;

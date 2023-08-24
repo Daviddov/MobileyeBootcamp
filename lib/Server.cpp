@@ -1,29 +1,23 @@
 #include "Server.h"
+#include <chrono>
+using namespace std::chrono;
 
-
+//c'tor
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
-	if (!sqlHandler.open("rect_data.db")) {
-		Logger::Error("Failed to open database.");
-		return;
-	}
-	sqlHandler.cleanDataBase();
-
-	
 	active = true;
 }
 
 void ServerProcessor::detect_with_YOLO5() {
 
-	Yolo5 yolo(currFrame);
+	yolo.setFrame(currFrame);
 	yolo.detect();
+	//Detect function runtime : 1379 ms
+	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 
-	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 	rect.toDrawRect();
+	//Detect function runtime: 205 ms
 }
-ServerProcessor::~ServerProcessor() {
-	
-	sqlHandler.close();
- }
+
 void ServerProcessor::run() {
 
 	while (active)
@@ -42,14 +36,12 @@ void ServerProcessor::run() {
 			if (waitKey(1) == 27)
 			{
 				Logger::Info("part server finished by user");
-				cout << "part server finished by user\n";
 				break;
 			}
 		}
 		else {
 			waitKey(1);
 		}
-
 	}
 }
 
