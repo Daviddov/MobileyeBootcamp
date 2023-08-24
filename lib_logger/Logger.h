@@ -96,7 +96,7 @@ private:
     }
 
     template<typename... Args>
-    void log(const char* message_priority_str, LogPriority message_priority, const char* message, Args... args)
+    void log(const char* message_priority_str, LogPriority message_priority, const char* message , Args... args)
     {
         if (priority <= message_priority)
         {
@@ -106,11 +106,11 @@ private:
             strftime(buffer, 80, "%c", timestamp);
 
             scoped_lock lock(log_mutex);
-            cout << buffer << '\t' << message_priority_str << message << '\n';
+            cout << buffer << '\t' << message_priority_str << message <<  '\n';
 
             if (fileStream.is_open())
             {
-                fileStream << buffer << '\t' << message_priority_str << message << '\n';
+                fileStream << buffer << '\t' << message_priority_str << message  <<   '\n';
             }
         }
     }

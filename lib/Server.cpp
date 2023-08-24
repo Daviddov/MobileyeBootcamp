@@ -31,7 +31,7 @@ void ServerProcessor::run() {
 
 			detect_with_YOLO5();
 
-			cv::imshow("output", currFrame.image);
+			imshow("output", currFrame.image);
 
 			if (waitKey(1) == 27)
 			{

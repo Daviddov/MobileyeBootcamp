@@ -134,6 +134,7 @@ void CameraProcessor::cameraPart(CameraProcessor& camera) {
 
 	if (!camera.init(id, path, numFrames, frameDiffThreshold))
 	{
+		Logger::Critical("the path is not found");
 		return;
 	}
 

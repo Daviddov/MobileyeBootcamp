@@ -66,9 +66,6 @@ void Yolo5::detect() {
     vector<float> confidences;
     vector<Rect> boxes;
 
-
-   
-
     float* data = (float*)outputs[0].data;
 
     for (int i = 0; i < NUM_OF_DETECT; ++i) {

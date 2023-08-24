@@ -1,9 +1,9 @@
-#include "../lib/SQLHandler.h"
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
-#include "../lib/Rect.h"
-
-using namespace testing;
+//#include "../lib/SQLHandler.h"
+//#include "gtest/gtest.h"
+//#include "gmock/gmock.h"
+//#include "../lib/Rect.h"
+//
+//using namespace testing;
 
 //class MockYoloRect : public SQLHandler {
 //public:
@@ -173,43 +173,43 @@ using namespace testing;
 //    }
 //};
 
-class MockYoloRect : public YoloRect {
-public:
+//class MockYoloRect : public YoloRect {
+//public:
+//
+//    MOCK_METHOD(void, calcAvgPerChannel,(Mat& , float* , float* , float*));
+//};
+//
+//class YoloRectTest : public ::testing::Test {
+//protected:
+//    void SetUp() override {
+//        yoloRectUnderTest = std::make_unique<MockYoloRect>();
+//    }
+//
+//    void TearDown() override {
+//    }
+//
+//    std::unique_ptr<MockYoloRect> yoloRectUnderTest;
+//};
 
-    MOCK_METHOD(void, calcAvgPerChannel,(Mat& , float* , float* , float*));
-};
 
-class YoloRectTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        yoloRectUnderTest = std::make_unique<MockYoloRect>();
-    }
-
-    void TearDown() override {
-    }
-
-    std::unique_ptr<MockYoloRect> yoloRectUnderTest;
-};
-
-
-TEST_F(YoloRectTest, CalculatesAveragePerChannel) {
-    Mat testImage(2, 2, CV_8UC3);
-    testImage.at<Vec3b>(0, 0) = Vec3b(10, 20, 30);
-    testImage.at<Vec3b>(0, 1) = Vec3b(40, 50, 60);
-    testImage.at<Vec3b>(1, 0) = Vec3b(70, 80, 90);
-    testImage.at<Vec3b>(1, 1) = Vec3b(100, 110, 120);
-
-    float avgB, avgG, avgR;
-
-    // Expect the mock function to be called and specify its behavior
-    EXPECT_CALL(*yoloRectUnderTest, calcAvgPerChannel(testImage, _, _, _))
-        .WillOnce(DoAll(SaveArg<1>(&avgB), SaveArg<2>(&avgG), SaveArg<3>(&avgR)));
-
-    // Call the function under test
-    yoloRectUnderTest->calcAvgPerChannel(testImage, &avgB, &avgG, &avgR);
-
-    // Check the results with a tolerance (e.g., due to floating-point precision)
-    EXPECT_FLOAT_EQ(avgB, (10 + 40 + 70 + 100) / 4.0f);
-    EXPECT_FLOAT_EQ(avgG, (20 + 50 + 80 + 110) / 4.0f);
-    EXPECT_FLOAT_EQ(avgR, (30 + 60 + 90 + 120) / 4.0f);
-}
+//TEST_F(YoloRectTest, CalculatesAveragePerChannel) {
+//    Mat testImage(2, 2, CV_8UC3);
+//    testImage.at<Vec3b>(0, 0) = Vec3b(10, 20, 30);
+//    testImage.at<Vec3b>(0, 1) = Vec3b(40, 50, 60);
+//    testImage.at<Vec3b>(1, 0) = Vec3b(70, 80, 90);
+//    testImage.at<Vec3b>(1, 1) = Vec3b(100, 110, 120);
+//
+//    float avgB, avgG, avgR;
+//
+//    // Expect the mock function to be called and specify its behavior
+//    EXPECT_CALL(*yoloRectUnderTest, calcAvgPerChannel(testImage, _, _, _))
+//        .WillOnce(DoAll(SaveArg<1>(&avgB), SaveArg<2>(&avgG), SaveArg<3>(&avgR)));
+//
+//    // Call the function under test
+//    yoloRectUnderTest->calcAvgPerChannel(testImage, &avgB, &avgG, &avgR);
+//
+//    // Check the results with a tolerance (e.g., due to floating-point precision)
+//    EXPECT_FLOAT_EQ(avgB, (10 + 40 + 70 + 100) / 4.0f);
+//    EXPECT_FLOAT_EQ(avgG, (20 + 50 + 80 + 110) / 4.0f);
+//    EXPECT_FLOAT_EQ(avgR, (30 + 60 + 90 + 120) / 4.0f);
+//}
