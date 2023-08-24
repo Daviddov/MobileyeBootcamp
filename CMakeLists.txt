@@ -9,14 +9,19 @@ if(UNIX AND NOT APPLE)
     set(CMAKE_CXX_COMPILER  "/usr/bin/g++")
 endif()
 
-
 # Main executable
-add_executable(${PROJECT_NAME} Main.cpp "lib_logger/Logger.h")
+add_executable(${PROJECT_NAME} Main.cpp)
 
 # Link lib
 add_subdirectory(lib)
 add_subdirectory(lib_Test)
-target_link_libraries(${PROJECT_NAME} PRIVATE lib)
+add_subdirectory(lib_logger)
+target_include_directories(${PROJECT_NAME} PRIVATE )
+
+target_link_libraries(${PROJECT_NAME} 
+PRIVATE lib
+PRIVATE logger
+)
 
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
@@ -25,19 +30,18 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
 
 # Define the directory for copying assets
 set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
-
 # Custom command to copy the entire "assets" folder during the build process
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
 )
+# Set the working directory to the build directory so that the assets are accessible during runtime
+set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 
 
 # Include the "sql" subdirectory containing SQLite source files
 add_subdirectory(sqlite3)
-
 # Link SQLite to the main executable
 target_link_libraries(${PROJECT_NAME} PRIVATE sqlite3)
-
 # Copy the SQLite DLL to the build directory
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -45,6 +49,3 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
 
-
-# Set the working directory to the build directory so that the assets are accessible during runtime
-set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
