@@ -5,6 +5,7 @@ using namespace std::chrono;
 //c'tor
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
 	active = true;
+	
 }
 
 void ServerProcessor::detect_with_YOLO5() {
@@ -15,7 +16,7 @@ void ServerProcessor::detect_with_YOLO5() {
 	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 
 	rect.toDrawRect();
-	//Detect function runtime: 205 ms
+	
 }
 
 void ServerProcessor::run() {
@@ -47,6 +48,7 @@ void ServerProcessor::run() {
 }
 
 void ServerProcessor::serverPart(ServerProcessor& server) {
+	
 	server.run();
 	Logger::Info("server is runing");
 }
