@@ -1,18 +1,21 @@
 #include "Server.h"
+#include <chrono>
+using namespace std::chrono;
 
-
+//c'tor
 ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
-
 	active = true;
 }
 
 void ServerProcessor::detect_with_YOLO5() {
 
-	Yolo5 yolo(currFrame);
+	yolo.setFrame(currFrame);
 	yolo.detect();
+	//Detect function runtime : 1379 ms
+	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 
-	YoloRect rect(currFrame, yolo.getOutput(), yolo.getClassList());
 	rect.toDrawRect();
+	//Detect function runtime: 205 ms
 }
 
 void ServerProcessor::run() {
@@ -33,11 +36,12 @@ void ServerProcessor::run() {
 			if (waitKey(1) == 27)
 			{
 				Logger::Info("part server finished by user");
-				cout << "part server finished by user\n";
 				break;
 			}
 		}
-
+		else {
+			waitKey(1);
+		}
 	}
 }
 
