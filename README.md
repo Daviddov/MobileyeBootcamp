@@ -54,4 +54,4 @@ sudo apt install -y git
 git clone https://github.com/opencv/opencv.git
 git -C opencv checkout 4.x
 #cmake ../opencv
-
+export CXX=g++

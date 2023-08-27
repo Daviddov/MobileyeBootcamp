@@ -4,11 +4,6 @@ project(Main VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Use g++ compiler on Linux
-if(UNIX AND NOT APPLE)
-    set(CMAKE_CXX_COMPILER  "/usr/bin/g++")
-endif()
-
 # Main executable
 add_executable(${PROJECT_NAME} Main.cpp)
 
@@ -37,7 +32,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # Set the working directory to the build directory so that the assets are accessible during runtime
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 
-
 # Include the "sql" subdirectory containing SQLite source files
 add_subdirectory(sqlite3)
 # Link SQLite to the main executable
@@ -48,4 +42,3 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         $<TARGET_FILE:sqlite3>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
-
