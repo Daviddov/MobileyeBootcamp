@@ -40,7 +40,8 @@ sudo apt install libopencv-dev
 mkdir -p build && cd build
 rm -rf *
 cmake ..
-
+make
+./Main
 #########
 
 sudo make install
