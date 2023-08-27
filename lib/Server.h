@@ -1,7 +1,7 @@
-# include "Header.h"
+#pragma once
 #include "Yolo.h"
 #include "Rect.h"
-#include <conio.h>
+
 
 class ServerProcessor {
 
@@ -13,6 +13,9 @@ private:
 
 	queue<FrameWrap>& dataFromCamera;
 
+	SQLHandler sqlHandler;
+
+	Yolo5 yolo;
 
 public:
 
