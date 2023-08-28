@@ -1,31 +1,34 @@
-#ifndef THREAD_SAFE_QUEUE_H
-#define THREAD_SAFE_QUEUE_H
+#pragma once
 
-#include <queue>
+#ifndef _SAFE_QUEUE_H_
+#define _SAFE_QUEUE_H_
+
 #include <mutex>
-#include <opencv2/opencv.hpp>
+
+#define QUEUE_SIZE 5
 
 template <typename T>
-class ThreadSafeQueue {
-public:
-    ThreadSafeQueue() = default;
-    ~ThreadSafeQueue() = default;
-
-    // Push an element into the queue
-    void Push(const T& value);
-
-    // Pop an element from the queue. If the queue is empty, it will repeatedly check until an element is available.
-    T Pop();
-
-    // Check if the queue is empty
-    bool Empty() const;
-
-    // Get the size of the queue
-    size_t Size() const;
-
+class queueTreadSafe
+{
 private:
-    std::queue<T> queue_;
-    mutable std::mutex mutex_;
+    int front, rear;
+    int to_read;
+    T arr[QUEUE_SIZE];
+    std::mutex m;
+
+public:
+    queueTreadSafe();
+
+    void push(T x);
+
+    bool pop(T& x);
+
+    bool is_empty();
+
+    int size();
 };
 
-#endif // THREAD_SAFE_QUEUE_H
+#include "Queue.cpp"
+
+#endif // !_SAFE_QUEUE_H_
+
