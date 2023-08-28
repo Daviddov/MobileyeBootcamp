@@ -44,9 +44,11 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 }
 
 TEST(InsertToQueueTest, BasicFunctionality) {
-    
+    //CameraProcessor(queue<FrameWrap>&queue, int id, string _path)
+    string path = R"(./assets/forTest.mp4)";
+    int id = 400;
     queue <FrameWrap> queue;
-    CameraProcessor camera(queue);
+    CameraProcessor camera(queue,id,path);
 
 
     camera.insertToQueue();
@@ -94,11 +96,12 @@ TEST(CurrentTimeTest, TestCurrentTime) {
 
 
 TEST(YoloRectTest, CalculatesAveragePerChannel) {
+
     FrameWrap frw;
     SQLHandler sql;
     vector<Detection>det;
     vector<string>classL;
-
+   
     RectHandler rh(frw, det, classL, sql);
 
     Mat testImage(2, 2, CV_8UC3);

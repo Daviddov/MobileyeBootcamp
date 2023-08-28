@@ -10,7 +10,7 @@ Yolo5::Yolo5() {
      INPUT_SIZE = 640.0f;
      SCORE_THRESHOLD = 0.2f;
      NMS_THRESHOLD = 0.4f;
-     CONFIDENCE_THRESHOLD = 0.4f;
+     CONFIDENCE_THRESHOLD = 0.1f;
 
      NUM_OF_DETECT = 25200;
      NUM_OF_DATA = 85;

@@ -89,3 +89,53 @@ bool SQLHandler::cleanDataBase() {
 sqlite3* SQLHandler::getDB() {
 	return db;
 }
+
+
+bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
+	// Calculate the middle point of the given rectangle
+	int middleX = rect.x + (rect.width / 2);
+	int middleY = rect.y + (rect.height / 2);
+
+	// Retrieve the rectangles from the last timestamp
+	const char* selectLastTimestampRectsQuery = "SELECT * FROM MyTable WHERE timestamp = (SELECT MAX(timestamp) FROM MyTable);";
+
+	struct RectInfo {
+		int leftX;
+		int topY;
+		int width;
+		int height;
+	};
+
+	std::vector<RectInfo> lastTimestampRects;
+
+	int result = sqlite3_exec(db, selectLastTimestampRectsQuery, [](void* data, int argc, char** argv, char** azColName) -> int {
+		if (argc >= 7) { // Make sure you have at least 7 columns in the query result
+			RectInfo rectInfo;
+			rectInfo.leftX = std::atoi(argv[3]);
+			rectInfo.topY = std::atoi(argv[4]);
+			rectInfo.width = std::atoi(argv[5]); // Calculate rightX from width
+			rectInfo.height = std::atoi(argv[6]); // Calculate bottomY from height
+			reinterpret_cast<std::vector<RectInfo>*>(data)->push_back(rectInfo);
+		}
+		return 0;
+		}, &lastTimestampRects, nullptr);
+
+	if (result != SQLITE_OK) {
+		cout << "Error occurred while retrieving data" << endl;
+		return false;
+	}
+
+	// Check if the middle point is inside any of the last timestamp's rectangles
+	for (const RectInfo& rectInfo : lastTimestampRects) {
+		//cout << "Checking rectangle: (" << rectInfo.leftX << "," << rectInfo.topY << "," << rectInfo.width << "," << rectInfo.height << ")" << endl;
+		if (middleX >= rectInfo.leftX && middleX <= rectInfo.leftX + rectInfo.width &&
+			middleY >= rectInfo.topY && middleY <= rectInfo.topY + rectInfo.height) {
+			cout << "Middle point is inside a rectangle" << endl;
+			return true;
+		}
+	}
+
+	cout << "Middle point is not inside any rectangle" << endl;
+	return false;
+}
+

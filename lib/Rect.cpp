@@ -26,7 +26,7 @@ void RectHandler::toDrawRect() {
 		box.y < 0 ? box.y = 0 : box.y;
 		box.x > 20 ? box.x -= 20 : box.x;
 		box.y > 20 ? box.y -= 20 : box.y;
-
+		
 		writeRectOnDB(box, class_list[classId]);
 	}
 }
@@ -62,6 +62,7 @@ void RectHandler::writeRectOnDB(Rect rect, string objectType) {
 
 
 	if (sqlHandler.createTableIfNotExists()) {
+			 sqlHandler.checkRectExistsInLastFrame(rect);
 		if (sqlHandler.insertData(rect, frameWarp, objectType, R, G, B)) {
 			//sqlHandler.selectMaxID();
 			Logger::Info("write Rect On DB.");

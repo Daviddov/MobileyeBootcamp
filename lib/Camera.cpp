@@ -2,7 +2,8 @@
 
 
 //c'tor
-CameraProcessor::CameraProcessor(queue<FrameWrap>& queue, int id, string _path) : dataFromCamera(queue) {
+CameraProcessor::CameraProcessor(queue<FrameWrap>& queue, int id, string _path) :
+	dataFromCamera(queue) ,cameraId (id) ,path  (_path) {
 	countFrame = 0;
 	active = true;
 	cameraId = id;
@@ -82,27 +83,36 @@ void CameraProcessor::run() {
 	}
 }
 
-string currentTime() {
+std::string currentTime() {
+	auto now = std::chrono::system_clock::now();
+	auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+		now.time_since_epoch()
+	);
 
-	auto timestamp = chrono::duration_cast<chrono::milliseconds>(
-		chrono::system_clock::now().time_since_epoch()
+	auto milliseconds = timestamp % 1000;
+
+	auto time_t_timestamp = std::chrono::duration_cast<std::chrono::seconds>(
+		timestamp
 	).count();
 
-	int milliseconds = timestamp % 1000;
+	std::time_t time_t_timestamp_t = static_cast<std::time_t>(time_t_timestamp);
 
-	time_t time_t_timestamp = timestamp / 1000;
-
-	tm timeinfo;
-	localtime_s(&timeinfo, &time_t_timestamp);
+	std::tm timeinfo;
+	// Use localtime or gmtime depending on your requirement
+#ifdef _WIN32
+	localtime_s(&timeinfo, &time_t_timestamp_t);
+#else
+	localtime_r(&time_t_timestamp_t, &timeinfo);
+#endif
 
 	char buffer[28];
-	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
+	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
-	sprintf_s(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), ":%03d", milliseconds);
+	std::ostringstream formatted_time;
+	formatted_time << buffer << ":" << std::setfill('0') << std::setw(3) << milliseconds.count();
 
-	string formatted_time = buffer;
-	Logger::Info("the time camera is %s", formatted_time);
-	return formatted_time;
+	std::cout << "The time is " << formatted_time.str() << std::endl;  // Replace with your logging mechanism
+	return formatted_time.str();
 }
 
 void CameraProcessor::cameraPart(CameraProcessor* camera) {
