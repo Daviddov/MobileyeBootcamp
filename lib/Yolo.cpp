@@ -1,5 +1,6 @@
 #include "Yolo.h"
-#include <chrono>
+
+
 using namespace std::chrono;
 
 Yolo5::Yolo5() {
@@ -43,21 +44,14 @@ void Yolo5::detect() {
  
     Mat blob;
 
-    //const auto start = high_resolution_clock::now();
-
     Mat inputImage = formatInputImage();
     dnn::blobFromImage(inputImage, blob, 1. / 255., Size(INPUT_SIZE, INPUT_SIZE), Scalar(), true, false);
-
-    //Detect function runtime: 159 ms
     net.setInput(blob);
     vector<Mat> outputs;
-    //auto stop = high_resolution_clock::now();
-    //auto duration = duration_cast<milliseconds>(stop - start);
-    //std::cout << "Detect function runtime: " << duration.count() << " ms\n";
-
+    
+   // cout << endl <<" start detect" << currentTime() << endl;
     net.forward(outputs, net.getUnconnectedOutLayersNames());
-    //Detect function runtime: 1353 ms in small module
-    //Detect function runtime: 178 ms in nano module
+   // cout << endl << " end detect" << currentTime() << endl;
 
     float xFactor = inputImage.cols / INPUT_SIZE;
     float yFactor = inputImage.rows / INPUT_SIZE;

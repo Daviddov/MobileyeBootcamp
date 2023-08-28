@@ -1,6 +1,8 @@
-# include "Header.h"
-#include <conio.h>
-#include "SQLHandler.h"
+#pragma once
+
+#include "Header.h"
+
+
 
 class CameraProcessor {
 
@@ -10,13 +12,13 @@ private:
 
 	int cameraId;
 
+	string path;
+
 	int numFramesCheck;
 
 	double frameDiffThreshold;
 
 	bool active;
-
-	bool isHaveError;
 
 	FrameWrap frameWarp;
 
@@ -28,7 +30,7 @@ private:
 
 public:
 
-	CameraProcessor(queue<FrameWrap>& queue);
+	CameraProcessor(queue<FrameWrap>& queue, int id, string path);
 
 	~CameraProcessor();
 
@@ -38,16 +40,17 @@ public:
 
 	void setPrev(Mat p);
 
-	void  setFrameDiffThreshold(double frameDiff);
+	int getId();
 
-	bool init(int id, string path, int numFrames, double frame_diff);
+	void setFrameDiffThreshold(double frameDiff);
+
+	bool init(int numFrames, double frame_diff);
 
 	void insertToQueue();
 
 	void run();
 
-	static void  cameraPart(CameraProcessor& camera);
+	static void  cameraPart(CameraProcessor* camera);
 };
-
 
 string currentTime();
