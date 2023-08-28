@@ -43,24 +43,26 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
     ASSERT_TRUE(camera.calcAbsDiff());
 }
 
-TEST(InsertToQueueTest, BasicFunctionality) {
-    //CameraProcessor(queue<FrameWrap>&queue, int id, string _path)
-    string path = R"(./assets/forTest.mp4)";
-    int id = 400;
-    queue <FrameWrap> queue;
-    CameraProcessor camera(queue,id,path);
+//Do not open this test Aharon needs to finish it
 
-
-    camera.insertToQueue();
-
-    ASSERT_EQ(2, dataFromCamera.size());  // We pushed one frame initially, now added one more
-
-    // You would need to define the expected values based on your specific test case
-    ASSERT_EQ(expectedFrameNumber, dataFromCamera.back().frameNumber);
-    ASSERT_EQ(expectedTimestamp, dataFromCamera.back().timestamp);
-    // Implement a suitable image comparison function or library
-    ASSERT_TRUE(compareImages(expectedImage, dataFromCamera.back().image));
-}
+//TEST(InsertToQueueTest, BasicFunctionality) {
+//    //CameraProcessor(queue<FrameWrap>&queue, int id, string _path)
+//    string path = R"(./assets/forTest.mp4)";
+//    int id = 400;
+//    queue <FrameWrap> queue;
+//    CameraProcessor camera(queue,id,path);
+//
+//
+//    camera.insertToQueue();
+//
+//    ASSERT_EQ(2, dataFromCamera.size());  // We pushed one frame initially, now added one more
+//
+//    // You would need to define the expected values based on your specific test case
+//    ASSERT_EQ(expectedFrameNumber, dataFromCamera.back().frameNumber);
+//    ASSERT_EQ(expectedTimestamp, dataFromCamera.back().timestamp);
+//    // Implement a suitable image comparison function or library
+//    ASSERT_TRUE(compareImages(expectedImage, dataFromCamera.back().image));
+//}
 
 
 
