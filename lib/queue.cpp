@@ -1,34 +1,52 @@
-#include "queue.h"
+#include <iostream>
 
 template <typename T>
-void ThreadSafeQueue<T>::Push(const T& value) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    queue_.push(value);
-}
+queueTreadSafe<T>::queueTreadSafe() : front(0), rear(0), to_read(0) {}
 
+// Pushing anyway, even old data will overwrite
 template <typename T>
-T ThreadSafeQueue<T>::Pop() {
-    while (true) {
-        std::lock_guard<std::mutex> lock(mutex_);
-        if (!queue_.empty()) {
-            T value = queue_.front();
-            queue_.pop();
-            return value;
-        }
+void queueTreadSafe<T>::push(T x)
+{
+    m.lock();
+    // if old data will overwrite:
+    if (to_read > 0 && rear == front)  {
+        front = (front + 1) % QUEUE_SIZE;
+        to_read--;
     }
+    arr[rear] = x;  
+    to_read++;
+    rear = (rear + 1) % QUEUE_SIZE; // Fixed the issue here
+    m.unlock();
 }
 
 template <typename T>
-bool ThreadSafeQueue<T>::Empty() const {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return queue_.empty();
+bool queueTreadSafe<T>::pop(T& x)
+{
+    m.lock();
+    if (to_read < 1) // queue is empty
+    {
+        m.unlock();
+        return false;
+    }
+    x = arr[front];
+    front = (front + 1) % QUEUE_SIZE;
+    to_read--;
+    m.unlock();
+    return true;
 }
 
 template <typename T>
-size_t ThreadSafeQueue<T>::Size() const {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return queue_.size();
+bool queueTreadSafe<T>::is_empty()
+{
+    return (to_read < 1);
 }
 
-// Explicit instantiation for cv::Mat
-template class ThreadSafeQueue<cv::Mat>;
+template <typename T>
+int queueTreadSafe<T>::size()
+{
+    return to_read ;
+}
+
+// Explicitly instantiate for the types you'll use. 
+template class queueTreadSafe<FrameWrap>;
+
