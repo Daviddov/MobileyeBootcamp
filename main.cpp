@@ -1,7 +1,7 @@
-#include "lib/Header.h"
-#include "lib/CameraManager.h"
-//#include "lib/Camera.h"
-#include "lib/Server.h"
+
+#include "Header.h"
+#include "CameraManager.h"
+#include "Server.h"
 
 
 int main() {
