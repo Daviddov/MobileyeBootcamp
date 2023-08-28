@@ -42,3 +42,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         $<TARGET_FILE:sqlite3>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
+
+
+set(ROOT_DIR ${CMAKE_SOURCE_DIR})
+
+# Include nlohmann_json
+add_subdirectory(nlohmann_json)
+include_directories(${CMAKE_SOURCE_DIR}/nlohmann_json)
