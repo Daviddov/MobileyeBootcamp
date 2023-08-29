@@ -8,13 +8,8 @@ file(GLOB SRCS *.cpp)
 # Create the library
 add_library(${PROJECT_NAME} ${SRCS})
 
-<<<<<<< HEAD
-add_library(${PROJECT_NAME} ${lib_Src}  "queue.cpp")
-
-=======
 # Include headers
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
->>>>>>> main
 
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
