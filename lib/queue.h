@@ -1,10 +1,10 @@
 #pragma once
-#include "Queue.cpp"
+#include "Header.h"
+#include <mutex>
 
 #ifndef _SAFE_QUEUE_H_
 #define _SAFE_QUEUE_H_
 
-#include <mutex>
 
 #define QUEUE_SIZE 5
 
@@ -12,21 +12,22 @@ template <typename T>
 class queueTreadSafe
 {
 private:
-    int front, rear;
-    int to_read;
-    T arr[QUEUE_SIZE];
-    std::mutex m;
+	int frontIdx, rearIdx;
+	int to_read;
+	T arr[QUEUE_SIZE];
+	std::mutex m;
 
 public:
-    queueTreadSafe();
+	queueTreadSafe();
 
-    void push(T x);
+	void push(T x);
+	void push(T& x);
 
-    bool pop(T& x);
+	T pop();
+	T front();
+	bool is_empty();
 
-    bool is_empty();
-
-    int size();
+	int size();
 };
 
 
