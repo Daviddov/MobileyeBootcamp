@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME} Main.cpp)
 add_subdirectory(lib)
 add_subdirectory(lib_Test)
 add_subdirectory(lib_logger)
+add_subdirectory(nlohmann)
 target_include_directories(${PROJECT_NAME} PRIVATE )
 
 target_link_libraries(${PROJECT_NAME} 
@@ -46,6 +47,3 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(ROOT_DIR ${CMAKE_SOURCE_DIR})
 
-# Include nlohmann_json
-add_subdirectory(nlohmann_json)
-include_directories(${CMAKE_SOURCE_DIR}/nlohmann_json)

@@ -2,9 +2,10 @@
 #include "Header.h"
 #include "CameraManager.h"
 #include "Server.h"
-#include "json.hpp"
+#include "ConfigurationManeger.h"
 
 int main() {
+	 //configRun(); //config json example
 
 	//log init
 	LogPriority priority = InfoPriority;

@@ -15757,7 +15757,7 @@ class binary_writer
                 if (use_type && !j.m_data.m_value.array->empty())
                 {
                     JSON_ASSERT(use_count);
-                    const CharType first_prefix = ubjson_prefix(j.frontIdx(), use_bjdata);
+                    const CharType first_prefix = ubjson_prefix(j.front(), use_bjdata);
                     const bool same_prefix = std::all_of(j.begin() + 1, j.end(),
                                                          [this, first_prefix, use_bjdata](const BasicJsonType & v)
                     {
@@ -15855,7 +15855,7 @@ class binary_writer
                 if (use_type && !j.m_data.m_value.object->empty())
                 {
                     JSON_ASSERT(use_count);
-                    const CharType first_prefix = ubjson_prefix(j.frontIdx(), use_bjdata);
+                    const CharType first_prefix = ubjson_prefix(j.front(), use_bjdata);
                     const bool same_prefix = std::all_of(j.begin(), j.end(),
                                                          [this, first_prefix, use_bjdata](const BasicJsonType & v)
                     {
@@ -21608,14 +21608,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief access the first element
     /// @sa https://json.nlohmann.me/api/basic_json/front/
-    reference frontIdx()
+    reference front()
     {
         return *begin();
     }
 
     /// @brief access the first element
     /// @sa https://json.nlohmann.me/api/basic_json/front/
-    const_reference frontIdx() const
+    const_reference front() const
     {
         return *cbegin();
     }
