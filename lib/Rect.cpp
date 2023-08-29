@@ -17,7 +17,7 @@ void RectHandler::toDrawRect() {
 		rectangle(frameWarp.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
 		putText(frameWarp.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
 
-		Logger::Info("origin frame width is "  " hight is %d ", frameWarp.image.cols , frameWarp.image.rows);
+		Logger::Info("origin frame width is %d"  " hight is %d ", frameWarp.image.cols , frameWarp.image.rows);
 		Logger::Info("Top left x is %d Top left y is %d ", box.x, box.y);
 		Logger::Info("Box width is %d Box hight is %d ", box.width, box.height);
 
