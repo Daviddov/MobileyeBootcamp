@@ -130,12 +130,12 @@ bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
 		//cout << "Checking rectangle: (" << rectInfo.leftX << "," << rectInfo.topY << "," << rectInfo.width << "," << rectInfo.height << ")" << endl;
 		if (middleX >= rectInfo.leftX && middleX <= rectInfo.leftX + rectInfo.width &&
 			middleY >= rectInfo.topY && middleY <= rectInfo.topY + rectInfo.height) {
-			cout << "Middle point is inside a rectangle" << endl;
+			cout << "new rectangle" << endl;
 			return true;
 		}
 	}
 
-	cout << "Middle point is not inside any rectangle" << endl;
+	//cout << "Middle point is not inside any rectangle" << endl;
 	return false;
 }
 
