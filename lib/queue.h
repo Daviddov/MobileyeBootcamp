@@ -1,4 +1,5 @@
 #pragma once
+#include "Queue.cpp"
 
 #ifndef _SAFE_QUEUE_H_
 #define _SAFE_QUEUE_H_
@@ -28,7 +29,6 @@ public:
     int size();
 };
 
-#include "Queue.cpp"
 
 #endif // !_SAFE_QUEUE_H_
 
