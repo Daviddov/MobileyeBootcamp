@@ -2,7 +2,8 @@
 
 
 //c'tor
-CameraProcessor::CameraProcessor(queue<FrameWrap>& queue, int id, string _path) : dataFromCamera(queue) {
+CameraProcessor::CameraProcessor(queue<FrameWrap>& queue, int id, string _path) :
+	dataFromCamera(queue) ,cameraId (id) ,path  (_path) {
 	countFrame = 0;
 	active = true;
 	cameraId = id;
@@ -125,6 +126,7 @@ void CameraProcessor::cameraPart(CameraProcessor* camera) {
 
 	if (!camera->init(numFrames, frameDiffThreshold))
 	{
+		Logger::Critical("the path is not found");
 		return;
 	}
 

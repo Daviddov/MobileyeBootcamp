@@ -3,7 +3,9 @@
 
 //c'tor
 SQLHandler::SQLHandler() : db(nullptr) {
+	
 	if (!open("rect_data.db")) {
+		
 		Logger::Error("Failed to open database.");
 		return;
 	}
@@ -11,6 +13,7 @@ SQLHandler::SQLHandler() : db(nullptr) {
 		Logger::Error("Failed to clean database.");
 		return;
 	}
+	
 	Logger::Info("To cleaned database.");
 }
 
@@ -20,6 +23,7 @@ SQLHandler::~SQLHandler() {
 }
 
 bool SQLHandler::open(const char* dbName) {
+	
 	return sqlite3_open(dbName, &db) == SQLITE_OK;
 }
 
@@ -57,7 +61,7 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objec
 		"VALUES ('%s', %d, %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
 		frameWarp.timestamp.c_str(), frameWarp.frameNumber, rect.x, rect.y, rect.width, rect.height,
 		objectType.c_str(), R, G, B);
-
+    	
 	return sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
@@ -79,10 +83,49 @@ void SQLHandler::printTable() {
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }
 
-bool SQLHandler::cleanDataBase() {
 
+
+GetFromDataBase* SQLHandler::getRow(int rowID, GetFromDataBase& getDb) {
+	char selectColumnQuery[128];
+	snprintf(selectColumnQuery, sizeof(selectColumnQuery),
+		"SELECT * FROM MyTable WHERE ID = %d;", rowID);
+
+	vector<GetFromDataBase> Datab;
+
+	int result = sqlite3_exec(db, selectColumnQuery, [](void* data, int argc, char** argv, char** azColName) -> int {
+		if (argc >= 7) { // Make sure you have at least 7 columns in the query result
+			GetFromDataBase getDbInto;
+			getDbInto.id = atoi(argv[0]);
+			getDbInto.time = argv[1];
+			getDbInto.fw.frameNumber = atoi(argv[2]);
+			getDbInto.rect.x = atoi(argv[3]);
+			getDbInto.rect.y = atoi(argv[4]);
+			getDbInto.rect.width = atoi(argv[5]);
+			getDbInto.rect.height = atoi(argv[6]);
+			getDbInto.typeObject = argv[7];
+			getDbInto.r = stof(argv[8]);
+			getDbInto.g = stof(argv[9]);
+			getDbInto.b = stof(argv[10]);
+			reinterpret_cast<vector<GetFromDataBase>*>(data)->push_back(getDbInto);
+		}
+		return 0;
+		}, &Datab, nullptr);
+
+	if (result != SQLITE_OK) {
+		cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+		return nullptr;
+	}
+
+	if (!Datab.empty()) {
+		getDb = Datab[0];
+		return &getDb;
+
+		return nullptr;
+	}
+}
+
+bool SQLHandler::cleanDataBase(){
 	const char* dropTableQuery = "DROP TABLE IF EXISTS MyTable;";
-
 	return sqlite3_exec(db, dropTableQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
@@ -106,16 +149,16 @@ bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
 		int height;
 	};
 
-	std::vector<RectInfo> lastTimestampRects;
+	 vector<RectInfo> lastTimestampRects;
 
 	int result = sqlite3_exec(db, selectLastTimestampRectsQuery, [](void* data, int argc, char** argv, char** azColName) -> int {
 		if (argc >= 7) { // Make sure you have at least 7 columns in the query result
 			RectInfo rectInfo;
-			rectInfo.leftX = std::atoi(argv[3]);
-			rectInfo.topY = std::atoi(argv[4]);
-			rectInfo.width = std::atoi(argv[5]); // Calculate rightX from width
-			rectInfo.height = std::atoi(argv[6]); // Calculate bottomY from height
-			reinterpret_cast<std::vector<RectInfo>*>(data)->push_back(rectInfo);
+			rectInfo.leftX = atoi(argv[3]);
+			rectInfo.topY = atoi(argv[4]);
+			rectInfo.width = atoi(argv[5]); // Calculate rightX from width
+			rectInfo.height = atoi(argv[6]); // Calculate bottomY from height
+			reinterpret_cast<vector<RectInfo>*>(data)->push_back(rectInfo);
 		}
 		return 0;
 		}, &lastTimestampRects, nullptr);

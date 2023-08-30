@@ -13,7 +13,7 @@ include_directories(
 )
 
 # link against gtest or gtest_main as needed. Eg
-add_executable(${PROJECT_NAME}  ${SRCS})
+add_executable(${PROJECT_NAME}  ${SRCS} "functionForTests.cpp" "functionForTests.h")
 target_link_libraries(${PROJECT_NAME}
     lib
     gtest_main
