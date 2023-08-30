@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME} Main.cpp)
 add_subdirectory(lib)
 add_subdirectory(lib_Test)
 add_subdirectory(lib_logger)
+add_subdirectory(nlohmann)
 target_include_directories(${PROJECT_NAME} PRIVATE )
 
 target_link_libraries(${PROJECT_NAME} 
@@ -43,3 +44,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         $<TARGET_FILE:sqlite3>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
+
+
+set(ROOT_DIR ${CMAKE_SOURCE_DIR})
+

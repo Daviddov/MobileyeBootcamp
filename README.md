@@ -4,8 +4,9 @@
 
 ## open the folder MobileyeBootcamp_ABUS 
 ## click on the right button and open with visual studio and run
-### need to add to PATH in Envairoment system the loction of openCV/Build
+### need to add to PATH the locations of openCV/Build
 
+### need to add to PATH in Envairoment system the loction of openCV/Build
 
 #how to install wsl2
 

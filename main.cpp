@@ -2,9 +2,11 @@
 #include "Header.h"
 #include "CameraManager.h"
 #include "Server.h"
-
+#include "ConfigurationManeger.h"
 
 int main() {
+	 //configRun(); //config json example
+
 	//log init
 	LogPriority priority = InfoPriority;
 	mutex log_mutex;
@@ -16,7 +18,7 @@ int main() {
 	int id = 1;
 
 	string path = R"(./assets/parking.mp4)";
-	//string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
+
 
 
 	CameraManager CManager(dataFromCamera);
