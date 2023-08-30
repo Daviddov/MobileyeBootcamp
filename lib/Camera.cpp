@@ -28,6 +28,10 @@ bool CameraProcessor::calcAbsDiff() {
 }
 
 bool CameraProcessor::init(int numFrames, double frame_diff) {
+	
+	//connect.server_address = "localhost:50051";
+	//connect.stub = grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+	
 
 	numFramesCheck = numFrames;
 
@@ -45,12 +49,33 @@ bool CameraProcessor::init(int numFrames, double frame_diff) {
 	return true;
 }
 
+
 void CameraProcessor::insertToQueue() {
+
+	
+	
+	///*vector<uchar> image_data;
+	//imencode(".jpg", frameWarp.image, image_data);
+	//request.set_image(image_data.data(), image_data.size());*/
+
+	//request.set_image(frameWarp.image.data, frameWarp.image.total() * frameWarp.image.elemSize());
+	//request.set_timestamp(frameWarp.timestamp);
+	//request.set_framenumber(frameWarp.frameNumber);
+
+
+	// status = stub.SendCameraData(&context, request, &response);
+
+	//if (status.ok()) {
+	//	cout << "Server response: " << response.acknowledgment() << endl;
+	//}
+	//else {
+	//	cerr << "RPC failed: " << status.error_message() << endl;
+	//}
+
 
 	frameWarp.frameNumber = ++countFrame;
 
 	frameWarp.timestamp = currentTime();
-
 	FrameWrap temp = frameWarp;
 	temp.image = frameWarp.image.clone();
 	dataFromCamera.push(temp);
@@ -129,19 +154,6 @@ void CameraProcessor::cameraPart(CameraProcessor* camera) {
 	}
 
 	camera->run();
-}
-
-//this nedded for test.cpp 
-void CameraProcessor::setFrame(Mat f) {
-	frameWarp.image = f;
-}
-//this nedded for test.cpp 
-void CameraProcessor::setPrev(Mat p) {
-	prev = p;
-}
-//this nedded for test.cpp
-void CameraProcessor::setFrameDiffThreshold(double frameDiff) {
-	frameDiffThreshold = frameDiff;
 }
 
 int CameraProcessor::getId() {

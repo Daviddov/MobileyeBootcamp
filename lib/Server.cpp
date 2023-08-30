@@ -12,7 +12,7 @@ void ServerProcessor::detect_with_YOLO5() {
 
 	yolo.setFrame(currFrame);
 	yolo.detect();
-	//Detect function runtime : 1379 ms
+
 	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 
 	rect.toDrawRect();
@@ -30,11 +30,12 @@ void ServerProcessor::run() {
 			dataFromCamera.pop();
 
 			detect_with_YOLO5();
+
 			Size size(600, 400);
 			resize(currFrame.image, currFrame.image, size, CV_8UC3),
 				cv::imshow("output", currFrame.image);
 
-			if (waitKeyEx(333) == 27)
+			if (waitKeyEx(1) == 27)
 			{
 				Logger::Info("part server finished by user");
 				break;

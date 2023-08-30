@@ -9,14 +9,13 @@ int main() {
 	LogPriority priority = InfoPriority;
 	mutex log_mutex;
 	Logger::EnableFileOutput();
-	Logger::Info("the programe is started");
+	Logger::Info("the programme is started");
 
 	queue<FrameWrap> dataFromCamera;
 
 	int id = 1;
 
 	string path = R"(./assets/parking.mp4)";
-	//string path = R"(C:\Users\1\Desktop\project_files\police.mp4)";
 
 
 	CameraManager CManager(dataFromCamera);
