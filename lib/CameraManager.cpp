@@ -7,7 +7,7 @@ CameraManager::CameraManager(queue<FrameWrap>& queue) :dataFromCamera(queue) {
 CameraManager::~CameraManager() {
 
 	for (int i = 0; i < cameras.size(); i++) {
-		Logger::Debug("The heap memory of camera id: %d deleted", cameras[i]->getId());
+		Logger::Info("The heap memory of camera id: %d deleted", cameras[i]->getId());
 		delete cameras[i];
 	}
 }
@@ -28,7 +28,7 @@ void CameraManager::removeCamera(int id) {
 		if ((*camera)->getId() == id) {
 			cameras.erase(camera);
 			delete* camera;
-			Logger::Debug("The heap memory of camera id: %d deleted", id);
+			Logger::Info("The heap memory of camera id: %d deleted", id);
 			break;
 		}
 		else {

@@ -25,10 +25,21 @@ public:
 
 	void printTable();
 
+	bool getDataFromRow(int rowID);
+
+	GetFromDataBase* getRow(int rowID, GetFromDataBase& getDb);
+
+	
+
+
+
+	
+
 	sqlite3* getDB();
 
 	int getValue() const;
-bool checkRectExistsInLastFrame(Rect rect);
+
+    bool checkRectExistsInLastFrame(Rect rect);
 private:
 
 	sqlite3* db;
