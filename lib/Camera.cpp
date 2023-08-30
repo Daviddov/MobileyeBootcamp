@@ -2,7 +2,7 @@
 
 
 //c'tor
-CameraProcessor::CameraProcessor(queue<FrameWrap>& queue, int id, string _path) :
+CameraProcessor::CameraProcessor(Queue<FrameWrap>& queue, int id, string _path) :
 	dataFromCamera(queue) ,cameraId (id) ,path  (_path) {
 	countFrame = 0;
 	active = true;

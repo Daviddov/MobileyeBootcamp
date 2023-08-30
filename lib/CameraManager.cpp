@@ -1,6 +1,6 @@
 #include "CameraManager.h"
 
-CameraManager::CameraManager(queue<FrameWrap>& queue) :dataFromCamera(queue) {
+CameraManager::CameraManager(Queue<FrameWrap>& queue) :dataFromCamera(queue) {
 	numOfCameras = 0;
 }
 

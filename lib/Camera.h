@@ -22,7 +22,7 @@ private:
 
 	FrameWrap frameWarp;
 
-	queue<FrameWrap>& dataFromCamera;
+	Queue<FrameWrap>& dataFromCamera;
 
 	Mat prev;
 
@@ -30,7 +30,7 @@ private:
 
 public:
 
-	CameraProcessor(queue<FrameWrap>& queue, int id, string path);
+	CameraProcessor(Queue<FrameWrap>& queue, int id, string path);
 
 	~CameraProcessor();
 

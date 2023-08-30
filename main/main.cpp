@@ -13,7 +13,7 @@ int main() {
 	Logger::EnableFileOutput();
 	Logger::Info("the programe is started");
 
-	queue<FrameWrap> dataFromCamera;
+	Queue<FrameWrap> dataFromCamera;
 
 	int id = 1;
 

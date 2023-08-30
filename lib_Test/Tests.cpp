@@ -23,7 +23,7 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
     Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
     Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
 
-    queue<FrameWrap> queue;
+    Queue<FrameWrap> queue;
     CameraProcessor camera(queue,2,"123");
 
     camera.setFrameDiffThreshold(0.9);

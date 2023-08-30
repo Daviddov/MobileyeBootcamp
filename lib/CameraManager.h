@@ -7,7 +7,7 @@ class CameraManager {
 
 private:
 
-	queue<FrameWrap>& dataFromCamera;
+	Queue<FrameWrap>& dataFromCamera;
 
 
 	int numOfCameras;
@@ -16,7 +16,7 @@ public:
 
 	vector<CameraProcessor*> cameras;
 
-	CameraManager(queue<FrameWrap>& queue);
+	CameraManager(Queue<FrameWrap>& queue);
 
 	~CameraManager();
 
