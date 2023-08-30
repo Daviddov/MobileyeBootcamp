@@ -54,8 +54,11 @@ TEST(CurrentTimeTest, TestCurrentTime) {
     tm timeinfo;
 
     // Use thread-safe version of localtime
+#ifdef _WIN32
     localtime_s(&timeinfo, &timestamp);
-
+#else
+    localtime_r(&timestamp, &timeinfo);
+#endif
     char buffer[28];
     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
