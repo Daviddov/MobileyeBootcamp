@@ -4,6 +4,20 @@
 #include "Server.h"
 #include "ConfigurationManeger.h"
 
+void tastInsertToQueue(Queue<FrameWrap>& dataFromCamera) {
+	FrameWrap werpframe;
+	Mat image(500, 500, CV_8UC3, Scalar(111, 22, 33));
+
+	werpframe.image = image.clone(); // Clone the image if necessary
+	werpframe.timestamp = currentTime();
+	werpframe.frameNumber = 1;
+
+	dataFromCamera.push(werpframe);
+
+	// If the cloned image is no longer needed, release its memory
+	werpframe.image.release();
+}
+
 int main() {
 	 //configRun(); //config json example
 
@@ -15,19 +29,7 @@ int main() {
 
 	Queue<FrameWrap> dataFromCamera;
 
-	int id = 1;
-
-	string path = R"(./assets/parking.mp4)";
-
-
-
-	CameraManager CManager(dataFromCamera);
-
-	CManager.addCamera(id, path);
-
-	CManager.startCameraRun(id);
-
-
+	tastInsertToQueue(dataFromCamera);
 
 	ServerProcessor server(dataFromCamera);
 
