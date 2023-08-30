@@ -6,7 +6,7 @@ project(lib VERSION 1.0)
 file(GLOB SRCS *.cpp)
 
 # Create the library
-add_library(${PROJECT_NAME} ${SRCS})
+add_library(${PROJECT_NAME} STATIC ${SRCS})
 
 # Include headers
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(Main VERSION 1.0)
+project(MainX VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Main executable
-add_executable(${PROJECT_NAME} main/Main.cpp)  # Update the path to main/Main.cpp
+add_executable(${PROJECT_NAME}
+    mainX.cpp
+)
+
 
 # Link lib
 add_subdirectory(lib)
@@ -45,3 +48,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 set(ROOT_DIR ${CMAKE_SOURCE_DIR})
+
+
+add_subdirectory(ServerMain)
+add_subdirectory(ClientMain)

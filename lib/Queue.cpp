@@ -1,26 +1,14 @@
 #include "Queue.h"
 
 template <typename T>
-queueTreadSafe<T>::queueTreadSafe() : frontIdx(0), rearIdx(0), to_read(0) {}
+Queue<T>::Queue() : frontIdx(0), rearIdx(0), to_read(0) {}
 
 // Pushing anyway, even old data will overwrite
-template <typename T>
-void queueTreadSafe<T>::push(T x)
-{
-    m.lock();
-    // if old data will overwrite:
-    if (to_read > 0 && rearIdx == frontIdx)  {
-        frontIdx = (frontIdx + 1) % QUEUE_SIZE;
-        to_read--;
-    }
-    arr[rearIdx] = x;  
-    to_read++;
-    rearIdx = (rearIdx + 1) % QUEUE_SIZE; // Fixed the issue here
-    m.unlock();
-}
+
+
 
 template <typename T>
-void queueTreadSafe<T>::push(T& x)
+void Queue<T>::push(T& x)
 {
     m.lock();
     // if old data will overwrite:
@@ -34,7 +22,7 @@ void queueTreadSafe<T>::push(T& x)
     m.unlock();
 }
 template <typename T>
-T queueTreadSafe<T>::pop()
+T Queue<T>::pop()
 {
     m.lock();
     if (to_read < 1) // queue is empty
@@ -51,7 +39,7 @@ T queueTreadSafe<T>::pop()
 }
 
 template <typename T>
-T queueTreadSafe<T>::front()
+T Queue<T>::front()
 {
     m.lock();
     if (to_read < 1) // queue is empty
@@ -70,17 +58,17 @@ T queueTreadSafe<T>::front()
 
 
 template <typename T>
-bool queueTreadSafe<T>::is_empty()
+bool Queue<T>::empty()
 {
     return (to_read < 1);
 }
 
 template <typename T>
-int queueTreadSafe<T>::size()
+int Queue<T>::size()
 {
     return to_read ;
 }
 
 // Explicitly instantiate for the types you'll use. 
-template class queueTreadSafe<FrameWrap>;
+template class Queue<FrameWrap>;
 

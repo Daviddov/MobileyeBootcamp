@@ -9,7 +9,7 @@
 #define QUEUE_SIZE 5
 
 template <typename T>
-class queueTreadSafe
+class Queue
 {
 private:
 	int frontIdx, rearIdx;
@@ -18,14 +18,14 @@ private:
 	std::mutex m;
 
 public:
-	queueTreadSafe();
+	Queue();
 
-	void push(T x);
+	//void push(T x);
 	void push(T& x);
 
 	T pop();
 	T front();
-	bool is_empty();
+	bool empty();
 
 	int size();
 };
