@@ -122,6 +122,7 @@ GetFromDataBase* SQLHandler::getRow(int rowID, GetFromDataBase& getDb) {
 
 		return nullptr;
 	}
+	return nullptr;
 }
 
 bool SQLHandler::cleanDataBase(){
