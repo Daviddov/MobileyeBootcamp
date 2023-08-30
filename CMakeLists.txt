@@ -8,56 +8,36 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Define the directory for copying assets
 set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
-# Link lib
+# Add subdirectories for libraries
 add_subdirectory(lib)
 add_subdirectory(lib_Test)
 add_subdirectory(lib_logger)
 add_subdirectory(nlohmann)
 add_subdirectory(sqlite3)
 
-# Find and link OpenCV for the executables
+# Find and link OpenCV
 find_package(OpenCV REQUIRED)
 
-# Build ServerMain executable
-add_executable(ServerMain
-    ServerMain.cpp
-)
+# Function to create an executable with common settings
+function(add_common_executable TARGET_NAME SOURCE_FILE)
+    add_executable(${TARGET_NAME} ${SOURCE_FILE})
+    target_link_libraries(${TARGET_NAME}
+        PRIVATE
+        lib
+        ${OpenCV_LIBS}
+        sqlite3
+    )
+    target_include_directories(${TARGET_NAME}
+        PRIVATE
+        ${OpenCV_INCLUDE_DIRS}
+    )
+    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:${TARGET_NAME}>/assets
+    )
+endfunction()
 
-target_link_libraries(ServerMain
-    PRIVATE
-    lib
-    ${OpenCV_LIBS}
-    sqlite3
-)
+# Build ServerMain executable
+add_common_executable(ServerMain ServerMain.cpp)
 
 # Build ClientMain executable
-add_executable(ClientMain
-    ClientMain.cpp
-)
-
-target_link_libraries(ClientMain
-    PRIVATE
-    lib
-    ${OpenCV_LIBS}
-    sqlite3
-)
-
-# Include directories for OpenCV and other dependencies if necessary
-target_include_directories(ServerMain
-    PRIVATE
-    ${OpenCV_INCLUDE_DIRS}
-)
-
-target_include_directories(ClientMain
-    PRIVATE
-    ${OpenCV_INCLUDE_DIRS}
-)
-
-# Copy assets after building the executables
-add_custom_command(TARGET ServerMain POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:ServerMain>/assets
-)
-
-add_custom_command(TARGET ClientMain POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:ClientMain>/assets
-)
+add_common_executable(ClientMain ClientMain.cpp)
