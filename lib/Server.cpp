@@ -28,7 +28,6 @@ void ServerProcessor::run() {
 			currFrame = dataFromCamera.front();
 
 			dataFromCamera.pop();
-
 			detect_with_YOLO5();
 
 			Size size(600, 400);

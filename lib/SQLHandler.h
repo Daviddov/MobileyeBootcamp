@@ -28,7 +28,9 @@ public:
 	sqlite3* getDB();
 
 	int getValue() const;
-bool checkRectExistsInLastFrame(Rect rect);
+
+    bool checkRectExistsInLastFrame(Rect rect);
+
 private:
 
 	sqlite3* db;

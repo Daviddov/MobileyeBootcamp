@@ -49,11 +49,9 @@ bool CameraProcessor::init(int numFrames, double frame_diff) {
 	return true;
 }
 
-
+//   CameraProcessor::send()
 void CameraProcessor::insertToQueue() {
 
-	
-	
 	///*vector<uchar> image_data;
 	//imencode(".jpg", frameWarp.image, image_data);
 	//request.set_image(image_data.data(), image_data.size());*/

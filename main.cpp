@@ -1,6 +1,6 @@
 
 #include "Header.h"
-#include "CameraManager.h"
+#include "ListeningManager.h"
 #include "Server.h"
 
 
@@ -13,25 +13,18 @@ int main() {
 
 	queue<FrameWrap> dataFromCamera;
 
-	int id = 1;
+	
+	ListeningManager CManager(dataFromCamera);
 
-	string path = R"(./assets/parking.mp4)";
-
-
-	CameraManager CManager(dataFromCamera);
-
-	CManager.addCamera(id, path);
-
-	CManager.startCameraRun(id);
-
+	thread listenThread(ListeningManager::startListen, ref(CManager));
 
 
 	ServerProcessor server(dataFromCamera);
 
-	thread serverThread(ServerProcessor::serverPart, ref(server));
+	thread runThread(ServerProcessor::serverPart, ref(server));
 
-	serverThread.join();
-
+	runThread.join();
+	listenThread.join();
 	Logger::Info("the programme is finised");
 
 	return 0;
