@@ -11,55 +11,47 @@ find_package(OpenCV REQUIRED)
 # Include directories for OpenCV and Google Test headers
 include_directories(
     ${OpenCV_INCLUDE_DIRS}
-
 )
-# Add the test executable for CalcAbsDiffTest
-add_executable(CalcAbsDiffTest CalcAbsDiffTest.cpp "functionForTests.cpp" "functionForTests.h")
-target_link_libraries(CalcAbsDiffTest
+
+# List of test sources
+set(TEST_SOURCES
+    CalcAbsDiffTest.cpp
+    CurrentTimeTest.cpp
+    YoloRectTest.cpp
+    SqlHandlerTest.cpp
+)
+
+# Function to add a test executable
+function(add_test_executable test_name)
+    add_executable(${test_name} ${ARGN})
+    target_link_libraries(${test_name}
+        lib  # Link your main project library if needed
+        gtest_main
+        gmock
+        ${OpenCV_LIBS}  # Link OpenCV to the test executable
+        sqlite3
+    )
+    gtest_discover_tests(${test_name})
+endfunction()
+
+# Add individual test executables
+foreach(test_source ${TEST_SOURCES})
+    get_filename_component(test_name ${test_source} NAME_WE)
+    add_test_executable(${test_name} ${test_source} functionForTests.cpp functionForTests.h)
+endforeach()
+
+# Add an executable to run all tests
+add_executable(run_all_tests ${TEST_SOURCES} functionForTests.cpp functionForTests.h)
+target_link_libraries(run_all_tests
     lib  # Link your main project library if needed
     gtest_main
     gmock
     ${OpenCV_LIBS}  # Link OpenCV to the test executable
     sqlite3
 )
-
-# Add the test executable for CurrentTimeTest
-add_executable(CurrentTimeTest CurrentTimeTest.cpp "functionForTests.cpp" "functionForTests.h")
-target_link_libraries(CurrentTimeTest
-    lib  # Link your main project library if needed
-    gtest_main
-    gmock
-    ${OpenCV_LIBS}  # Link OpenCV to the test executable
-    sqlite3
-)
-
-# Add the test executable for YoloRectTest
-add_executable(YoloRectTest YoloRectTest.cpp "functionForTests.cpp" "functionForTests.h")
-target_link_libraries(YoloRectTest
-    lib  # Link your main project library if needed
-    gtest_main
-    gmock
-    ${OpenCV_LIBS}  # Link OpenCV to the test executable
-    sqlite3
-)
-
-# Add the test executable for SqlHandlerTest
-add_executable(SqlHandlerTest SqlHandlerTest.cpp "functionForTests.cpp" "functionForTests.h")
-target_link_libraries(SqlHandlerTest
-    lib  # Link your main project library if needed
-    gtest_main
-    gmock
-    ${OpenCV_LIBS}  # Link OpenCV to the test executable
-    sqlite3
-)
+gtest_discover_tests(run_all_tests)
 
 # Include the Google Test framework
-gtest_discover_tests(CalcAbsDiffTest)
-gtest_discover_tests(CurrentTimeTest)
-gtest_discover_tests(YoloRectTest)
-gtest_discover_tests(SqlHandlerTest)
-
-# Google Test setup (fetching from GoogleTest repository)
 include(FetchContent)
 FetchContent_Declare(
     googletest
