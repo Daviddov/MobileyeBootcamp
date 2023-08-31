@@ -2,7 +2,7 @@
 #include "Header.h"
 #include "CameraManager.h"
 #include "Server.h"
-#include "ConfigurationManeger.h"
+#include "ConfigurationManager.h"
 
 int main() {
 	 //configRun(); //config json example

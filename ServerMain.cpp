@@ -2,7 +2,7 @@
 #include "Header.h"
 #include "CameraManager.h"
 #include "Server.h"
-#include "ConfigurationManeger.h"
+#include "ConfigurationManager.h"
 
 void tastInsertToQueue(Queue<FrameWrap>& dataFromCamera) {
 	FrameWrap werpframe;

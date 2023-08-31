@@ -14,7 +14,7 @@ struct Configuration {
     int backendPort;
 };
 
-class ConfigurationManeger {
+class ConfigurationManager {
 public:
     
 

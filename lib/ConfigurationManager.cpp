@@ -1,9 +1,9 @@
-#include "ConfigurationManeger.h"
+#include "ConfigurationManager.h"
 // Define a struct to hold configuration settings
 
 
 
-json ConfigurationManeger::createDefaultConfigJson() {
+json ConfigurationManager::createDefaultConfigJson() {
     json config;
     config["cameraThreshold"] = 0.5;
     config["backendQueueSize"] = 10;
@@ -14,7 +14,7 @@ json ConfigurationManeger::createDefaultConfigJson() {
     return config;
 }
 
-bool ConfigurationManeger::saveConfigToFile(const std::string& filename, const Configuration& config) {
+bool ConfigurationManager::saveConfigToFile(const std::string& filename, const Configuration& config) {
     json config_json;
     config_json["cameraThreshold"] = config.cameraThreshold;
     config_json["backendQueueSize"] = config.backendQueueSize;
@@ -32,7 +32,7 @@ bool ConfigurationManeger::saveConfigToFile(const std::string& filename, const C
     return false;
 }
 
-Configuration ConfigurationManeger::readConfigFromFile(const std::string& filename) {
+Configuration ConfigurationManager::readConfigFromFile(const std::string& filename) {
     Configuration config;
     json config_json;
 
@@ -51,7 +51,7 @@ Configuration ConfigurationManeger::readConfigFromFile(const std::string& filena
     return config;
 }
 
-void ConfigurationManeger::editConfig(Configuration& config) {
+void ConfigurationManager::editConfig(Configuration& config) {
     std::cout << "Enter new Camera Threshold: ";
     std::cin >> config.cameraThreshold;
 
@@ -72,7 +72,7 @@ void ConfigurationManeger::editConfig(Configuration& config) {
 }
 
 void configRun() {
-    ConfigurationManeger j;
+    ConfigurationManager j;
 
     Configuration config = j.readConfigFromFile("config.json");
 
