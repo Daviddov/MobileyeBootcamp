@@ -1,47 +1,13 @@
 #include "ListeningManager.h"
 
-ListeningManager::ListeningManager(queue<FrameWrap>& queue) :dataFromCamera(queue) {
-	numOfCameras = 0;
-}
+ListeningManager::ListeningManager(Queue<FrameWrap>& queue) :dataFromCamera(queue) {}
 
-ListeningManager::~ListeningManager() {
-
-	for (int i = 0; i < cameras.size(); i++) {
-		Logger::Debug("The heap memory of camera id: %d deleted", cameras[i]->getId());
-		delete cameras[i];
-	}
-}
-
-void ListeningManager::addCamera(int id, string path) {
-
-	//??? need to replace it to shear ptr ???
-	CameraProcessor* camera = new CameraProcessor(dataFromCamera, id, path);
-
-	cameras.push_back(camera);
-	numOfCameras++;
-}
-
-void ListeningManager::removeCamera(int id) {
-	if (numOfCameras == 0) return;
-
-	for (auto camera = cameras.begin(); camera != cameras.end();) {
-		if ((*camera)->getId() == id) {
-			cameras.erase(camera);
-			delete* camera;
-			Logger::Debug("The heap memory of camera id: %d deleted", id);
-			break;
-		}
-		else {
-			camera++;
-		}
-	}
-	numOfCameras--;
-}
+ListeningManager::~ListeningManager() {}
 
 void ListeningManager::startListen(ListeningManager listen) {
 	
 	VideoCapture capture;
-	capture.open("C:\\Users\\1\\Desktop\\project_files\\parking.mp4");
+	capture.open("./assets/parking.mp4");
 	if (!capture.isOpened()) {
 		cout<< "Error opening video file"<<endl;
 	}

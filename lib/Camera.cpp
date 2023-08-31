@@ -4,7 +4,7 @@
 //c'tor
 CameraProcessor::CameraProcessor(Queue<FrameWrap>& queue, int id, string _path) :
 	dataFromCamera(queue) ,cameraId (id) ,path  (_path) {
-	countFrame = 0;
+	countFrame = 1;
 	active = true;
 	cameraId = id;
 	path = _path;
@@ -72,7 +72,7 @@ void CameraProcessor::insertToQueue() {
 	//}
 
 
-	frameWarp.frameNumber = ++countFrame;
+	frameWarp.frameNumber = countFrame;
 
 	frameWarp.timestamp = currentTime();
 	FrameWrap temp = frameWarp;
@@ -87,7 +87,7 @@ void CameraProcessor::run() {
 	while (active) {
 
 		capture.read(frameWarp.image);
-		//countFrame++;
+		
 
 		if (frameWarp.image.empty()) {
 			cout << "End of stream\n";
@@ -99,9 +99,12 @@ void CameraProcessor::run() {
 			this_thread::sleep_for(chrono::milliseconds(333));
 			insertToQueue();
 			Logger::Info("insert to queue");
-		}
-		else {
-			continue;
+
+			Mat view = dataFromCamera.front().image;
+			imshow("clientMain", view);
+			if (waitKey(1) == 27) {
+				break;
+			}
 		}
 	}
 }
@@ -154,6 +157,7 @@ void CameraProcessor::cameraPart(CameraProcessor* camera) {
 	}
 
 	camera->run();
+
 }
 
 int CameraProcessor::getId() {

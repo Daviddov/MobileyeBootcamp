@@ -1,8 +1,8 @@
 
 #include "Header.h"
-#include "CameraManager.h"
 #include "Server.h"
 #include "ConfigurationManeger.h"
+
 
 int main() {
 	 //configRun(); //config json example
@@ -15,15 +15,9 @@ int main() {
 
 	Queue<FrameWrap> dataFromCamera;
 
-	int id = 1;
+	CameraProcessor* camera = new CameraProcessor(dataFromCamera,1, "assets/parking.mp4");
 
-	thread listenThread(ListeningManager::startListen, ref(CManager));
-
-	ServerProcessor server(dataFromCamera);
-
-	thread serverThread(ServerProcessor::serverPart, ref(server));
-
-	serverThread.join();
+	CameraProcessor::cameraPart(camera);
 
 	Logger::Info("the programme is finised");
 

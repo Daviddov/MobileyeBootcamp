@@ -7,24 +7,17 @@ class ListeningManager {
 
 private:
 
-	queue<FrameWrap>& dataFromCamera;
-
-	int numOfCameras;
+	Queue<FrameWrap>& dataFromCamera;
 
 public:
 
 	vector<CameraProcessor*> cameras;
 
-	ListeningManager(queue<FrameWrap>& queue);
+	ListeningManager(Queue<FrameWrap>& queue);
 
 	~ListeningManager();
 
-	void addCamera(int id, string path);
-
-	void removeCamera(int id);
-
 	static void startListen(ListeningManager listen);
-
 
 };
 
@@ -37,7 +30,7 @@ public:
 //
 //	CameraServiceImpl(queue<FrameWrap>& queue);
 //
-//    FrameWrap frameWrap;
+//  FrameWrap frameWrap;
 //
 //	grpc::Status SendCameraData(grpc::ServerContext* context,const CameraDataRequest* request,CameraDataResponse* response) override;
 //
