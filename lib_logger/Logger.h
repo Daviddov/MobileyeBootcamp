@@ -96,7 +96,7 @@ private:
     }
 
     template<typename... Args>
-    void log(const char* message_priority_str, LogPriority message_priority, const char* message, Args... args)
+    void log(const char* message_priority_str, LogPriority message_priority, const char* message , Args... args)
     {
         if (priority <= message_priority)
         {
@@ -110,7 +110,7 @@ private:
 
             if (fileStream.is_open())
             {
-                fileStream << buffer << '\t' << message_priority_str << message << '\n';
+                fileStream << buffer << '\t' << message_priority_str << message  <<   '\n';
             }
         }
     }

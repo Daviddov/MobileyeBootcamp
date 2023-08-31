@@ -1,6 +1,6 @@
 #pragma once
 #include "Yolo.h"
-#include "Rect.h"
+#include "RectHandler.h"
 
 
 class ServerProcessor {
@@ -11,7 +11,7 @@ private:
 
 	FrameWrap currFrame;
 
-	queue<FrameWrap>& dataFromCamera;
+	Queue<FrameWrap>& dataFromCamera;
 
 	SQLHandler sqlHandler;
 
@@ -19,7 +19,7 @@ private:
 
 public:
 
-	ServerProcessor(queue<FrameWrap>& dataFromCamera);
+	ServerProcessor(Queue<FrameWrap>& dataFromCamera);
 
 	void detect_with_YOLO5();
 

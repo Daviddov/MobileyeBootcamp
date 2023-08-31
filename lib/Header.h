@@ -4,7 +4,9 @@
 #include <string>
 #include <filesystem>
 #include <vector>
-#include <queue>
+
+#include "Queue.h"
+
 #include <chrono>
 #include <thread>
 #include <memory>
@@ -12,12 +14,12 @@
 #include "../sqlite3/sqlite3.h"
 #include "../lib_logger/Logger.h"
 
+
 #include <ctime>
 #include <iomanip>
 #include <sstream>
 
 //#include "frame.pb.h"
-
 
 
 using namespace cv;
@@ -35,6 +37,17 @@ struct FrameWrap
     Mat image;
     string timestamp;
     int frameNumber;
+};
+
+
+
+struct GetFromDataBase {
+    int id;
+    string time;
+    Rect rect;
+    FrameWrap fw;
+    string typeObject;
+    float r, g, b;
 };
 
 

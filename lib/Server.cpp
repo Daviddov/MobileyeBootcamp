@@ -3,7 +3,7 @@
 using namespace std::chrono;
 
 //c'tor
-ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue) {
+ServerProcessor::ServerProcessor(Queue<FrameWrap>& queue) :dataFromCamera(queue) {
 	active = true;
 	
 }
@@ -11,6 +11,7 @@ ServerProcessor::ServerProcessor(queue<FrameWrap>& queue) :dataFromCamera(queue)
 void ServerProcessor::detect_with_YOLO5() {
 
 	yolo.setFrame(currFrame);
+
 	yolo.detect();
 
 	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);

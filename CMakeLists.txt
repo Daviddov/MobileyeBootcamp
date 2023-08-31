@@ -1,44 +1,43 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(Main VERSION 1.0)
+project(ServerMain VERSION 1.0)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Main executable
-add_executable(${PROJECT_NAME} Main.cpp)
+# Define the directory for copying assets
+set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
-# Link lib
+# Add subdirectories for libraries
 add_subdirectory(lib)
 add_subdirectory(lib_Test)
 add_subdirectory(lib_logger)
-target_include_directories(${PROJECT_NAME} PRIVATE )
-
-target_link_libraries(${PROJECT_NAME} 
-PRIVATE lib
-PRIVATE logger
-)
+add_subdirectory(nlohmann)
+add_subdirectory(sqlite3)
 
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
-target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
 
-# Define the directory for copying assets
-set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
-# Custom command to copy the entire "assets" folder during the build process
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
-)
-# Set the working directory to the build directory so that the assets are accessible during runtime
-set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
+# Function to create an executable with common settings
+function(add_common_executable TARGET_NAME SOURCE_FILE)
+    add_executable(${TARGET_NAME} ${SOURCE_FILE})
+    target_link_libraries(${TARGET_NAME}
+        PRIVATE
+        lib
+        ${OpenCV_LIBS}
+        sqlite3
+    )
+    target_include_directories(${TARGET_NAME}
+        PRIVATE
+        ${OpenCV_INCLUDE_DIRS}
+    )
+    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:${TARGET_NAME}>/assets
+    )
+endfunction()
 
-# Include the "sql" subdirectory containing SQLite source files
-add_subdirectory(sqlite3)
-# Link SQLite to the main executable
-target_link_libraries(${PROJECT_NAME} PRIVATE sqlite3)
-# Copy the SQLite DLL to the build directory
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:sqlite3>
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
+# Build ServerMain executable
+add_common_executable(ServerMain ServerMain.cpp)
+
+# Build ClientMain executable
+add_common_executable(ClientMain ClientMain.cpp)

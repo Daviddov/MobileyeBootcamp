@@ -25,6 +25,16 @@ public:
 
 	void printTable();
 
+	bool getDataFromRow(int rowID);
+
+	GetFromDataBase* getRow(int rowID, GetFromDataBase& getDb);
+
+	
+
+
+
+	
+
 	sqlite3* getDB();
 
 	int getValue() const;

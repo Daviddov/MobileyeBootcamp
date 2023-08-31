@@ -1,28 +1,29 @@
 
 #include "Header.h"
-#include "ListeningManager.h"
+#include "CameraManager.h"
 #include "Server.h"
-
+#include "ConfigurationManeger.h"
 
 int main() {
+	 //configRun(); //config json example
+
 	//log init
 	LogPriority priority = InfoPriority;
 	mutex log_mutex;
 	Logger::EnableFileOutput();
 	Logger::Info("the programme is started");
 
-	queue<FrameWrap> dataFromCamera;
+	Queue<FrameWrap> dataFromCamera;
 
-	ListeningManager CManager(dataFromCamera);
+	int id = 1;
 
 	thread listenThread(ListeningManager::startListen, ref(CManager));
 
 	ServerProcessor server(dataFromCamera);
 
-	thread runThread(ServerProcessor::serverPart, ref(server));
+	thread serverThread(ServerProcessor::serverPart, ref(server));
 
-	runThread.join();
-	listenThread.join();
+	serverThread.join();
 
 	Logger::Info("the programme is finised");
 

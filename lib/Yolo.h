@@ -23,8 +23,7 @@ private:
 	 int NUM_OF_DETECT;
 	 int NUM_OF_DATA ;
 
-
-
+	
 	dnn::Net net;
 
 	vector<Detection> output;
