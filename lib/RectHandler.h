@@ -2,7 +2,6 @@
 #include "SQLHandler.h"
 
 
-
 class RectHandler {
 
 private:

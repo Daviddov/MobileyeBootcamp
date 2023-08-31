@@ -1,14 +1,6 @@
-#include "../lib/Header.h"
-#include "../lib/Camera.h"
-#include "../lib/RectHandler.h"
-#include "opencv2/opencv.hpp"
+
 #include "gtest/gtest.h"
-#include "../sqlite3/sqlite3.h"
 #include "functionForTests.h"
-
-
-
-
 
 
 TEST(SqlHandlerTest,  checkIfDataCorrect) {

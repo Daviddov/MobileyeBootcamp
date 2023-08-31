@@ -19,8 +19,6 @@ int main() {
 
 	string path = R"(./assets/parking.mp4)";
 
-
-
 	CameraManager CManager(dataFromCamera);
 
 	CManager.addCamera(id, path);

@@ -13,7 +13,6 @@ enum  {
 };
 
 class Yolo5 {
-
 private:
 	 float INPUT_SIZE ;
 	 float SCORE_THRESHOLD ;
