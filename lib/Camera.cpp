@@ -71,15 +71,15 @@ void CameraProcessor::insertToQueue() {
 	//	cerr << "RPC failed: " << status.error_message() << endl;
 	//}
 
+	//From here //////////////////////////////
+	frameWarp.frameNumber = countFrame;     //
+	frameWarp.timestamp = currentTime();    //
+	FrameWrap temp = frameWarp;             //
+	temp.image = frameWarp.image.clone();   //
+	dataFromCamera.push(temp);              //
+	prev = frameWarp.image.clone();         //
+//until here is a temporary until fixed grpc//
 
-	frameWarp.frameNumber = countFrame;
-
-	frameWarp.timestamp = currentTime();
-	FrameWrap temp = frameWarp;
-	temp.image = frameWarp.image.clone();
-	dataFromCamera.push(temp);
-
-	prev = frameWarp.image.clone();
 }
 
 void CameraProcessor::run() {
@@ -99,12 +99,14 @@ void CameraProcessor::run() {
 			this_thread::sleep_for(chrono::milliseconds(333));
 			insertToQueue();
 			Logger::Info("insert to queue");
+			//From here ///////////////////////////////////
+			Mat view = dataFromCamera.front().image;     //      
+			imshow("clientMain", view);                  //
+			if (waitKey(1) == 27) {                      //
+				break;                                   //
+			}                                            //
+			///until here is a temporary until fixed grpc//
 
-			Mat view = dataFromCamera.front().image;
-			imshow("clientMain", view);
-			if (waitKey(1) == 27) {
-				break;
-			}
 		}
 	}
 }
