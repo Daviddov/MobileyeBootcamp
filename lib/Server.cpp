@@ -14,7 +14,7 @@ void ServerProcessor::detect_with_YOLO5() {
 
 	yolo.detect();
 
-	//Detect function runtime : 1379 ms
+	
 	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 
 	rect.toDrawRect();
@@ -30,8 +30,20 @@ void ServerProcessor::run() {
 			currFrame = dataFromCamera.front();
 
 			dataFromCamera.pop();
+			auto start = std::chrono::high_resolution_clock::now();
+
+			// Place your code here that you want to measure the time for
+			// ...
 
 			detect_with_YOLO5();
+			// Record the end time
+			auto end = std::chrono::high_resolution_clock::now();
+
+			// Calculate the duration in milliseconds
+			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+			// Print the time difference
+			std::cout << "Time taken: " << duration.count() << " milliseconds" << std::endl;
 			Size size(600, 400);
 			resize(currFrame.image, currFrame.image, size, CV_8UC3),
 				cv::imshow("output", currFrame.image);

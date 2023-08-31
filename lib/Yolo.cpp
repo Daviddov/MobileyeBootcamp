@@ -49,9 +49,9 @@ void Yolo5::detect() {
     net.setInput(blob);
     vector<Mat> outputs;
     
-   // cout << endl <<" start detect" << currentTime() << endl;
+  
     net.forward(outputs, net.getUnconnectedOutLayersNames());
-   // cout << endl << " end detect" << currentTime() << endl;
+   
 
     float xFactor = inputImage.cols / INPUT_SIZE;
     float yFactor = inputImage.rows / INPUT_SIZE;

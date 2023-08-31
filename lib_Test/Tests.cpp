@@ -8,15 +8,7 @@
 
 
 
-//TEST(TestCaseName, TestName) {
-//
-//	EXPECT_EQ(1, 1);
-//	EXPECT_TRUE(true);
-//}
-//
-//    EXPECT_EQ(1, 1);
-//    EXPECT_TRUE(true);
-//}
+
 
 TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 
@@ -36,14 +28,11 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
     Mat testImage3(3, 3, CV_8UC3, Scalar(100, 150, 200));
     Mat testImage4(3, 3, CV_8UC3, Scalar(110, 160, 210));
 
-
     camera.setFrame(testImage3);
     camera.setPrev(testImage4);
 
     ASSERT_TRUE(camera.calcAbsDiff());
 }
-
-
 
 
 
