@@ -12,14 +12,9 @@ find_package(OpenCV REQUIRED)
 include_directories(
     ${OpenCV_INCLUDE_DIRS}
 )
+# Discover test source files
+file(GLOB TEST_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*Test.cpp")
 
-# List of test sources
-set(TEST_SOURCES
-    CalcAbsDiffTest.cpp
-    CurrentTimeTest.cpp
-    YoloRectTest.cpp
-    SqlHandlerTest.cpp
-)
 
 # Function to add a test executable
 function(add_test_executable test_name)

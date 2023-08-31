@@ -7,9 +7,6 @@
 #include "functionForTests.h"
 
 
-
-
-
 TEST(CurrentTimeTest, TestCurrentTime) {
     // Get the current system time using the C++ standard library
     auto now = chrono::system_clock::now();
