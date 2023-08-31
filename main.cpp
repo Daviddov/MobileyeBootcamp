@@ -13,11 +13,9 @@ int main() {
 
 	queue<FrameWrap> dataFromCamera;
 
-	
 	ListeningManager CManager(dataFromCamera);
 
 	thread listenThread(ListeningManager::startListen, ref(CManager));
-
 
 	ServerProcessor server(dataFromCamera);
 
@@ -25,6 +23,7 @@ int main() {
 
 	runThread.join();
 	listenThread.join();
+
 	Logger::Info("the programme is finised");
 
 	return 0;
