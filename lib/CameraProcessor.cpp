@@ -1,4 +1,4 @@
-#include "Camera.h" 
+#include "CameraProcessor.h" 
 
 
 //c'tor

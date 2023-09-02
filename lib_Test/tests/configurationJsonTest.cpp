@@ -89,3 +89,42 @@ TEST(ConfigurationManagerTest, SaveConfigToFileTest) {
     EXPECT_EQ(parsed_saved, parsed_expected);
 }
 
+// Define a test fixture to set up common resources for tests.
+class EditConfigTest : public ::testing::Test {
+protected:
+    ConfigurationManager configManager;
+    Configuration config;
+
+    // This function is called before each test case.
+    void SetUp() override {
+        // Initialize a Configuration object with initial values.
+        config.cameraThreshold = 50.0;
+        config.backendQueueSize = 10;
+        config.cameraIP = "127.0.0.1";
+        config.cameraPort = 8080;
+        config.backendIP = "127.0.0.1";
+        config.backendPort = 8000;
+    }
+};
+
+// Define a test case for editConfig.
+TEST_F(EditConfigTest, EditConfiguration) {
+    // Create a stringstream to simulate user input.
+    std::stringstream user_input;
+    user_input << "75.5\n20\nnew_camera_ip\n9091\nnew_backend_ip\n9092\n";
+
+    // Redirect cin to the stringstream.
+    std::cin.rdbuf(user_input.rdbuf());
+
+    // Call the editConfig function.
+    configManager.editConfig(config);
+
+    // Verify that the configuration has been updated correctly.
+    EXPECT_EQ(config.cameraThreshold, 75.5);
+    EXPECT_EQ(config.backendQueueSize, 20);
+    EXPECT_EQ(config.cameraIP, "new_camera_ip");
+    EXPECT_EQ(config.cameraPort, 9091);
+    EXPECT_EQ(config.backendIP, "new_backend_ip");
+    EXPECT_EQ(config.backendPort, 9092);
+}
+

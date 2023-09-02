@@ -1,5 +1,5 @@
 #pragma once
-# include "Camera.h"
+# include "CameraProcessor.h"
 
 enum  {
 	ZERO,

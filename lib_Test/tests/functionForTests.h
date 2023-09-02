@@ -1,6 +1,6 @@
 #pragma once
 #include "../../lib/Header.h"
-#include "../../lib/Camera.h"
+#include "../../lib/CameraProcessor.h"
 #include "../../lib/RectHandler.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
