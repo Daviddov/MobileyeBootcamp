@@ -77,7 +77,7 @@ void CameraProcessor::insertToQueue() {
 	FrameWrap temp = frameWarp;             //
 	temp.image = frameWarp.image.clone();   //
 	dataFromCamera.push(temp);              //
-	prev = frameWarp.image.clone();         //
+	setPrev(frameWarp.image.clone());       //
 //until here is a temporary until fixed grpc//
 
 }
@@ -165,3 +165,10 @@ void CameraProcessor::cameraPart(CameraProcessor* camera) {
 int CameraProcessor::getId() {
 	return cameraId;
 }
+
+void CameraProcessor::setFrame(Mat p) {
+	prev = p;
+};
+void CameraProcessor::setPrev(Mat& p) {
+	prev = p;
+};

@@ -43,7 +43,7 @@ public:
 
 	void setFrame(Mat f);
 
-	void setPrev(Mat p);
+	void setPrev(Mat &p);
 
 	int getId();
 
