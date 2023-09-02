@@ -4,7 +4,7 @@
 //c'tor
 CameraProcessor::CameraProcessor(Queue<FrameWrap>& queue, int id, string _path) :
 	dataFromCamera(queue) ,cameraId (id) ,path  (_path) {
-	countFrame = 0;
+	countFrame = 1;
 	active = true;
 	cameraId = id;
 	path = _path;
@@ -29,6 +29,10 @@ bool CameraProcessor::calcAbsDiff() {
 }
 
 bool CameraProcessor::init(int numFrames, double frame_diff) {
+	
+	//connect.server_address = "localhost:50051";
+	//connect.stub = grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+	
 
 	numFramesCheck = numFrames;
 
@@ -46,17 +50,36 @@ bool CameraProcessor::init(int numFrames, double frame_diff) {
 	return true;
 }
 
+//   CameraProcessor::send()
 void CameraProcessor::insertToQueue() {
 
-	frameWarp.frameNumber = ++countFrame;
+	///*vector<uchar> image_data;
+	//imencode(".jpg", frameWarp.image, image_data);
+	//request.set_image(image_data.data(), image_data.size());*/
 
-	frameWarp.timestamp = currentTime();
+	//request.set_image(frameWarp.image.data, frameWarp.image.total() * frameWarp.image.elemSize());
+	//request.set_timestamp(frameWarp.timestamp);
+	//request.set_framenumber(frameWarp.frameNumber);
 
-	FrameWrap temp = frameWarp;
-	temp.image = frameWarp.image.clone();
-	dataFromCamera.push(temp);
 
-	prev = frameWarp.image.clone();
+	// status = stub.SendCameraData(&context, request, &response);
+
+	//if (status.ok()) {
+	//	cout << "Server response: " << response.acknowledgment() << endl;
+	//}
+	//else {
+	//	cerr << "RPC failed: " << status.error_message() << endl;
+	//}
+
+	//From here //////////////////////////////
+	frameWarp.frameNumber = countFrame;     //
+	frameWarp.timestamp = currentTime();    //
+	FrameWrap temp = frameWarp;             //
+	temp.image = frameWarp.image.clone();   //
+	dataFromCamera.push(temp);              //
+	prev = frameWarp.image.clone();         //
+//until here is a temporary until fixed grpc//
+
 }
 
 void CameraProcessor::run() {
@@ -64,7 +87,7 @@ void CameraProcessor::run() {
 	while (active) {
 
 		capture.read(frameWarp.image);
-		//countFrame++;
+		
 
 		if (frameWarp.image.empty()) {
 			cout << "End of stream\n";
@@ -76,9 +99,14 @@ void CameraProcessor::run() {
 			this_thread::sleep_for(chrono::milliseconds(333));
 			insertToQueue();
 			Logger::Info("insert to queue");
-		}
-		else {
-			continue;
+			//From here ///////////////////////////////////
+			Mat view = dataFromCamera.front().image;     //      
+			imshow("clientMain", view);                  //
+			if (waitKey(1) == 27) {                      //
+				break;                                   //
+			}                                            //
+			///until here is a temporary until fixed grpc//
+
 		}
 	}
 }
@@ -131,19 +159,7 @@ void CameraProcessor::cameraPart(CameraProcessor* camera) {
 	}
 
 	camera->run();
-}
 
-//this nedded for test.cpp 
-void CameraProcessor::setFrame(Mat f) {
-	frameWarp.image = f;
-}
-//this nedded for test.cpp 
-void CameraProcessor::setPrev(Mat p) {
-	prev = p;
-}
-//this nedded for test.cpp
-void CameraProcessor::setFrameDiffThreshold(double frameDiff) {
-	frameDiffThreshold = frameDiff;
 }
 
 int CameraProcessor::getId() {

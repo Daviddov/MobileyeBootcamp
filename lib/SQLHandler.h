@@ -32,6 +32,7 @@ public:
 	sqlite3* getDB();
 
     bool checkRectExistsInLastFrame(Rect rect);
+
 private:
 
 	sqlite3* db;

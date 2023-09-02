@@ -1,8 +1,8 @@
 
 #include "Header.h"
-#include "CameraManager.h"
 #include "Server.h"
 #include "ConfigurationManager.h"
+
 
 int main() {
 	 //configRun(); //config json example
@@ -11,27 +11,13 @@ int main() {
 	LogPriority priority = InfoPriority;
 	mutex log_mutex;
 	Logger::EnableFileOutput();
-	Logger::Info("the programe is started");
+	Logger::Info("the programme is started");
 
 	Queue<FrameWrap> dataFromCamera;
 
-	int id = 1;
+	CameraProcessor* camera = new CameraProcessor(dataFromCamera,1, "assets/parking.mp4");
 
-	string path = R"(./assets/parking.mp4)";
-
-	CameraManager CManager(dataFromCamera);
-
-	CManager.addCamera(id, path);
-
-	CManager.startCameraRun(id);
-
-
-
-	ServerProcessor server(dataFromCamera);
-
-	thread serverThread(ServerProcessor::serverPart, ref(server));
-
-	serverThread.join();
+	CameraProcessor::cameraPart(camera);
 
 	Logger::Info("the programme is finised");
 

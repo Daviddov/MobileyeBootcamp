@@ -1,7 +1,10 @@
 #pragma once
 
 #include "Header.h"
-
+#include "CameraConnector.h"
+//#include <grpc++/grpc++.h>
+//#include "camera_service.grpc.pb.h"
+//
 
 
 class CameraProcessor {
@@ -27,6 +30,8 @@ private:
 	Mat prev;
 
 	VideoCapture capture;
+
+	//CameraConnector connect;
 
 public:
 
