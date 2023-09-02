@@ -25,6 +25,8 @@ public:
     Configuration readConfigFromFile(const std::string& filename);
 
     void editConfig(Configuration& config);
+
+
 };
 
 

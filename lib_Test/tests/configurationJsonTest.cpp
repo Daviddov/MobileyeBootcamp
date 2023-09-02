@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "ConfigurationManager.h"
+#include <gmock/gmock.h>
 
 
 TEST(ConfigurationManagerTest, TestreadConfigFromFile) {
@@ -127,4 +128,5 @@ TEST_F(EditConfigTest, EditConfiguration) {
     EXPECT_EQ(config.backendIP, "new_backend_ip");
     EXPECT_EQ(config.backendPort, 9092);
 }
+
 
