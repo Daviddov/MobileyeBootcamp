@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 //#include "../lib/Rect.h"
-//
+
 //using namespace testing;
 
 class JustForTest {

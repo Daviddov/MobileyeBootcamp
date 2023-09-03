@@ -8,7 +8,7 @@
 
 struct SentToDataBase {
 
-    Rect rect;
+    cv::Rect rect;
     FrameWrap fw;
     string objTipe = "car";
     float r = 3.8;

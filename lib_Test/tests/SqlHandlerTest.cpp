@@ -1,7 +1,7 @@
 
 #include "gtest/gtest.h"
 #include "functionForTests.h"
-
+using namespace cv;
 
 TEST(SqlHandlerTest,  checkIfDataCorrect) {
     

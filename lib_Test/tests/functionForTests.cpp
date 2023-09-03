@@ -1,5 +1,5 @@
 #include "functionForTests.h"
-
+using namespace cv;
 
 void createFakeFrameWrapForTest(SentToDataBase& toDb) {
  toDb.fw.timestamp = currentTime();

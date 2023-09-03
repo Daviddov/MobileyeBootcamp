@@ -5,16 +5,28 @@ enable_testing()
 
 # Include Google Test
 include(GoogleTest)
-# Find and link OpenCV for the test executable
+
+# Find and link OpenCV
 find_package(OpenCV REQUIRED)
 
-# Include directories for OpenCV and Google Test headers
+# Include directories 
 include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
     ${OpenCV_INCLUDE_DIRS}
+    ${WindowsSDK_INCLUDE_DIRS}  # Windows SDK include directory
+    ${gRPC_INCLUDE_DIRS}        # gRPC include directory
 )
+
+
 # Discover test source files
 file(GLOB TEST_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*Test.cpp")
 
+# Find gRPC and protobuf packages
+find_package(protobuf CONFIG REQUIRED)
+find_package(gRPC REQUIRED)
+
+message(STATUS "Using protobuf ${protobuf_VERSION}")
 
 # Function to add a test executable
 function(add_test_executable test_name)
@@ -25,6 +37,8 @@ function(add_test_executable test_name)
         gmock
         ${OpenCV_LIBS}  # Link OpenCV to the test executable
         sqlite3
+        gRPC::grpc++
+        protobuf::libprotobuf
     )
     gtest_discover_tests(${test_name})
 endfunction()
@@ -35,6 +49,8 @@ foreach(test_source ${TEST_SOURCES})
     add_test_executable(${test_name} ${test_source} functionForTests.cpp functionForTests.h)
 endforeach()
 
+
+
 # Add an executable to run all tests
 add_executable(run_all_tests ${TEST_SOURCES} functionForTests.cpp functionForTests.h)
 target_link_libraries(run_all_tests
@@ -43,6 +59,8 @@ target_link_libraries(run_all_tests
     gmock
     ${OpenCV_LIBS}  # Link OpenCV to the test executable
     sqlite3
+    gRPC::grpc++
+    protobuf::libprotobuf
 )
 gtest_discover_tests(run_all_tests)
 

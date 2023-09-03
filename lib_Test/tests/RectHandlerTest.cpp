@@ -2,7 +2,7 @@
 #include "RectHandler.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
-
+using namespace cv;
 
 TEST(RectHandlerTest, CalculatesAveragePerChannel) {
 
