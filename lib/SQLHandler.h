@@ -15,7 +15,7 @@ public:
 
 	bool createTableIfNotExists();
 
-	bool insertData(Rect rect, FrameWrap& frameWarp, const string& objectType, float R, float G, float B);
+	bool insertData(cv::Rect rect, FrameWrap& frameWarp, const string& objectType, float R, float G, float B);
 
 	void selectMaxID();
 
@@ -31,7 +31,7 @@ public:
 
 	sqlite3* getDB();
 
-    bool checkRectExistsInLastFrame(Rect rect);
+    bool checkRectExistsInLastFrame(cv::Rect rect);
 
 private:
 

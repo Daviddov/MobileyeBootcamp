@@ -1,5 +1,5 @@
 #include "RectHandler.h"
-
+using namespace cv;
 //c'tor
 RectHandler::RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler &sqlHandler) :frameWarp(frameW), output(outputP), class_list(class_listP), sqlHandler(sqlHandler)
 {

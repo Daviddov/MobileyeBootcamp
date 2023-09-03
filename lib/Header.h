@@ -22,19 +22,19 @@
 //#include "frame.pb.h"
 
 
-using namespace cv;
+//using namespace cv;
 using namespace std;
 
 struct Detection
 {
     int class_id;
     float confidence;
-    Rect box;
+    cv::Rect box;
 };
 
 struct FrameWrap
 {
-    Mat image;
+    cv::Mat image;
     string timestamp;
     int frameNumber;
 };
@@ -44,7 +44,7 @@ struct FrameWrap
 struct GetFromDataBase {
     int id;
     string time;
-    Rect rect;
+    cv::Rect rect;
     FrameWrap fw;
     string typeObject;
     float r, g, b;

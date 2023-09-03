@@ -2,6 +2,7 @@
 
 
 using namespace std::chrono;
+using namespace cv;
 
 Yolo5::Yolo5() {
     loadNet();

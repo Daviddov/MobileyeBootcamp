@@ -23,7 +23,7 @@ private:
 	 int NUM_OF_DATA ;
 
 	
-	dnn::Net net;
+	 cv::dnn::Net net;
 
 	vector<Detection> output;
 
@@ -35,7 +35,7 @@ private:
 
 	void loadClassList();
 
-	Mat formatInputImage();
+	cv::Mat formatInputImage();
 public:
 
 	Yolo5();

@@ -1,10 +1,8 @@
-#pragma once
-
+#pragma once 
+//#include <grpc++/grpc++.h>
 #include "Header.h"
 #include "CameraConnector.h"
-//#include <grpc++/grpc++.h>
-//#include "camera_service.grpc.pb.h"
-//
+#include "camera_service.grpc.pb.h"
 
 
 class CameraProcessor {
@@ -27,9 +25,9 @@ private:
 
 	Queue<FrameWrap>& dataFromCamera;
 
-	Mat prev;
+	cv::Mat prev;
 
-	VideoCapture capture;
+	cv::VideoCapture capture;
 
 	//CameraConnector connect;
 
@@ -41,9 +39,9 @@ public:
 
 	bool calcAbsDiff();
 
-	void setFrame(Mat f);
+	void setFrame(cv::Mat f);
 
-	void setPrev(Mat &p);
+	void setPrev(cv::Mat& p);
 
 	int getId();
 

@@ -1,7 +1,8 @@
 #pragma once
 #include "CameraProcessor.h"
 #include "Server.h"
-
+#include "camera_service.grpc.pb.h"
+#include <grpc++/grpc++.h>
 
 class ListeningManager {
 

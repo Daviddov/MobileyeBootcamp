@@ -1,6 +1,7 @@
 #include "CameraProcessor.h" 
+#include <grpc++/grpc++.h>
 
-
+using namespace cv;
 //c'tor
 CameraProcessor::CameraProcessor(Queue<FrameWrap>& queue, int id, string _path) :
 	dataFromCamera(queue) ,cameraId (id) ,path  (_path) {

@@ -1,5 +1,5 @@
 #include "ListeningManager.h"
-
+using namespace cv;
 ListeningManager::ListeningManager(Queue<FrameWrap>& queue) :dataFromCamera(queue) {}
 
 ListeningManager::~ListeningManager() {}
