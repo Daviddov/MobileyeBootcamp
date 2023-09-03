@@ -12,8 +12,6 @@ private:
 
 public:
 
-	vector<CameraProcessor*> cameras;
-
 	ListeningManager(Queue<FrameWrap>& queue);
 
 	~ListeningManager();
@@ -27,9 +25,9 @@ public:
 //
 //public:
 //
-//	queue<FrameWrap>& dataFromCamera;
+//	Queue<FrameWrap>& dataFromCamera;
 //
-//	CameraServiceImpl(queue<FrameWrap>& queue);
+//	CameraServiceImpl(Queue<FrameWrap>& queue);
 //
 //  FrameWrap frameWrap;
 //

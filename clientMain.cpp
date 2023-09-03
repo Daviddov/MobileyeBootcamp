@@ -1,6 +1,6 @@
 #include <grpc++/grpc++.h>
 #include "Header.h"
-#include "Server.h"
+#include "CameraProcessor.h"
 #include "ConfigurationManager.h"
 
 

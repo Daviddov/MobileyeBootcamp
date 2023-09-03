@@ -47,13 +47,20 @@ void ListeningManager::startListen(ListeningManager listen) {
 //
 //grpc::Status CameraServiceImpl:: SendCameraData(grpc::ServerContext* context,const CameraDataRequest* request,CameraDataResponse* response) { 
 //
+// FrameWrap frameWrap;
+// 
 //	frameWrap.frameNumber = request->frameNumber;
 //	frameWrap.timestamp = request->timestamp;
 // 
 // //here need to replace to Mat
-//	frameWrap.image = request->image;
 //
-//  //using in temp
+    /*  const string& imageDataString = request->image();
+     vector<uint8_t> imageData(imageDataString.begin(), imageDataString.end());
+	 frameWrap.image = imdecode(imageData,IMREAD_COLOR);*/
+
+//	
+//
+//  //does need to using in temp??
 //	dataFromCamera.push(frameWrap);
 //
 //	response->set_acknowledgment("successfully.");

@@ -3,6 +3,8 @@
 #include "Header.h"
 #include "CameraConnector.h"
 #include "camera_service.grpc.pb.h"
+#include <grpc++/grpc++.h>
+
 
 
 class CameraProcessor {
@@ -47,7 +49,7 @@ public:
 
 	void setFrameDiffThreshold(double frameDiff);
 
-	bool init(int numFrames, double frame_diff);
+	bool init(int numFrames, double frameDiff);
 
 	void insertToQueue();
 
