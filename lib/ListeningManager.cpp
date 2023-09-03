@@ -49,10 +49,10 @@ void ListeningManager::startListen(ListeningManager listen) {
 //
 // FrameWrap frameWrap;
 // 
-//	frameWrap.frameNumber = request->frameNumber;
-//	frameWrap.timestamp = request->timestamp;
+//	frameWrap.frameNumber = request->frameNumber();
+//	frameWrap.timestamp = request->timestamp(); 
 // 
-// //here need to replace to Mat
+//
 //
     /*  const string& imageDataString = request->image();
      vector<uint8_t> imageData(imageDataString.begin(), imageDataString.end());

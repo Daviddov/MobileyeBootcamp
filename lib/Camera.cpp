@@ -53,19 +53,22 @@ bool CameraProcessor::init(int numFrames, double frameDiff) {
 //   CameraProcessor::send()
 void CameraProcessor::insertToQueue() {
 
+	
 	//1?
-	///*vector<uchar> image_data;
-	//imencode(".jpg", frameWarp.image, image_data);
-	//request.set_image(image_data.data(), image_data.size());*/
-
-	//2?
 	//vector<uint8_t> imageBytes(frameWarp.image.data, frameWarp.image.data + frameWarp.image.total() * frameWarp.image.elemSize());
 	// Create a CameraDataRequest
 	//request.set_image(imageBytes.data(), imageBytes.size());
 
-	//3?
+	//2?
 	//request.set_image(frameWarp.image.data, frameWarp.image.total() * frameWarp.image.elemSize());
 	
+
+	//3? vector<uint8_t> encodedImage;
+	//imencode(".jpg", image, encodedImage);
+    //or instead .jpg using .png.  jpg = less quality more fasting
+
+	//request.set_image(encodedImage.data(), encodedImage.size());
+
 	
 	//request.set_timestamp(frameWarp.timestamp);
 	//request.set_framenumber(frameWarp.frameNumber);
