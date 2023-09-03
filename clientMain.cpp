@@ -1,6 +1,6 @@
 
 #include "Header.h"
-#include "Server.h"
+#include "Camera.h"
 #include "ConfigurationManeger.h"
 
 

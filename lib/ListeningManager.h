@@ -1,6 +1,8 @@
 #pragma once
 #include "Camera.h"
 #include "Server.h"
+#include "camera_service.grpc.pb.h"
+//#include <grpc++/grpc++.h>
 
 
 class ListeningManager {
@@ -10,8 +12,6 @@ private:
 	Queue<FrameWrap>& dataFromCamera;
 
 public:
-
-	vector<CameraProcessor*> cameras;
 
 	ListeningManager(Queue<FrameWrap>& queue);
 
@@ -26,9 +26,9 @@ public:
 //
 //public:
 //
-//	queue<FrameWrap>& dataFromCamera;
+//	Queue<FrameWrap>& dataFromCamera;
 //
-//	CameraServiceImpl(queue<FrameWrap>& queue);
+//	CameraServiceImpl(Queue<FrameWrap>& queue);
 //
 //  FrameWrap frameWrap;
 //

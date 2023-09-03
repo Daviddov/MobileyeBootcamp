@@ -28,7 +28,7 @@ bool CameraProcessor::calcAbsDiff() {
 	return frameDiffThreshold < normalRes;
 }
 
-bool CameraProcessor::init(int numFrames, double frame_diff) {
+bool CameraProcessor::init(int numFrames, double frameDiff) {
 	
 	//connect.server_address = "localhost:50051";
 	//connect.stub = grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
@@ -36,7 +36,7 @@ bool CameraProcessor::init(int numFrames, double frame_diff) {
 
 	numFramesCheck = numFrames;
 
-	frameDiffThreshold = frame_diff;
+	frameDiffThreshold = frameDiff;
 
 	capture.open(path);
 
@@ -53,11 +53,20 @@ bool CameraProcessor::init(int numFrames, double frame_diff) {
 //   CameraProcessor::send()
 void CameraProcessor::insertToQueue() {
 
+	//1?
 	///*vector<uchar> image_data;
 	//imencode(".jpg", frameWarp.image, image_data);
 	//request.set_image(image_data.data(), image_data.size());*/
 
+	//2?
+	//vector<uint8_t> imageBytes(frameWarp.image.data, frameWarp.image.data + frameWarp.image.total() * frameWarp.image.elemSize());
+	// Create a CameraDataRequest
+	//request.set_image(imageBytes.data(), imageBytes.size());
+
+	//3?
 	//request.set_image(frameWarp.image.data, frameWarp.image.total() * frameWarp.image.elemSize());
+	
+	
 	//request.set_timestamp(frameWarp.timestamp);
 	//request.set_framenumber(frameWarp.frameNumber);
 
@@ -160,6 +169,7 @@ void CameraProcessor::cameraPart(CameraProcessor* camera) {
 
 	camera->run();
 
+	delete camera;
 }
 
 int CameraProcessor::getId() {
