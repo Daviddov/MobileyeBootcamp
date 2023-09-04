@@ -15,7 +15,7 @@ int main() {
 
 	Queue<FrameWrap> dataFromCamera;
 
-	CameraProcessor* camera = new CameraProcessor(dataFromCamera,1, "assets/parking.mp4");
+	CameraProcessor camera(dataFromCamera,1, "assets/parking.mp4");
 
 	CameraProcessor::cameraPart(camera);
 

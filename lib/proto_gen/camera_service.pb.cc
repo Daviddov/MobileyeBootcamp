@@ -29,6 +29,10 @@ PROTOBUF_CONSTEXPR CameraDataRequest::CameraDataRequest(
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
 
+  , /*decltype(_impl_.time_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
   , /*decltype(_impl_.framenumber_)*/ 0
 
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -78,6 +82,7 @@ const ::uint32_t TableStruct_camera_5fservice_2eproto::offsets[] PROTOBUF_SECTIO
     PROTOBUF_FIELD_OFFSET(::CameraDataRequest, _impl_.image_),
     PROTOBUF_FIELD_OFFSET(::CameraDataRequest, _impl_.timestamp_),
     PROTOBUF_FIELD_OFFSET(::CameraDataRequest, _impl_.framenumber_),
+    PROTOBUF_FIELD_OFFSET(::CameraDataRequest, _impl_.time_),
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::CameraDataResponse, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -92,7 +97,7 @@ const ::uint32_t TableStruct_camera_5fservice_2eproto::offsets[] PROTOBUF_SECTIO
 static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
         { 0, -1, -1, sizeof(::CameraDataRequest)},
-        { 11, -1, -1, sizeof(::CameraDataResponse)},
+        { 12, -1, -1, sizeof(::CameraDataResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -100,18 +105,19 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::_CameraDataResponse_default_instance_._instance,
 };
 const char descriptor_table_protodef_camera_5fservice_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-    "\n\024camera_service.proto\"J\n\021CameraDataRequ"
+    "\n\024camera_service.proto\"X\n\021CameraDataRequ"
     "est\022\r\n\005image\030\001 \001(\014\022\021\n\ttimestamp\030\002 \001(\t\022\023\n"
-    "\013frameNumber\030\003 \001(\005\",\n\022CameraDataResponse"
-    "\022\026\n\016acknowledgment\030\001 \001(\t2J\n\rCameraServic"
-    "e\0229\n\016SendCameraData\022\022.CameraDataRequest\032"
-    "\023.CameraDataResponseb\006proto3"
+    "\013frameNumber\030\003 \001(\005\022\014\n\004time\030\004 \001(\t\",\n\022Came"
+    "raDataResponse\022\026\n\016acknowledgment\030\001 \001(\t2J"
+    "\n\rCameraService\0229\n\016SendCameraData\022\022.Came"
+    "raDataRequest\032\023.CameraDataResponseb\006prot"
+    "o3"
 };
 static ::absl::once_flag descriptor_table_camera_5fservice_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_camera_5fservice_2eproto = {
     false,
     false,
-    228,
+    242,
     descriptor_table_protodef_camera_5fservice_2eproto,
     "camera_service.proto",
     &descriptor_table_camera_5fservice_2eproto_once,
@@ -162,6 +168,8 @@ CameraDataRequest::CameraDataRequest(const CameraDataRequest& from)
 
     , decltype(_impl_.timestamp_) {}
 
+    , decltype(_impl_.time_) {}
+
     , decltype(_impl_.framenumber_) {}
 
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -181,6 +189,13 @@ CameraDataRequest::CameraDataRequest(const CameraDataRequest& from)
   if (!from._internal_timestamp().empty()) {
     _this->_impl_.timestamp_.Set(from._internal_timestamp(), _this->GetArenaForAllocation());
   }
+  _impl_.time_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.time_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_time().empty()) {
+    _this->_impl_.time_.Set(from._internal_time(), _this->GetArenaForAllocation());
+  }
   _this->_impl_.framenumber_ = from._impl_.framenumber_;
   // @@protoc_insertion_point(copy_constructor:CameraDataRequest)
 }
@@ -191,6 +206,8 @@ inline void CameraDataRequest::SharedCtor(::_pb::Arena* arena) {
       decltype(_impl_.image_) {}
 
     , decltype(_impl_.timestamp_) {}
+
+    , decltype(_impl_.time_) {}
 
     , decltype(_impl_.framenumber_) { 0 }
 
@@ -203,6 +220,10 @@ inline void CameraDataRequest::SharedCtor(::_pb::Arena* arena) {
   _impl_.timestamp_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.timestamp_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.time_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.time_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -219,6 +240,7 @@ inline void CameraDataRequest::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.image_.Destroy();
   _impl_.timestamp_.Destroy();
+  _impl_.time_.Destroy();
 }
 
 void CameraDataRequest::SetCachedSize(int size) const {
@@ -233,6 +255,7 @@ void CameraDataRequest::Clear() {
 
   _impl_.image_.ClearToEmpty();
   _impl_.timestamp_.ClearToEmpty();
+  _impl_.time_.ClearToEmpty();
   _impl_.framenumber_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -269,6 +292,17 @@ const char* CameraDataRequest::_InternalParse(const char* ptr, ::_pbi::ParseCont
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
           _impl_.framenumber_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // string time = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_time();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "CameraDataRequest.time"));
         } else {
           goto handle_unusual;
         }
@@ -323,6 +357,14 @@ failure:
         3, this->_internal_framenumber(), target);
   }
 
+  // string time = 4;
+  if (!this->_internal_time().empty()) {
+    const std::string& _s = this->_internal_time();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "CameraDataRequest.time");
+    target = stream->WriteStringMaybeAliased(4, _s, target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -349,6 +391,12 @@ failure:
   if (!this->_internal_timestamp().empty()) {
     total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
                                     this->_internal_timestamp());
+  }
+
+  // string time = 4;
+  if (!this->_internal_time().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_time());
   }
 
   // int32 frameNumber = 3;
@@ -381,6 +429,9 @@ void CameraDataRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   if (!from._internal_timestamp().empty()) {
     _this->_internal_set_timestamp(from._internal_timestamp());
   }
+  if (!from._internal_time().empty()) {
+    _this->_internal_set_time(from._internal_time());
+  }
   if (from._internal_framenumber() != 0) {
     _this->_internal_set_framenumber(from._internal_framenumber());
   }
@@ -407,6 +458,8 @@ void CameraDataRequest::InternalSwap(CameraDataRequest* other) {
                                        &other->_impl_.image_, rhs_arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.timestamp_, lhs_arena,
                                        &other->_impl_.timestamp_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.time_, lhs_arena,
+                                       &other->_impl_.time_, rhs_arena);
 
   swap(_impl_.framenumber_, other->_impl_.framenumber_);
 }

@@ -1,11 +1,11 @@
 #include "CameraProcessor.h" 
-#include <grpc++/grpc++.h>
+
 
 using namespace cv;
 //c'tor
 CameraProcessor::CameraProcessor(Queue<FrameWrap>& queue, int id, string _path) :
-	dataFromCamera(queue) ,cameraId (id) ,path  (_path) {
-	countFrame = 1;
+	dataFromCamera(queue), cameraId(id), path(_path) {
+	countFrame = 0;
 	active = true;
 	cameraId = id;
 	path = _path;
@@ -30,10 +30,12 @@ bool CameraProcessor::calcAbsDiff() {
 }
 
 bool CameraProcessor::init(int numFrames, double frameDiff) {
-	
-	//connect.server_address = "localhost:50051";
-	//connect.stub = grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
-	
+
+	///*connect.*/string server_address = "localhost:50051";
+
+	//CameraService::Stub stub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+
+	//connect.stub = grpc::CreateChannel(connect.server_address, grpc::InsecureChannelCredentials());
 
 	numFramesCheck = numFrames;
 
@@ -47,17 +49,22 @@ bool CameraProcessor::init(int numFrames, double frameDiff) {
 	}
 	Logger::Info("Video file is opening ");
 	capture.read(frameWarp.image);
-	insertToQueue();
+	//Instead send() added in run() a check if it's the first time
+	//send();
 	return true;
 }
+  
+void CameraProcessor::send() {
 
-//   CameraProcessor::send()
-void CameraProcessor::insertToQueue() {
+	string server_address = "localhost:50051";
 
-	//1?
-	///*vector<uchar> image_data;
-	//imencode(".jpg", frameWarp.image, image_data);
-	//request.set_image(image_data.data(), image_data.size());*/
+	CameraService::Stub stub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+
+	CameraDataRequest request;
+
+	vector<uchar> image_data;
+	imencode(".jpg", frameWarp.image, image_data);
+	request.set_image(image_data.data(), image_data.size());
 
 	//2?
 	//vector<uint8_t> imageBytes(frameWarp.image.data, frameWarp.image.data + frameWarp.image.total() * frameWarp.image.elemSize());
@@ -66,29 +73,32 @@ void CameraProcessor::insertToQueue() {
 
 	//3?
 	//request.set_image(frameWarp.image.data, frameWarp.image.total() * frameWarp.image.elemSize());
-	
-	
-	//request.set_timestamp(frameWarp.timestamp);
-	//request.set_framenumber(frameWarp.frameNumber);
+
+	request.set_timestamp(frameWarp.timestamp);
+	request.set_framenumber(frameWarp.frameNumber);
+
+	CameraDataResponse response;
+
+	grpc::ClientContext context;
+
+	grpc::Status status = stub.SendCameraData(&context, request, &response);
+
+	if (status.ok()) {
+		std::cout << "Server response: " << response.acknowledgment() << std::endl;
+	}
+	else {
+		std::cerr << "RPC failed: " << status.error_message() << std::endl;
+	}
 
 
-	// status = stub.SendCameraData(&context, request, &response);
-
-	//if (status.ok()) {
-	//	cout << "Server response: " << response.acknowledgment() << endl;
-	//}
-	//else {
-	//	cerr << "RPC failed: " << status.error_message() << endl;
-	//}
-
-	//From here //////////////////////////////
-	frameWarp.frameNumber = countFrame;     //
-	frameWarp.timestamp = currentTime();    //
-	FrameWrap temp = frameWarp;             //
-	temp.image = frameWarp.image.clone();   //
-	dataFromCamera.push(temp);              //
-	setPrev(frameWarp.image.clone());       //
-//until here is a temporary until fixed grpc//
+	////From here //////////////////////////////
+	//frameWarp.frameNumber = countFrame;     //
+	//frameWarp.timestamp = currentTime();    //
+	//FrameWrap temp = frameWarp;             //
+	//temp.image = frameWarp.image.clone();   //
+	//dataFromCamera.push(temp);              //
+	//setPrev(frameWarp.image.clone());       //
+	////until here is a temporary until fixed grpc//
 
 }
 
@@ -97,18 +107,21 @@ void CameraProcessor::run() {
 	while (active) {
 
 		capture.read(frameWarp.image);
-		
+
 
 		if (frameWarp.image.empty()) {
 			cout << "End of stream\n";
 			Logger::Info("End of stream");
 			break;
 		}
-		if (++countFrame % numFramesCheck == 0 && calcAbsDiff()) {
+		//this added instead called to send() in init()
+		if (++countFrame == 1||(countFrame % numFramesCheck == 0 && calcAbsDiff())) {
 			Logger::Info("wait 0.3 second");
 			this_thread::sleep_for(chrono::milliseconds(333));
-			insertToQueue();
-			Logger::Info("insert to queue");
+
+			send();
+			Logger::Info("send to server");
+
 			//From here ///////////////////////////////////
 			Mat view = dataFromCamera.front().image;     //      
 			imshow("clientMain", view);                  //
@@ -153,24 +166,14 @@ std::string currentTime() {
 	return formatted_time.str();
 }
 
-void CameraProcessor::cameraPart(CameraProcessor* camera) {
-
-
-	//the user input it using Qt
-	int numFrames = 30;
-
-	//the user input it using Qt
-	double frameDiffThreshold = 0.9;
-
-	if (!camera->init(numFrames, frameDiffThreshold))
+void CameraProcessor::cameraPart(CameraProcessor camera) {
+	//here need to use in try & catch
+	if (!camera.init(30,0.9))
 	{
 		Logger::Critical("the path is not found");
 		return;
 	}
-
-	camera->run();
-
-	delete camera;
+	camera.run();
 }
 
 int CameraProcessor::getId() {
@@ -178,8 +181,9 @@ int CameraProcessor::getId() {
 }
 
 void CameraProcessor::setFrame(Mat p) {
-	prev = p;
+	frameWarp.image = p;
 };
+
 void CameraProcessor::setPrev(Mat& p) {
 	prev = p;
 };

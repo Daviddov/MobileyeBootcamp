@@ -23,9 +23,12 @@ find_package(OpenCV REQUIRED)
 find_package(protobuf CONFIG REQUIRED)
 find_package(gRPC CONFIG REQUIRED)  # Use CONFIG to find gRPC
 
+message(STATUS "Using Protobuf ${protobuf_VERSION}")
+
 message(STATUS "Using protobuf ${protobuf_VERSION}")
 
 # Function to create an executable with common settings
+
 function(add_common_executable TARGET_NAME SOURCE_FILE)
     add_executable(${TARGET_NAME} ${SOURCE_FILE})
     target_link_libraries(${TARGET_NAME}
@@ -35,7 +38,11 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
         sqlite3
         gRPC::grpc++
         protobuf::libprotobuf
+      #  $<$<CONFIG:Debug>:protobuf::libprotobufd>
+       # $<$<NOT:$<CONFIG:Debug>>:protobuf::libprotobuf>
     )
+
+
 
     target_include_directories(${TARGET_NAME}
         PRIVATE
@@ -46,8 +53,22 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     )
 endfunction()
 
+      message(STATUS "1Using Protobuf ${Protobuf_VERSION}")
+      message(STATUS "2Protobuf Include Path: ${protobuf_INCLUDE_DIRS}")
+      message(STATUS "3Protobuf Libraries: ${protobuf_LIBRARIES}")
+      message(STATUS "4Protobuf Compiler Libraries: ${protobuf_PROTOC_LIBRARIES}")
+
+      message(STATUS "openCV1234: ${gRPC}")
+
+
+
+
+
+
+
 # Build ServerMain executable
 add_common_executable(ServerMain ServerMain.cpp)
 
 # Build ClientMain executable
 add_common_executable(ClientMain ClientMain.cpp)
+

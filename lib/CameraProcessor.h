@@ -1,8 +1,8 @@
 #pragma once 
-//#include <grpc++/grpc++.h>
+
 #include "Header.h"
 #include "CameraConnector.h"
-#include "camera_service.grpc.pb.h"
+#include "./proto_gen/camera_service.grpc.pb.h"
 #include <grpc++/grpc++.h>
 
 
@@ -51,11 +51,11 @@ public:
 
 	bool init(int numFrames, double frameDiff);
 
-	void insertToQueue();
+	void send();
 
 	void run();
 
-	static void  cameraPart(CameraProcessor* camera);
+	static void  cameraPart(CameraProcessor camera);
 };
 
 string currentTime();

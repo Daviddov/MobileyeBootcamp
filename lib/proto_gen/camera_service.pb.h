@@ -199,6 +199,7 @@ class CameraDataRequest final :
   enum : int {
     kImageFieldNumber = 1,
     kTimestampFieldNumber = 2,
+    kTimeFieldNumber = 4,
     kFrameNumberFieldNumber = 3,
   };
   // bytes image = 1;
@@ -241,6 +242,26 @@ class CameraDataRequest final :
   std::string* _internal_mutable_timestamp();
 
   public:
+  // string time = 4;
+  void clear_time() ;
+  const std::string& time() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_time(Arg_&& arg, Args_... args);
+  std::string* mutable_time();
+  PROTOBUF_NODISCARD std::string* release_time();
+  void set_allocated_time(std::string* ptr);
+
+  private:
+  const std::string& _internal_time() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_time(
+      const std::string& value);
+  std::string* _internal_mutable_time();
+
+  public:
   // int32 frameNumber = 3;
   void clear_framenumber() ;
   ::int32_t framenumber() const;
@@ -261,6 +282,7 @@ class CameraDataRequest final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr image_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr timestamp_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr time_;
     ::int32_t framenumber_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -561,6 +583,53 @@ inline ::int32_t CameraDataRequest::_internal_framenumber() const {
 inline void CameraDataRequest::_internal_set_framenumber(::int32_t value) {
   ;
   _impl_.framenumber_ = value;
+}
+
+// string time = 4;
+inline void CameraDataRequest::clear_time() {
+  _impl_.time_.ClearToEmpty();
+}
+inline const std::string& CameraDataRequest::time() const {
+  // @@protoc_insertion_point(field_get:CameraDataRequest.time)
+  return _internal_time();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CameraDataRequest::set_time(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.time_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CameraDataRequest.time)
+}
+inline std::string* CameraDataRequest::mutable_time() {
+  std::string* _s = _internal_mutable_time();
+  // @@protoc_insertion_point(field_mutable:CameraDataRequest.time)
+  return _s;
+}
+inline const std::string& CameraDataRequest::_internal_time() const {
+  return _impl_.time_.Get();
+}
+inline void CameraDataRequest::_internal_set_time(const std::string& value) {
+  ;
+
+
+  _impl_.time_.Set(value, GetArenaForAllocation());
+}
+inline std::string* CameraDataRequest::_internal_mutable_time() {
+  ;
+  return _impl_.time_.Mutable( GetArenaForAllocation());
+}
+inline std::string* CameraDataRequest::release_time() {
+  // @@protoc_insertion_point(field_release:CameraDataRequest.time)
+  return _impl_.time_.Release();
+}
+inline void CameraDataRequest::set_allocated_time(std::string* value) {
+  _impl_.time_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.time_.IsDefault()) {
+          _impl_.time_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:CameraDataRequest.time)
 }
 
 // -------------------------------------------------------------------
