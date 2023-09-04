@@ -1,6 +1,6 @@
 #pragma once
 #include "../../lib/Header.h"
-#include "../../lib/Camera.h"
+#include "../../lib/CameraProcessor.h"
 #include "../../lib/RectHandler.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
@@ -8,7 +8,7 @@
 
 struct SentToDataBase {
 
-    Rect rect;
+    cv::Rect rect;
     FrameWrap fw;
     string objTipe = "car";
     float r = 3.8;

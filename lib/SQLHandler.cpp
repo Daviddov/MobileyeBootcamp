@@ -1,5 +1,5 @@
 #include "SQLHandler.h"
-
+using namespace cv;
 
 //c'tor
 SQLHandler::SQLHandler() : db(nullptr) {

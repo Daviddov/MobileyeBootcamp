@@ -2,7 +2,7 @@
 #include "Header.h"
 #include "Server.h"
 #include "ListeningManager.h"
-#include "ConfigurationManeger.h"
+#include "ConfigurationManager.h"
 
 
 int main() {

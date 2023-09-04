@@ -1,7 +1,7 @@
-
+#include <grpc++/grpc++.h>
 #include "Header.h"
-#include "Camera.h"
-#include "ConfigurationManeger.h"
+#include "CameraProcessor.h"
+#include "ConfigurationManager.h"
 
 
 int main() {
@@ -15,7 +15,7 @@ int main() {
 
 	Queue<FrameWrap> dataFromCamera;
 
-	CameraProcessor* camera = new CameraProcessor(dataFromCamera,1, "assets/parking.mp4");
+	CameraProcessor camera(dataFromCamera,1, "assets/parking.mp4");
 
 	CameraProcessor::cameraPart(camera);
 

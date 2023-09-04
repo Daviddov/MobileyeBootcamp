@@ -2,7 +2,6 @@
 #include "SQLHandler.h"
 
 
-
 class RectHandler {
 
 private:
@@ -13,20 +12,18 @@ private:
 
 	FrameWrap& frameWarp;
 
-	vector<Scalar> colors;
+	vector<cv::Scalar> colors;
 
 	SQLHandler& sqlHandler;
 
-	void writeRectOnDB(Rect rect, string objectType);
-
-
 public:
+	void writeRectOnDB(cv::Rect rect, string objectType);
 
 	RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler& sqlHandler);
 	
 	void toDrawRect();
 
-	 void calcAvgPerChannel(const Mat& img, float* B, float* G, float* R);
+	 void calcAvgPerChannel(const cv::Mat& img, float* B, float* G, float* R);
 
 
 };

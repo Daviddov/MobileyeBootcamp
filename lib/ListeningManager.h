@@ -1,9 +1,8 @@
 #pragma once
-#include "Camera.h"
+#include "CameraProcessor.h"
 #include "Server.h"
-#include "camera_service.grpc.pb.h"
-//#include <grpc++/grpc++.h>
-
+#include "./proto_gen/camera_service.grpc.pb.h"
+#include <grpc++/grpc++.h>
 
 class ListeningManager {
 
@@ -22,17 +21,16 @@ public:
 };
 
 
-//class CameraServiceImpl final : public CameraService::Service {
-//
-//public:
-//
-//	Queue<FrameWrap>& dataFromCamera;
-//
-//	CameraServiceImpl(Queue<FrameWrap>& queue);
-//
-//  FrameWrap frameWrap;
-//
-//	grpc::Status SendCameraData(grpc::ServerContext* context,const CameraDataRequest* request,CameraDataResponse* response) override;
-//
-//
-//};
+class CameraServiceImpl final : public CameraService::Service {
+
+public:
+
+	Queue<FrameWrap>& dataFromCamera;
+
+	CameraServiceImpl(Queue<FrameWrap>& queue);
+
+	FrameWrap frameWrap;
+
+	grpc::Status SendCameraData(grpc::ServerContext* context, const CameraDataRequest* request, CameraDataResponse* response) override;
+
+};
