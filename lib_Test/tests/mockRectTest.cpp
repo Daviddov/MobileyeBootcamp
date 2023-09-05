@@ -1,38 +1,38 @@
 //#include "../lib/SQLHandler.h"
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
-//#include "../lib/Rect.h"
-
-//using namespace testing;
-
-class JustForTest {
-public:
-    virtual int just() {
-        int num = 5;
-        int num2 = 5;
-        return num + num2;
-    }
-};
-
-class MockJustForTest : public JustForTest {
-public:
-    MOCK_METHOD(int, just, (), (override));
-};
-
-
-TEST(JustForTestMockTest, TestJustForTest) {
-    MockJustForTest mockJustForTest;
-
-    // Set up an expectation for the return value.
-    EXPECT_CALL(mockJustForTest, just())
-        .WillOnce(::testing::Return(100)); // Specify the expected return value
-        
-    // Call the method on the mock object
-    int result = mockJustForTest.just();
-
-    // Verify the result
-    EXPECT_EQ(result, 100);
-}
+//#include "gtest/gtest.h"
+//#include "gmock/gmock.h"
+////#include "../lib/Rect.h"
+//
+////using namespace testing;
+//
+//class JustForTest {
+//public:
+//    virtual int just() {
+//        int num = 5;
+//        int num2 = 5;
+//        return num + num2;
+//    }
+//};
+//
+//class MockJustForTest : public JustForTest {
+//public:
+//    MOCK_METHOD(int, just, (), (override));
+//};
+//
+//
+//TEST(JustForTestMockTest, TestJustForTest) {
+//    MockJustForTest mockJustForTest;
+//
+//    // Set up an expectation for the return value.
+//    EXPECT_CALL(mockJustForTest, just())
+//        .WillOnce(::testing::Return(100)); // Specify the expected return value
+//        
+//    // Call the method on the mock object
+//    int result = mockJustForTest.just();
+//
+//    // Verify the result
+//    EXPECT_EQ(result, 100);
+//}
 
 
 //class MockYoloRect : public SQLHandler {

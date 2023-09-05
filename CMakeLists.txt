@@ -53,19 +53,7 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     )
 endfunction()
 
-      message(STATUS "1Using Protobuf ${Protobuf_VERSION}")
-      message(STATUS "2Protobuf Include Path: ${protobuf_INCLUDE_DIRS}")
-      message(STATUS "3Protobuf Libraries: ${protobuf_LIBRARIES}")
-      message(STATUS "4Protobuf Compiler Libraries: ${protobuf_PROTOC_LIBRARIES}")
-
-      message(STATUS "openCV1234: ${gRPC}")
-
-
-
-
-
-
-
+   
 # Build ServerMain executable
 add_common_executable(ServerMain ServerMain.cpp)
 

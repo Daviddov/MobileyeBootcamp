@@ -41,7 +41,7 @@ PRIVATE
 )
 
 #replace it with enviroment variable
-set(PROTO_SRC_DIR "C:\\Program Files\\grpc\\bin")
+set(PROTO_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(GEN_PROTO_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto_gen")
 
@@ -67,7 +67,6 @@ add_custom_command(
     DEPENDS ${PROTO_FILE}
 )
 
-
 set_source_files_properties(
   ${GEN_PROTO_SRC}
   ${GEN_PROTO_HDR}
@@ -79,4 +78,4 @@ add_custom_target(YourRealCustomTargetThatRunsProtoc DEPENDS ${GEN_PROTO_SRC} ${
 add_dependencies(${PROJECT_NAME} YourRealCustomTargetThatRunsProtoc)
 
 
-   message(STATUS "43333333Protobuf Compiler Libraries: ${_PROTOBUF_PROTOC}")
+ 
