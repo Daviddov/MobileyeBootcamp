@@ -13,13 +13,21 @@ int main() {
 	Logger::EnableFileOutput();
 	Logger::Info("the programme is started");
 
-	Queue<FrameWrap> dataFromCamera;
+	
 
-	CameraProcessor camera(dataFromCamera,1, "assets/parking.mp4");
+	CameraProcessor camera("assets/parking.mp4");
 
-	CameraProcessor::cameraPart(camera);
+	if (!camera.init(30, 0.9))
+	{
+		Logger::Critical("the path is not found");
+		return 1;
+	}
+
+	camera.run();
 
 	Logger::Info("the programme is finised");
+
+	
 
 	return 0;
 }

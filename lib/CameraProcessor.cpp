@@ -3,11 +3,9 @@
 
 using namespace cv;
 //c'tor
-CameraProcessor::CameraProcessor(Queue<FrameWrap>& queue, int id, string _path) :
-	dataFromCamera(queue), cameraId(id), path(_path) {
+CameraProcessor::CameraProcessor(string _path){
 	countFrame = 0;
 	active = true;
-	cameraId = id;
 	path = _path;
 	numFramesCheck = 0;
 	frameDiffThreshold = 0.0;
@@ -64,7 +62,12 @@ void CameraProcessor::send() {
 
 	vector<uchar> image_data;
 	imencode(".jpg", frameWarp.image, image_data);
+
 	request.set_image(image_data.data(), image_data.size());
+
+	request.set_timestamp(frameWarp.timestamp);
+
+	request.set_framenumber(frameWarp.frameNumber);
 
 	//2?
 	//vector<uint8_t> imageBytes(frameWarp.image.data, frameWarp.image.data + frameWarp.image.total() * frameWarp.image.elemSize());
@@ -74,8 +77,7 @@ void CameraProcessor::send() {
 	//2?
 	//request.set_image(frameWarp.image.data, frameWarp.image.total() * frameWarp.image.elemSize());
 
-	request.set_timestamp(frameWarp.timestamp);
-	request.set_framenumber(frameWarp.frameNumber);
+
 
 	CameraDataResponse response;
 
@@ -166,15 +168,6 @@ std::string currentTime() {
 	return formatted_time.str();
 }
 
-void CameraProcessor::cameraPart(CameraProcessor camera) {
-	//here need to use in try & catch
-	if (!camera.init(30,0.9))
-	{
-		Logger::Critical("the path is not found");
-		return;
-	}
-	camera.run();
-}
 
 int CameraProcessor::getId() {
 	return cameraId;

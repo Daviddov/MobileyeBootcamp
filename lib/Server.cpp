@@ -46,9 +46,3 @@ void ServerProcessor::run() {
 		}
 	}
 }
-
-void ServerProcessor::serverPart(ServerProcessor& server) {
-	
-	Logger::Info("server is runing");
-	server.run();
-}

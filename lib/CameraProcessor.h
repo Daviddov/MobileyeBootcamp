@@ -31,11 +31,12 @@ private:
 
 	cv::VideoCapture capture;
 
+
 	//CameraConnector connect;
 
 public:
 
-	CameraProcessor(Queue<FrameWrap>& queue, int id, string path);
+	CameraProcessor(string path);
 
 	~CameraProcessor();
 
@@ -55,7 +56,6 @@ public:
 
 	void run();
 
-	static void  cameraPart(CameraProcessor camera);
 };
 
 string currentTime();

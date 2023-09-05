@@ -1,5 +1,3 @@
-
-#include "Header.h"
 #include "Server.h"
 #include "ListeningManager.h"
 #include "ConfigurationManager.h"
@@ -14,13 +12,10 @@ int main() {
 
 	Queue<FrameWrap> dataFromCamera;
 
-	ListeningManager LManager(dataFromCamera);
-
-	thread listenThread(ListeningManager::startListen, ref(LManager));
+	thread listenThread(startListen,ref(dataFromCamera));
 
 	ServerProcessor server(dataFromCamera);
-
-	thread runThread(ServerProcessor::serverPart, ref(server));
+	thread runThread(&ServerProcessor::run, &server);
 
 	runThread.join();
 	listenThread.join();

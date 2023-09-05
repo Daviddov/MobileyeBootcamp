@@ -24,6 +24,4 @@ public:
 	void detect_with_YOLO5();
 
 	void run();
-
-  static void  serverPart(ServerProcessor& server);
 };

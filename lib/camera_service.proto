@@ -25,10 +25,8 @@ message CameraDataRequest {
    string timestamp = 2;
    
    int32 frameNumber = 3;
-string time = 4;
-   
 
-
+   string time = 4;
 }
 
 
@@ -37,9 +35,6 @@ string time = 4;
 
 
  message CameraDataResponse {
- 
-
    string acknowledgment = 1;
-
 
 }

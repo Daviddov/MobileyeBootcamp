@@ -23,12 +23,7 @@ find_package(OpenCV REQUIRED)
 find_package(protobuf CONFIG REQUIRED)
 find_package(gRPC CONFIG REQUIRED)  # Use CONFIG to find gRPC
 
-message(STATUS "Using Protobuf ${protobuf_VERSION}")
-
-message(STATUS "Using protobuf ${protobuf_VERSION}")
-
 # Function to create an executable with common settings
-
 function(add_common_executable TARGET_NAME SOURCE_FILE)
     add_executable(${TARGET_NAME} ${SOURCE_FILE})
     target_link_libraries(${TARGET_NAME}
@@ -41,8 +36,6 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
       #  $<$<CONFIG:Debug>:protobuf::libprotobufd>
        # $<$<NOT:$<CONFIG:Debug>>:protobuf::libprotobuf>
     )
-
-
 
     target_include_directories(${TARGET_NAME}
         PRIVATE
