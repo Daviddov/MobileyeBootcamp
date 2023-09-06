@@ -40,6 +40,7 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     target_include_directories(${TARGET_NAME}
         PRIVATE
         ${OpenCV_INCLUDE_DIRS}
+        ${GEN_PROTO_DIR}
     )
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:${TARGET_NAME}>/assets

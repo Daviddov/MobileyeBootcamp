@@ -11,23 +11,19 @@ int main() {
 	LogPriority priority = InfoPriority;
 	mutex log_mutex;
 	Logger::EnableFileOutput();
-	Logger::Info("the programme is started");
+	Logger::Info("the camera process is started");
 
 	
+	CameraProcessor camera("assets/parking.mp4", 30, 0.9);
 
-	CameraProcessor camera("assets/parking.mp4");
-
-	if (!camera.init(30, 0.9))
-	{
-		Logger::Critical("the path is not found");
+	if (!camera.capture.isOpened()) {
+		Logger::Critical("Error opening video file");
 		return 1;
 	}
 
 	camera.run();
 
-	Logger::Info("the programme is finised");
-
-	
+	Logger::Info("the camera process is finised");
 
 	return 0;
 }

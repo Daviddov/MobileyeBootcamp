@@ -1,8 +1,7 @@
 #pragma once 
 
 #include "Header.h"
-#include "CameraConnector.h"
-#include "./proto_gen/camera_service.grpc.pb.h"
+#include "../proto_gen/camera_service.grpc.pb.h"
 #include <grpc++/grpc++.h>
 
 
@@ -23,20 +22,15 @@ private:
 
 	bool active;
 
-	FrameWrap frameWarp;
-
-	Queue<FrameWrap>& dataFromCamera;
+	FrameWrap frameWrap;
 
 	cv::Mat prev;
 
-	cv::VideoCapture capture;
-
-
-	//CameraConnector connect;
-
 public:
 
-	CameraProcessor(string path);
+	cv::VideoCapture capture;
+
+	CameraProcessor(string path, int numFrames, double frameDiff);
 
 	~CameraProcessor();
 
@@ -50,12 +44,24 @@ public:
 
 	void setFrameDiffThreshold(double frameDiff);
 
-	bool init(int numFrames, double frameDiff);
-
-	void send();
-
 	void run();
-
 };
 
 string currentTime();
+
+
+
+class connectionManager {
+
+public:
+
+	connectionManager(const string& server_address);
+
+	void sendToServer(FrameWrap& frameWrap);
+
+
+private:
+
+	unique_ptr<CameraService::Stub> stub_;
+};
+	

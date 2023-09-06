@@ -1,40 +1,23 @@
 syntax = "proto3";
 
-// Define the service
 
 service CameraService {
  
-
-   // Define the RPC method for sending camera data
-
-
     rpc SendCameraData (CameraDataRequest) returns (CameraDataResponse);
-
-
 }
-
-
-// Define the request message
 
 
 message CameraDataRequest {
  
-
    bytes image = 1;
  
    string timestamp = 2;
    
    int32 frameNumber = 3;
-
-   string time = 4;
 }
 
 
-
-// Define the response message
-
-
  message CameraDataResponse {
-   string acknowledgment = 1;
 
+   string acknowledgment = 1;
 }
