@@ -5,7 +5,7 @@
 
 
 int main() {
-	 //configRun(); //config json example
+	//configRun(); //config json example
 
 	//log init
 	LogPriority priority = InfoPriority;
