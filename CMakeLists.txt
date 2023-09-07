@@ -41,7 +41,7 @@ set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 # Add subdirectories for libraries
 add_subdirectory(lib)
-#add_subdirectory(lib_Test)
+add_subdirectory(lib_Test)
 add_subdirectory(lib_logger)
 add_subdirectory(nlohmann)
 add_subdirectory(sqlite3)
