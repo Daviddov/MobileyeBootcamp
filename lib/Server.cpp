@@ -26,7 +26,7 @@ void ServerProcessor::run() {
 	{
 		if (!dataFromCamera.empty())
 		{
-			currFrame = dataFromCamera.front();
+			currFrame = dataFromCamera.pop();
 
 			detect_with_YOLO5();
 

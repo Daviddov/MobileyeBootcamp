@@ -31,11 +31,11 @@ T Queue<T>::pop()
         cout << "queue is empty" << endl;
         return T();
     }
-    T x = arr[frontIdx];
+    T poppedValue = arr[frontIdx];
     frontIdx = (frontIdx + 1) % QUEUE_SIZE;
     to_read--;
     m.unlock();
-    return x;
+    return poppedValue;
 }
 
 template <typename T>
@@ -48,11 +48,10 @@ T Queue<T>::front()
         cout << "queue is empty" << endl;
         return T();
     }
-    T x = arr[this->frontIdx];
-    frontIdx = (frontIdx + 1) % QUEUE_SIZE;
-    to_read--;
+    T frontValue = arr[this->frontIdx];
+
     m.unlock();
-    return x;
+    return frontValue;
 }
 
 
