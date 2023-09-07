@@ -5,7 +5,7 @@
 
 
 
-class ListeningManager final : public CameraService::Service {
+class ListeningManager final : public services::CameraService::Service {
 
 private:
 
@@ -15,7 +15,7 @@ public:
 
 	ListeningManager(Queue<FrameWrap>& queue);
 
-	grpc::Status SendCameraData(grpc::ServerContext* context, const CameraDataRequest* request, CameraDataResponse* response) override;
+	grpc::Status SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) override;
 };
 
     void startListen(Queue<FrameWrap>& dataFromCamera);

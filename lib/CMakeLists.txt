@@ -53,13 +53,6 @@ else()
 endif()
 
 
-#target_link_libraries(${PROJECT_NAME}
-   # grpc
-    #protobuf::libprotobuf
-#)
-
-
-
 
 #automAutomatic command file generatoraticly :
 
@@ -70,18 +63,18 @@ set(PROTO_FILE "${CMAKE_CURRENT_SOURCE_DIR}/camera_service.proto")
 
 get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
 
-set(GEN_PROTO_SRC "${GEN_PROTO_DIR}/${PROTO_NAME}.pb.cc")
-set(GEN_PROTO_HDR "${GEN_PROTO_DIR}/${PROTO_NAME}.pb.h")
-set(GEN_GRPC_SRC "${GEN_PROTO_DIR}/${PROTO_NAME}.grpc.pb.cc")
-set(GEN_GRPC_HDR "${GEN_PROTO_DIR}/${PROTO_NAME}.grpc.pb.h")
+set(GEN_PROTO_SRC "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_NAME}.pb.cc")
+set(GEN_PROTO_HDR "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_NAME}.pb.h")
+set(GEN_GRPC_SRC "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_NAME}.grpc.pb.cc")
+set(GEN_GRPC_HDR "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_NAME}.grpc.pb.h")
 
 
 add_custom_command(
     OUTPUT "${GEN_PROTO_SRC}" "${GEN_PROTO_HDR}" "${GEN_GRPC_SRC}" "${GEN_GRPC_HDR}"
     COMMAND protoc
     ARGS -I=${CMAKE_CURRENT_SOURCE_DIR}
-         --cpp_out=${GEN_PROTO_DIR}
-         --grpc_out=${GEN_PROTO_DIR}
+         --cpp_out=${CMAKE_CURRENT_BINARY_DIR}
+         --grpc_out=${CMAKE_CURRENT_BINARY_DIR}
          --plugin=protoc-gen-grpc="${_GRPC_CPP_PLUGIN_EXECUTABLE}"
          ${PROTO_FILE}
     DEPENDS ${PROTO_FILE}
@@ -98,17 +91,6 @@ set_source_files_properties(
 add_custom_target(YourRealCustomTargetThatRunsProtoc DEPENDS ${GEN_PROTO_SRC} ${GEN_GRPC_SRC})
 add_dependencies(${PROJECT_NAME} YourRealCustomTargetThatRunsProtoc)
 
-
-   message(STATUS "43333333Protobuf Compiler Libraries: ${_PROTOBUF_PROTOC}")
-target_include_directories(lib PUBLIC ${GEN_PROTO_DIR})
-
-
-message(STATUS "___________Protobuf libraries: ${Protobuf_LIBRARIES}")
-message(STATUS "gRPC libraries: ${gRPC_LIBRARIES}")
-
-
-set(targets "serverMain" "clientMain")
-
-# Include generated *.pb.h files
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${OpenCV_INCLUDE_DIRS})
+
 

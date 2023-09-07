@@ -1,10 +1,7 @@
 syntax = "proto3";
 
 
-service CameraService {
- 
-    rpc SendCameraData (CameraDataRequest) returns (CameraDataResponse);
-}
+package services;
 
 
 message CameraDataRequest {
@@ -20,4 +17,9 @@ message CameraDataRequest {
  message CameraDataResponse {
 
    string acknowledgment = 1;
+}
+
+service CameraService {
+ 
+    rpc SendCameraData (CameraDataRequest) returns (CameraDataResponse){}
 }

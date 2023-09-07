@@ -4,7 +4,7 @@ using namespace cv;
 
 ListeningManager::ListeningManager(Queue<FrameWrap>& queue) :dataFromCamera(queue) {}
 
-grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, const CameraDataRequest* request, CameraDataResponse* response) {
+grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
 
 	FrameWrap frameWrap;
 

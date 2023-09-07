@@ -12,8 +12,6 @@ private:
 
 	int countFrame;
 
-	int cameraId;
-
 	string path;
 
 	int numFramesCheck;
@@ -40,8 +38,6 @@ public:
 
 	void setPrev(cv::Mat& p);
 
-	int getId();
-
 	void setFrameDiffThreshold(double frameDiff);
 
 	void run();
@@ -62,6 +58,6 @@ public:
 
 private:
 
-	unique_ptr<CameraService::Stub> stub_;
+	unique_ptr<services::CameraService::Stub> stub;
 };
 	
