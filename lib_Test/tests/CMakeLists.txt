@@ -9,24 +9,40 @@ include(GoogleTest)
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
 
+set(protobuf_MODULE_COMPATIBLE TRUE)
+find_package(Protobuf CONFIG REQUIRED)
+message(STATUS "Using protobuf ${Protobuf_VERSION}")
+
+set(_PROTOBUF_LIBPROTOBUF protobuf::libprotobuf)
+set(_REFLECTION gRPC::grpc++_reflection)
+if(CMAKE_CROSSCOMPILING)
+  find_program(_PROTOBUF_PROTOC protoc)
+else()
+  set(_PROTOBUF_PROTOC $<TARGET_FILE:protobuf::protoc>)
+endif()
+
+# Find gRPC installation
+# Looks for gRPCConfig.cmake file installed by gRPC's cmake installation.
+find_package(gRPC CONFIG REQUIRED)
+message(STATUS "Using gRPC ${gRPC_VERSION}")
+
+set(_GRPC_GRPCPP gRPC::grpc++)
+if(CMAKE_CROSSCOMPILING)
+  find_program(_GRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
+else()
+  set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
+endif()
+
 # Include directories 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${OpenCV_INCLUDE_DIRS}
-    ${WindowsSDK_INCLUDE_DIRS}  # Windows SDK include directory
-    ${gRPC_INCLUDE_DIRS}        # gRPC include directory
 )
-
 
 # Discover test source files
 file(GLOB TEST_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*Test.cpp")
 
-# Find gRPC and protobuf packages
-find_package(protobuf CONFIG REQUIRED)
-find_package(gRPC REQUIRED)
-
-message(STATUS "Using protobuf ${protobuf_VERSION}")
 
 # Function to add a test executable
 function(add_test_executable test_name)
@@ -37,8 +53,10 @@ function(add_test_executable test_name)
         gmock
         ${OpenCV_LIBS}  # Link OpenCV to the test executable
         sqlite3
-        gRPC::grpc++
-        protobuf::libprotobuf
+                ${_REFLECTION} 
+        ${_GRPC_GRPCPP} 
+        ${_PROTOBUF_LIBPROTOBUF} 
+        protos_lib
     )
     gtest_discover_tests(${test_name})
 endfunction()
@@ -59,8 +77,6 @@ target_link_libraries(run_all_tests
     gmock
     ${OpenCV_LIBS}  # Link OpenCV to the test executable
     sqlite3
-    gRPC::grpc++
-    protobuf::libprotobuf
 )
 gtest_discover_tests(run_all_tests)
 
