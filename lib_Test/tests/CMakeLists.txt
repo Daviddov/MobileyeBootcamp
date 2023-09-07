@@ -53,7 +53,7 @@ function(add_test_executable test_name)
         gmock
         ${OpenCV_LIBS}  # Link OpenCV to the test executable
         sqlite3
-                ${_REFLECTION} 
+        ${_REFLECTION} 
         ${_GRPC_GRPCPP} 
         ${_PROTOBUF_LIBPROTOBUF} 
         protos_lib
@@ -77,6 +77,10 @@ target_link_libraries(run_all_tests
     gmock
     ${OpenCV_LIBS}  # Link OpenCV to the test executable
     sqlite3
+    ${_REFLECTION} 
+    ${_GRPC_GRPCPP} 
+    ${_PROTOBUF_LIBPROTOBUF} 
+    protos_lib
 )
 gtest_discover_tests(run_all_tests)
 
