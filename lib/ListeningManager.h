@@ -1,6 +1,6 @@
 #pragma once
 #include "Header.h"
-#include "../proto_gen/camera_service.grpc.pb.h"
+#include "../protos/service.grpc.pb.h"
 #include <grpc++/grpc++.h>
 
 

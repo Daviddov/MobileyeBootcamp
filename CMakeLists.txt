@@ -79,10 +79,10 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     )
 endfunction()
 
+# Build ClientMain executable
+add_common_executable(ClientMain ClientMain.cpp)
 # Build ServerMain executable
 add_common_executable(ServerMain ServerMain.cpp)
 
-# Build ClientMain executable
-add_common_executable(ClientMain ClientMain.cpp)
 
 

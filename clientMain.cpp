@@ -1,4 +1,4 @@
-#include <grpc++/grpc++.h>
+
 #include "Header.h"
 #include "CameraProcessor.h"
 #include "ConfigurationManager.h"

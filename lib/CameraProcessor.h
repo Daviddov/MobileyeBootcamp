@@ -1,9 +1,11 @@
 #pragma once 
 
 #include "Header.h"
-#include "../proto_gen/camera_service.grpc.pb.h"
+#include "../protos/service.grpc.pb.h"
 #include <grpc++/grpc++.h>
-
+using services::CameraService;
+using services::CameraDataRequest;
+using services::CameraDataResponse;
 
 
 class CameraProcessor {
@@ -53,7 +55,7 @@ public:
 
 	connectionManager(const string& server_address);
 
-	void sendToServer(FrameWrap& frameWrap);
+	void sendToServer(FrameWrap frameWrap);
 
 
 private:

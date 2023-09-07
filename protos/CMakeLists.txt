@@ -47,7 +47,5 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}  PRIVATE 
     ${_REFLECTION} 
     ${_GRPC_GRPCPP} 
-    ${_PROTOBUF_LIBPROTOBUF}
-      
-
+    ${_PROTOBUF_LIBPROTOBUF}      
 )
