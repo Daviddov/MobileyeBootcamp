@@ -53,6 +53,7 @@ bool SQLHandler::createTableIfNotExists() {
 
 bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objectType, float R, float G, float B) {
 	char insertDataQuery[256];
+	cout << endl << "frameWarp.timestamp in insert func" << frameWarp.timestamp << endl;
 	snprintf(insertDataQuery, sizeof(insertDataQuery),
 		"INSERT INTO MyTable (timestamp,\"frame number\","
 		" \"Top left X\",\"Top left Y\","

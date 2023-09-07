@@ -41,9 +41,11 @@ void ServerProcessor::run() {
 			}
 		}
 		else {
-			cout << "TEST" << endl;
 			Logger::Info("data From Camera empty");
+			cout << endl <<"before " << currentTime()<<endl;
 			waitKeyEx(333);
+			cout << endl << "after " << currentTime() << endl;
+
 		}
 	}
 }

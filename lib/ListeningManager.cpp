@@ -7,7 +7,6 @@ ListeningManager::ListeningManager(Queue<FrameWrap>& queue) :dataFromCamera(queu
 grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
 
 	FrameWrap frameWrap;
-
 	frameWrap.frameNumber = request->framenumber();
 	frameWrap.timestamp = request->timestamp();
 
