@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-
 package services;
-
 
 message CameraDataRequest {
  
@@ -12,7 +10,6 @@ message CameraDataRequest {
    
    int32 frameNumber = 3;
 }
-
 
  message CameraDataResponse {
 
