@@ -83,7 +83,7 @@ std::string currentTime() {
 	std::ostringstream formatted_time;
 	formatted_time << buffer << ":" << std::setfill('0') << std::setw(3) << milliseconds.count();
 
-	std::cout << "The time is " << formatted_time.str() << std::endl;  // Replace with your logging mechanism
+	//std::cout << "The time is " << formatted_time.str() << std::endl;  // Replace with your logging mechanism
 	return formatted_time.str();
 }
 
@@ -108,7 +108,7 @@ void connectionManager::sendToServer(FrameWrap frameWrap) {
 
 	vector<uchar> image_data;
 	imencode(".jpg", frameWrap.image, image_data);
-	cout <<"frameWrap.frameNumber: " << frameWrap.frameNumber;
+
 	request.set_image(image_data.data(), image_data.size());
 	request.set_timestamp(frameWrap.timestamp);
 	request.set_framenumber(frameWrap.frameNumber);

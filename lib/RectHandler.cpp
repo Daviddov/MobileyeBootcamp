@@ -5,6 +5,7 @@ RectHandler::RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<s
 {
 	colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 }
+
 void RectHandler::toDrawRect() {
 	// Loop through the detected objects in the 'output' container
 	for (int i = 0; i < output.size(); ++i)
@@ -40,7 +41,6 @@ void RectHandler::toDrawRect() {
 		writeRectOnDB(box, class_list[classId]);
 	}
 }
-
 
 void RectHandler::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
