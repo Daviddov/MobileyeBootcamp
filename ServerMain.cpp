@@ -1,6 +1,5 @@
 #include "Server.h"
 #include "ListeningManager.h"
-#include "ConfigurationManager.h"
 
 
 int main() {
