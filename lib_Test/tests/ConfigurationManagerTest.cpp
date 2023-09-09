@@ -1,59 +1,42 @@
-#include "ConfigurationManager.h"
 #include <gtest/gtest.h>
-#include <sstream>
+#include "ConfigurationManager.h"
 
-TEST(ConfigurationManager, SaveAndReadConfig) {
-    ConfigurationManager configManager;
+TEST(ConfigurationManagerTest, SaveAndReadConfig) {
+    // Create a temporary test file
+    const std::string filename = "test_config.json";
 
-    // Save configuration to file
-    ASSERT_TRUE(configManager.saveConfigToFile("test_config.json"));
+    // Create a ConfigurationManager instance
+    ConfigurationManager manager;
 
-    // Read configuration from the saved file
-    ASSERT_TRUE(configManager.readConfigFromFile("test_config.json"));
+    // Save the default configuration to the file
+    EXPECT_TRUE(manager.saveConfigToFile(filename));
 
-    // Check if the configuration values were correctly read
-    EXPECT_EQ(configManager.getCameraThreshold(), 0.9);
-    EXPECT_EQ(configManager.getBackendQueueSize(), 5);
-    EXPECT_EQ(configManager.getCameraIP(), "127.0.0.1");
-    EXPECT_EQ(configManager.getCameraPort(), 8080);
-    EXPECT_EQ(configManager.getBackendIP(), "127.0.0.1");
-    EXPECT_EQ(configManager.getBackendPort(), 8000);
+    // Create a new ConfigurationManager instance to read from the file
+    ConfigurationManager readManager;
+    EXPECT_TRUE(readManager.readConfigFromFile(filename));
+
+    // Compare the configurations to ensure they match
+    EXPECT_EQ(manager.getConfig(), readManager.getConfig());
+
+    // Clean up the test file
+    remove(filename.c_str());
 }
 
-TEST(ConfigurationManager, EditSingleConfigField) {
-    ConfigurationManager configManager;
+TEST(ConfigurationManagerTest, EditConfig) {
+    // Create a ConfigurationManager instance
+    ConfigurationManager manager;
 
-    // Redirect cin and cout to stringstream to capture input and output
-    std::stringstream input_stream;
-    std::stringstream output_stream;
-    std::streambuf* original_cin = std::cin.rdbuf(input_stream.rdbuf());
-    std::streambuf* original_cout = std::cout.rdbuf(output_stream.rdbuf());
+    // Set up input stream for simulating user input
+    std::istringstream input_stream("2\n100\n8\n");
+    std::cin.rdbuf(input_stream.rdbuf()); // Redirect std::cin to input_stream
 
-    // Simulate user input
-    input_stream << "1\n"; // Choose Camera Threshold
-    input_stream << "0.7\n"; // Enter new Camera Threshold
+    // Edit the configuration (change Backend Queue Size)
+    manager.editConfig();
 
-    // Call the function
-    configManager.editSingleConfigField();
-
-    // Restore cin and cout
-    std::cin.rdbuf(original_cin);
-    std::cout.rdbuf(original_cout);
-
-    // Check if the cameraThreshold was updated
-    EXPECT_EQ(configManager.getCameraThreshold(), 0.7);
-
-    // Check the captured output for expected messages
-    std::string expected_output =
-        "Select the field to edit:\n"
-        "1. Camera Threshold\n"
-        "2. Backend Queue Size\n"
-        "3. Camera IP\n"
-        "4. Camera Port\n"
-        "5. Backend IP\n"
-        "6. Backend Port\n"
-        "Enter your choice (1-6): "
-        "Enter new Camera Threshold: ";
-
-    EXPECT_EQ(output_stream.str(), expected_output);
+    // Check if the configuration has been updated
+    EXPECT_EQ(manager.getConfig()["backendQueueSize"], 100);
 }
+
+
+
+

@@ -23,6 +23,10 @@ public:
     void editSingleConfigField(const std::string& fieldName, int newValue);    // Example for integer values
     void editSingleConfigField(const std::string& fieldName, const std::string& newValue); // Example for string values
 
+    json getConfig() {
+        return config;
+    }
+
     // Implement the function template
     template <typename T>
     T getFieldValue(const std::string& fieldName) const {
