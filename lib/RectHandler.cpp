@@ -12,7 +12,6 @@ void RectHandler::drawAllDetectsBoxs() {
 		// Extract the bounding box and class ID for the current object
 		auto box = output[i].box;
 		auto classId = output[i].class_id;
-		bool isNewDetect = false;
 		// Draw the object
 		drawDetectBox(box, classId);
 		// Write the bounding box and class name to a database
