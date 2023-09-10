@@ -1,9 +1,11 @@
 #include "SQLHandler.h"
-
+using namespace cv;
 
 //c'tor
 SQLHandler::SQLHandler() : db(nullptr) {
+	
 	if (!open("rect_data.db")) {
+		
 		Logger::Error("Failed to open database.");
 		return;
 	}
@@ -11,6 +13,7 @@ SQLHandler::SQLHandler() : db(nullptr) {
 		Logger::Error("Failed to clean database.");
 		return;
 	}
+	
 	Logger::Info("To cleaned database.");
 }
 
@@ -20,6 +23,7 @@ SQLHandler::~SQLHandler() {
 }
 
 bool SQLHandler::open(const char* dbName) {
+	
 	return sqlite3_open(dbName, &db) == SQLITE_OK;
 }
 
@@ -49,6 +53,7 @@ bool SQLHandler::createTableIfNotExists() {
 
 bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objectType, float R, float G, float B) {
 	char insertDataQuery[256];
+	//cout << "frameWarp.timestamp in insert func" << frameWarp.timestamp << endl;
 	snprintf(insertDataQuery, sizeof(insertDataQuery),
 		"INSERT INTO MyTable (timestamp,\"frame number\","
 		" \"Top left X\",\"Top left Y\","
@@ -57,7 +62,7 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objec
 		"VALUES ('%s', %d, %d, %d, %d, %d, '%s', %lf, %lf, %lf);",
 		frameWarp.timestamp.c_str(), frameWarp.frameNumber, rect.x, rect.y, rect.width, rect.height,
 		objectType.c_str(), R, G, B);
-
+    	
 	return sqlite3_exec(db, insertDataQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
@@ -79,13 +84,103 @@ void SQLHandler::printTable() {
 	sqlite3_exec(db, selectAllQuery, callbackFunction, nullptr, nullptr);
 }
 
-bool SQLHandler::cleanDataBase() {
 
+
+GetFromDataBase* SQLHandler::getRow(int rowID, GetFromDataBase& getDb) {
+	char selectColumnQuery[128];
+	snprintf(selectColumnQuery, sizeof(selectColumnQuery),
+		"SELECT * FROM MyTable WHERE ID = %d;", rowID);
+
+	vector<GetFromDataBase> Datab;
+
+	int result = sqlite3_exec(db, selectColumnQuery, [](void* data, int argc, char** argv, char** azColName) -> int {
+		if (argc >= 7) { // Make sure you have at least 7 columns in the query result
+			GetFromDataBase getDbInto;
+			getDbInto.id = atoi(argv[0]);
+			getDbInto.time = argv[1];
+			getDbInto.fw.frameNumber = atoi(argv[2]);
+			getDbInto.rect.x = atoi(argv[3]);
+			getDbInto.rect.y = atoi(argv[4]);
+			getDbInto.rect.width = atoi(argv[5]);
+			getDbInto.rect.height = atoi(argv[6]);
+			getDbInto.typeObject = argv[7];
+			getDbInto.r = stof(argv[8]);
+			getDbInto.g = stof(argv[9]);
+			getDbInto.b = stof(argv[10]);
+			reinterpret_cast<vector<GetFromDataBase>*>(data)->push_back(getDbInto);
+		}
+		return 0;
+		}, &Datab, nullptr);
+
+	if (result != SQLITE_OK) {
+		cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+		return nullptr;
+	}
+
+	if (!Datab.empty()) {
+		getDb = Datab[0];
+		return &getDb;
+
+		return nullptr;
+	}
+	return nullptr;
+}
+
+bool SQLHandler::cleanDataBase(){
 	const char* dropTableQuery = "DROP TABLE IF EXISTS MyTable;";
-
 	return sqlite3_exec(db, dropTableQuery, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
 sqlite3* SQLHandler::getDB() {
 	return db;
 }
+
+
+bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
+	// Calculate the middle point of the given rectangle
+	int middleX = rect.x + (rect.width / 2);
+	int middleY = rect.y + (rect.height / 2);
+
+	// Retrieve the rectangles from the last timestamp
+	const char* selectLastTimestampRectsQuery = "SELECT * FROM MyTable WHERE timestamp = (SELECT MAX(timestamp) FROM MyTable);";
+
+	struct RectInfo {
+		int leftX;
+		int topY;
+		int width;
+		int height;
+	};
+
+	 vector<RectInfo> lastTimestampRects;
+
+	int result = sqlite3_exec(db, selectLastTimestampRectsQuery, [](void* data, int argc, char** argv, char** azColName) -> int {
+		if (argc >= 7) { // Make sure you have at least 7 columns in the query result
+			RectInfo rectInfo;
+			rectInfo.leftX = atoi(argv[3]);
+			rectInfo.topY = atoi(argv[4]);
+			rectInfo.width = atoi(argv[5]); // Calculate rightX from width
+			rectInfo.height = atoi(argv[6]); // Calculate bottomY from height
+			reinterpret_cast<vector<RectInfo>*>(data)->push_back(rectInfo);
+		}
+		return 0;
+		}, &lastTimestampRects, nullptr);
+
+	if (result != SQLITE_OK) {
+		cout << "Error occurred while retrieving data" << endl;
+		return false;
+	}
+
+	// Check if the middle point is inside any of the last timestamp's rectangles
+	for (const RectInfo& rectInfo : lastTimestampRects) {
+		//cout << "Checking rectangle: (" << rectInfo.leftX << "," << rectInfo.topY << "," << rectInfo.width << "," << rectInfo.height << ")" << endl;
+		if (middleX >= rectInfo.leftX && middleX <= rectInfo.leftX + rectInfo.width &&
+			middleY >= rectInfo.topY && middleY <= rectInfo.topY + rectInfo.height) {
+			cout << "new rectangle" << endl;
+			return true;
+		}
+	}
+
+	//cout << "Middle point is not inside any rectangle" << endl;
+	return false;
+}
+

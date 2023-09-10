@@ -1,8 +1,8 @@
-# include "Header.h"
+#pragma once
 #include "Yolo.h"
-#include "Rect.h"
-#include <conio.h>
-#include "Camera.h"
+#include "RectHandler.h"
+
+
 class ServerProcessor {
 
 private:
@@ -11,17 +11,17 @@ private:
 
 	FrameWrap currFrame;
 
-	queue<FrameWrap>& dataFromCamera;
+	Queue<FrameWrap>& dataFromCamera;
 
 	SQLHandler sqlHandler;
 
+	Yolo5 yolo;
+
 public:
 
-	ServerProcessor(queue<FrameWrap>& dataFromCamera);
+	ServerProcessor(Queue<FrameWrap>& dataFromCamera);
 
 	void detect_with_YOLO5(Yolo5 yolo);
 
 	void run();
-
-  static void  serverPart(ServerProcessor& server);
 };
