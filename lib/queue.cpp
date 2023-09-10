@@ -7,7 +7,6 @@ template <typename T>
 void Queue<T>::push(T& x)
 {
 	m.lock();
-	//unique_lock<mutex> lock(m);
 	
 	// if old data will overwrite:
 	if (to_read > 0 && rearIdx == frontIdx) {
@@ -17,8 +16,7 @@ void Queue<T>::push(T& x)
 	arr[rearIdx] = x;
 	to_read++;
 	rearIdx = (rearIdx + 1) % QUEUE_SIZE; // Fixed the issue here
-	//conditionVar.notify_one();
-
+	
 	m.unlock();
 }
 
@@ -67,15 +65,6 @@ int Queue<T>::size()
 	return to_read;
 }
 
-//template <typename T>
-//void Queue<T>::waitUntilNotEmpty() {
-//	unique_lock<mutex> lock(m);
-//    cout << "the server wait....." << endl;
-//
-//	conditionVar.wait(lock, [this]() { 
-//		return !this->empty();
-//	});
-//}
 
 // Explicitly instantiate for the types you'll use. 
 template class Queue<FrameWrap>;

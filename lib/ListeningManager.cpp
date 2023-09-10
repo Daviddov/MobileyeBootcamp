@@ -2,7 +2,7 @@
 
 using namespace cv;
 
-ListeningManager::ListeningManager(Queue<FrameWrap>& queue,condition_variable& condition):dataFromCamera(queue), conditionVar(condition){}
+ListeningManager::ListeningManager(Queue<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition) {}
 
 grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
 
@@ -14,10 +14,7 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 	vector<uint8_t> imageData(imageDataString.begin(), imageDataString.end());
 	frameWrap.image = imdecode(imageData, IMREAD_COLOR);
 
-	{
-		//lock_guard<std::mutex> lock(dataFromCamera.m);
-		dataFromCamera.push(frameWrap);
-	}
+	dataFromCamera.push(frameWrap);
 	conditionVar.notify_one();
 
 	response->set_acknowledgment("successfully.");
@@ -27,7 +24,7 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 
 
 void ListeningManager::startListen() {
-	                                           
+
 	string server_address("0.0.0.0:50051");
 
 	grpc::ServerBuilder builder;
