@@ -28,11 +28,14 @@ void ServerProcessor::run() {
 		{
 			currFrame = dataFromCamera.front();
 
+
+			//cv::imshow("Server", currFrame.image);
 			detect_with_YOLO5();
 
 			Size size(600, 400);
+
 			resize(currFrame.image, currFrame.image, size, CV_8UC3),
-				cv::imshow("output", currFrame.image);
+				cv::imshow("Server", currFrame.image);
 
 			if (waitKeyEx(1) == 27)
 			{

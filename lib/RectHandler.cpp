@@ -33,9 +33,8 @@ void RectHandler::toDrawRect() {
 		// Modify 'x' and 'y' to prevent overflowing beyond the frame boundaries
 		box.x = std::max(0, box.x);
 		box.y = std::max(0, box.y);
-		box.x = std::min(box.x, frameWarp.image.cols - 20);
-		box.y = std::min(box.y, frameWarp.image.rows - 20);
-
+		box.y > 20 ? box.y -= 20 : box.y;
+		box.x > 20 ? box.x -= 20 : box.x;
 		// Write the bounding box and class name to a database
 		writeRectOnDB(box, class_list[classId]);
 	}
