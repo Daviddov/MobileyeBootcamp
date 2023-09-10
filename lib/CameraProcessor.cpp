@@ -35,18 +35,18 @@ void CameraProcessor::run() {
 	while (active) {
 
 		capture.read(frameWrap.image);
-		//cv::imshow("dsd", frameWrap.image);
-		//waitKey(1);
+
 		if (frameWrap.image.empty()) {
 			cout << "End of stream\n";
 			Logger::Info("End of stream");
 			break;
 		}
 		if (++countFrame == 1 || (countFrame % numFramesCheck == 0 && calcAbsDiff())) {
+			prev = frameWrap.image.clone();
+			frameWrap.timestamp = currentTime();
+			connect.sendToServer(frameWrap);
 			Logger::Info("wait 0.3 second");
 			this_thread::sleep_for(chrono::milliseconds(333));
-			prev = frameWrap.image.clone();
-			connect.sendToServer(frameWrap);
 		}
 	}
 }
