@@ -1,4 +1,5 @@
 #include "CameraProcessor.h" 
+#include "ConfigurationManager.h"
 
 using namespace cv;
 
@@ -28,8 +29,10 @@ bool CameraProcessor::calcAbsDiff() {
 }
 
 void CameraProcessor::run() {
+	ConfigurationManager configManager;
+	string cameraIP = configManager.getFieldValue<string>("cameraIP");
 
-	connectionManager connect("localhost:50051");
+	connectionManager connect(cameraIP);
 
 	while (active) {
 

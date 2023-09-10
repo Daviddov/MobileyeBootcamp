@@ -1,4 +1,5 @@
 #include "ListeningManager.h"
+#include "ConfigurationManager.h"
 
 using namespace cv;
 
@@ -23,8 +24,10 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 
 
 void startListen(Queue<FrameWrap>& dataFromCamera) {
-	                                           
-	string server_address("0.0.0.0:50051");
+	ConfigurationManager configManager;
+	string server_address = configManager.getFieldValue<string>("backendIP");
+
+	//string server_address("0.0.0.0:50051");
 	ListeningManager service(dataFromCamera);
 
 	grpc::ServerBuilder builder;

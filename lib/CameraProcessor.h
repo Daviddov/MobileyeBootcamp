@@ -3,8 +3,8 @@
 #include "Header.h"
 #include "../protos/service.grpc.pb.h"
 #include <grpc++/grpc++.h>
-
-
+//
+//
 using services::CameraService;
 using services::CameraDataRequest;
 using services::CameraDataResponse;
