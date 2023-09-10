@@ -1,6 +1,6 @@
-#include "../protos/service.grpc.pb.h"
 #include <grpc++/grpc++.h>
 #include "CameraProcessor.h"
+#include "../protos/service.grpc.pb.h"
 
 using services::CameraService;
 using services::CameraDataRequest;
