@@ -41,9 +41,8 @@ add_subdirectory(protos)
 add_subdirectory(lib_logger)
 add_subdirectory(nlohmann)
 add_subdirectory(sqlite3)
-if(BUILD_LIB_TEST)
-  add_subdirectory(lib_Test)
-endif()
+add_subdirectory(lib_Test)
+
 
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
