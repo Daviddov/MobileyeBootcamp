@@ -33,3 +33,5 @@
 /build
 /out
 /.vs
+/lib/Queue.cpp
+/lib/Queue.h

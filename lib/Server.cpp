@@ -1,7 +1,9 @@
 #include "Server.h"
 #include <chrono>
+
 using namespace std::chrono;
 using namespace cv;
+
 //c'tor
 ServerProcessor::ServerProcessor(Queue<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition) {
 	active = true;
