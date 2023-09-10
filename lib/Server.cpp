@@ -24,6 +24,8 @@ void ServerProcessor::run() {
 		{
 			currFrame = dataFromCamera.pop();
 
+
+			//cv::imshow("Server", currFrame.image);
 			detect_with_YOLO5();
 
 			RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
@@ -31,7 +33,7 @@ void ServerProcessor::run() {
 
 			Size size(800, 600);
 			resize(currFrame.image, currFrame.image, size, CV_8UC3),
-				cv::imshow("output", currFrame.image);
+				cv::imshow("Server", currFrame.image);
 
 			if (waitKeyEx(1) == 27)
 			{

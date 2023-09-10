@@ -10,7 +10,7 @@ struct SentToDataBase {
 
     cv::Rect rect;
     FrameWrap fw;
-    string objTipe = "car";
+    string objType = "car";
     float r = 3.8;
     float g = 4.0;
     float b = 3.9;

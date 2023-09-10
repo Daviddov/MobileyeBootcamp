@@ -1,6 +1,5 @@
 #include "CameraProcessor.h" 
 
-
 using namespace cv;
 
 //c'tor
