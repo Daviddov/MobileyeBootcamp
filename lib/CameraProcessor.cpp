@@ -44,6 +44,7 @@ void CameraProcessor::run() {
 		if (++countFrame == 1 || (countFrame % numFramesCheck == 0 && calcAbsDiff())) {
 			prev = frameWrap.image.clone();
 			frameWrap.timestamp = currentTime();
+			frameWrap.frameNumber = countFrame;
 			connect.sendToServer(frameWrap);
 			Logger::Info("wait 0.3 second");
 			this_thread::sleep_for(chrono::milliseconds(333));
