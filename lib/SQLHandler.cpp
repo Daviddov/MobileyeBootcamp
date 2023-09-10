@@ -176,7 +176,6 @@ bool SQLHandler::isObjectExistsInLastRecordsQuery(Rect& rect) {
 	for (const RectInfo& rectInfo : last100RecordsQuery) {
 		if (middleX >= rectInfo.leftX && middleX <= (rectInfo.leftX + rectInfo.width) &&
 			middleY >= rectInfo.topY && middleY <= (rectInfo.topY + rectInfo.height)) {
-			cout << "Yes" << endl;
 			return true;
 		}
 	}

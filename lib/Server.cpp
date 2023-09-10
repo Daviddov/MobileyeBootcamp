@@ -13,10 +13,6 @@ void ServerProcessor::detect_with_YOLO5() {
 	yolo.setFrame(currFrame);
 
 	yolo.detect();
-
-	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
-
-	rect.drawAllDetectsBoxs();
 	
 }
 
@@ -29,6 +25,9 @@ void ServerProcessor::run() {
 			currFrame = dataFromCamera.pop();
 
 			detect_with_YOLO5();
+
+			RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
+			rect.drawAllDetectsBoxs();
 
 			Size size(800, 600);
 			resize(currFrame.image, currFrame.image, size, CV_8UC3),
