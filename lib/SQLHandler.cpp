@@ -38,7 +38,7 @@ bool SQLHandler::createTableIfNotExists() {
 	const char* createTableQuery = "CREATE TABLE IF NOT EXISTS MyTable ("
 		"ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 		"timestamp TEXT NOT NULL,"
-		"\"frame number\" INT NOT NULL,"
+		"\"frame_number\" INT NOT NULL,"
 		"\"Top left X\" INTEGER NOT NULL,"
 		"\"Top left Y\" INTEGER NOT NULL,"
 		"width INTEGER NOT NULL,"
@@ -55,7 +55,7 @@ bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objec
 	char insertDataQuery[256];
 	//cout << "frameWarp.timestamp in insert func" << frameWarp.timestamp << endl;
 	snprintf(insertDataQuery, sizeof(insertDataQuery),
-		"INSERT INTO MyTable (timestamp,\"frame number\","
+		"INSERT INTO MyTable (timestamp,\"frame_number\","
 		" \"Top left X\",\"Top left Y\","
 		"width, height, \"object type\", "
 		"\"R avg\", \"G avg\", \"B avg\") "
@@ -135,14 +135,13 @@ sqlite3* SQLHandler::getDB() {
 	return db;
 }
 
-
-bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
+bool SQLHandler::isObjectExistsInLastRecordsQuery(Rect& rect) {
 	// Calculate the middle point of the given rectangle
 	int middleX = rect.x + (rect.width / 2);
 	int middleY = rect.y + (rect.height / 2);
 
-	// Retrieve the rectangles from the last timestamp
-	const char* selectLastTimestampRectsQuery = "SELECT * FROM MyTable WHERE timestamp = (SELECT MAX(timestamp) FROM MyTable);";
+	// Query to retrieve the rectangles from the last 100 records
+	const char* selectLast100RecordsQuery = "SELECT * FROM MyTable ORDER BY ID DESC LIMIT 100;";
 
 	struct RectInfo {
 		int leftX;
@@ -151,9 +150,10 @@ bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
 		int height;
 	};
 
-	 vector<RectInfo> lastTimestampRects;
+	vector<RectInfo> last100RecordsQuery;
 
-	int result = sqlite3_exec(db, selectLastTimestampRectsQuery, [](void* data, int argc, char** argv, char** azColName) -> int {
+	// Define a lambda function to process query results
+	auto processQueryResults = [](void* data, int argc, char** argv, char** azColName) -> int {
 		if (argc >= 7) { // Make sure you have at least 7 columns in the query result
 			RectInfo rectInfo;
 			rectInfo.leftX = atoi(argv[3]);
@@ -163,19 +163,20 @@ bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
 			reinterpret_cast<vector<RectInfo>*>(data)->push_back(rectInfo);
 		}
 		return 0;
-		}, &lastTimestampRects, nullptr);
+	};
+
+	int result = sqlite3_exec(db, selectLast100RecordsQuery, processQueryResults, &last100RecordsQuery, nullptr);
 
 	if (result != SQLITE_OK) {
 		cout << "Error occurred while retrieving data" << endl;
 		return false;
 	}
 
-	// Check if the middle point is inside any of the last timestamp's rectangles
-	for (const RectInfo& rectInfo : lastTimestampRects) {
-		//cout << "Checking rectangle: (" << rectInfo.leftX << "," << rectInfo.topY << "," << rectInfo.width << "," << rectInfo.height << ")" << endl;
-		if (middleX >= rectInfo.leftX && middleX <= rectInfo.leftX + rectInfo.width &&
-			middleY >= rectInfo.topY && middleY <= rectInfo.topY + rectInfo.height) {
-			cout << "new rectangle" << endl;
+	// Check if the middle point is inside any of the last 100 records' rectangles
+	for (const RectInfo& rectInfo : last100RecordsQuery) {
+		if (middleX >= rectInfo.leftX && middleX <= (rectInfo.leftX + rectInfo.width) &&
+			middleY >= rectInfo.topY && middleY <= (rectInfo.topY + rectInfo.height)) {
+			cout << "Yes" << endl;
 			return true;
 		}
 	}
@@ -183,4 +184,3 @@ bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
 	//cout << "Middle point is not inside any rectangle" << endl;
 	return false;
 }
-

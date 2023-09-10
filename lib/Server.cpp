@@ -16,7 +16,7 @@ void ServerProcessor::detect_with_YOLO5() {
 
 	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 
-	rect.toDrawRect();
+	rect.drawAllDetectsBoxs();
 	
 }
 
@@ -30,7 +30,7 @@ void ServerProcessor::run() {
 
 			detect_with_YOLO5();
 
-			Size size(600, 400);
+			Size size(800, 600);
 			resize(currFrame.image, currFrame.image, size, CV_8UC3),
 				cv::imshow("output", currFrame.image);
 
