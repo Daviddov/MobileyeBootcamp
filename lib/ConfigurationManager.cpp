@@ -1,93 +1,177 @@
-#include "ConfigurationManager.h"
-// Define a struct to hold configuration settings
+#include "ConfigurationManager.h" // Include your header file
 
-
-
-json ConfigurationManager::createDefaultConfigJson() {
-    json config;
-    config["cameraThreshold"] = 0.5;
-    config["backendQueueSize"] = 10;
-    config["cameraIP"] = "127.0.0.1";
+ConfigurationManager::ConfigurationManager() {
+    // Initialize default configuration values
+    config["cameraThreshold"] = 0.9;
+    config["backendQueueSize"] = 5;
+    config["cameraIP"] = "127.0.0.1:50051";
     config["cameraPort"] = 8080;
-    config["backendIP"] = "127.0.0.1";
+    config["backendIP"] = "127.0.0.1:50051";
     config["backendPort"] = 8000;
-    return config;
+    config["numFrames"] = 30;
 }
 
-bool ConfigurationManager::saveConfigToFile(const std::string& filename, const Configuration& config) {
-    json config_json;
-    config_json["cameraThreshold"] = config.cameraThreshold;
-    config_json["backendQueueSize"] = config.backendQueueSize;
-    config_json["cameraIP"] = config.cameraIP;
-    config_json["cameraPort"] = config.cameraPort;
-    config_json["backendIP"] = config.backendIP;
-    config_json["backendPort"] = config.backendPort;
-
+bool ConfigurationManager::saveConfigToFile(const std::string& filename) {
     std::ofstream output_file(filename);
     if (output_file.is_open()) {
-        output_file << config_json.dump(4);
+        output_file << config.dump(4);
         output_file.close();
         return true;
     }
     return false;
 }
 
-Configuration ConfigurationManager::readConfigFromFile(const std::string& filename) {
-    Configuration config;
-    json config_json;
+bool ConfigurationManager::readConfigFromFile(const std::string& filename) {
+    // Clear existing configuration before reading from the file
+    config.clear();
 
     std::ifstream input_file(filename);
     if (input_file.is_open()) {
-        input_file >> config_json;
-
-        config.cameraThreshold = config_json.value("cameraThreshold", 0.5);
-        config.backendQueueSize = config_json.value("backendQueueSize", 10);
-        config.cameraIP = config_json.value("cameraIP", "127.0.0.1");
-        config.cameraPort = config_json.value("cameraPort", 8080);
-        config.backendIP = config_json.value("backendIP", "127.0.0.1");
-        config.backendPort = config_json.value("backendPort", 8000);
-    }
-
-    return config;
-}
-
-void ConfigurationManager::editConfig(Configuration& config) {
-    std::cout << "Enter new Camera Threshold: ";
-    std::cin >> config.cameraThreshold;
-
-    std::cout << "Enter new Backend Queue Size: ";
-    std::cin >> config.backendQueueSize;
-
-    std::cout << "Enter new Camera IP: ";
-    std::cin >> config.cameraIP;
-
-    std::cout << "Enter new Camera Port: ";
-    std::cin >> config.cameraPort;
-
-    std::cout << "Enter new Backend IP: ";
-    std::cin >> config.backendIP;
-
-    std::cout << "Enter new Backend Port: ";
-    std::cin >> config.backendPort;
-}
-
-void configRun() {
-    ConfigurationManager j;
-
-    Configuration config = j.readConfigFromFile("config.json");
-
-    std::cout << "Current Configuration:" << std::endl;
-    std::cout << "Camera Threshold: " << config.cameraThreshold << std::endl;
-    std::cout << "Backend Queue Size: " << config.backendQueueSize << std::endl;
-    std::cout << "Camera IP: " << config.cameraIP << " Port: " << config.cameraPort << std::endl;
-    std::cout << "Backend IP: " << config.backendIP << " Port: " << config.backendPort << std::endl;
-
-    j.editConfig(config);
-
-    if (j.saveConfigToFile("config.json", config)) {
-        std::cout << "Configuration saved to 'config.json'" << std::endl;
+        try {
+            input_file >> config;
+            return true;
+        }
+        catch (const std::exception& e) {
+            // Handle JSON parsing errors
+            std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+            return false;
+        }
     }
     else {
-        std::cerr << "Unable to save configuration to file" << std::endl;
+        // Handle file open error
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return false;
     }
+}
+
+void ConfigurationManager::editConfig() {
+    // Provide a menu to the user to select which fields to edit
+    int choice;
+    do {
+        std::cout << "Select a field to edit:" << std::endl;
+        std::cout << "1. Camera Threshold" << std::endl;
+        std::cout << "2. Backend Queue Size" << std::endl;
+        std::cout << "3. Camera IP" << std::endl;
+        std::cout << "4. Camera Port" << std::endl;
+        std::cout << "5. Backend IP" << std::endl;
+        std::cout << "6. Backend Port" << std::endl;
+        std::cout << "7. Number of Frames" << std::endl;
+        std::cout << "8. Exit" << std::endl;
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+        case 1: {
+            double threshold;
+            std::cout << "Enter new Camera Threshold: ";
+            std::cin >> threshold;
+            editSingleConfigField("cameraThreshold", threshold);
+            break;
+        }
+        case 2: {
+            int queueSize;
+            std::cout << "Enter new Backend Queue Size: ";
+            std::cin >> queueSize;
+            editSingleConfigField("backendQueueSize", queueSize);
+            break;
+        }
+        case 3: {
+            std::string cameraIP;
+            std::cout << "Enter new Camera IP: ";
+            std::cin.ignore();
+            std::getline(std::cin, cameraIP);
+            editSingleConfigField("cameraIP", cameraIP);
+            break;
+        }
+        case 4: {
+            int cameraPort;
+            std::cout << "Enter new Camera Port: ";
+            std::cin >> cameraPort;
+            editSingleConfigField("cameraPort", cameraPort);
+            break;
+        }
+        case 5: {
+            std::string backendIP;
+            std::cout << "Enter new Backend IP: ";
+            std::cin.ignore();
+            std::getline(std::cin, backendIP);
+            editSingleConfigField("backendIP", backendIP);
+            break;
+        }
+        case 6: {
+            int backendPort;
+            std::cout << "Enter new Backend Port: ";
+            std::cin >> backendPort;
+            editSingleConfigField("backendPort", backendPort);
+            break;
+        }
+        case 7: {
+            int numFrames;
+            std::cout << "Enter new Number of Frames: ";
+            std::cin >> numFrames;
+            editSingleConfigField("numFrames", numFrames);
+            break;
+        }
+        case 8:
+            // Exit the editing menu
+            break;
+        default:
+            std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+        }
+    } while (choice != 8);
+}
+
+void ConfigurationManager::editSingleConfigField(const std::string& fieldName, double newValue) {
+    // Check if the field name exists in the configuration
+    if (config.find(fieldName) != config.end()) {
+        config[fieldName] = newValue;
+    }
+    else {
+        std::cerr << "Field " << fieldName << " does not exist in the configuration." << std::endl;
+    }
+}
+
+void ConfigurationManager::editSingleConfigField(const std::string& fieldName, int newValue) {
+    // Check if the field name exists in the configuration
+    if (config.find(fieldName) != config.end()) {
+        config[fieldName] = newValue;
+    }
+    else {
+        std::cerr << "Field " << fieldName << " does not exist in the configuration." << std::endl;
+    }
+}
+
+void ConfigurationManager::editSingleConfigField(const std::string& fieldName, const std::string& newValue) {
+    // Check if the field name exists in the configuration
+    if (config.find(fieldName) != config.end()) {
+        config[fieldName] = newValue;
+    }
+    else {
+        std::cerr << "Field " << fieldName << " does not exist in the configuration." << std::endl;
+    }
+}
+
+
+
+
+void ConfigurationManager::printConfig() {
+    std::cout << "Current Configuration:" << std::endl;
+    for (json::iterator it = config.begin(); it != config.end(); ++it) {
+        // Access the key (field name) using it.key() and the value using it.value()
+        std::cout << it.key() << ": " << it.value() << std::endl;
+    }
+}
+
+
+
+void configRun() {
+	ConfigurationManager j;
+	j.saveConfigToFile("config.json");
+	j.readConfigFromFile("config.json");
+	j.printConfig();
+	j.editConfig();
+	j.printConfig();
+
+	//j.editSingleConfigField();
+	j.printConfig();
 }

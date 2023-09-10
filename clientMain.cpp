@@ -5,7 +5,13 @@
 
 
 int main() {
-	 //configRun(); //config json example
+	ConfigurationManager configManager;
+	
+	// Retrieve the "cameraThreshold" field as a double
+	double frameDiff = configManager.getFieldValue<double>("cameraThreshold");
+	int numFrames = configManager.getFieldValue<int>("numFrames");
+
+	string path = "assets/parking.mp4";
 
 	//log init
 	LogPriority priority = InfoPriority;
@@ -14,7 +20,7 @@ int main() {
 
 	Logger::Info("the camera process is started");
 
-	CameraProcessor camera("assets/parking.mp4", 30, 0.9);
+	CameraProcessor camera(path, numFrames, frameDiff);
 	if (!camera.capture.isOpened()) {
 		Logger::Critical("Error opening video file");
 		return 1;

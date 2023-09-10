@@ -34,19 +34,25 @@ void CameraProcessor::run() {
 
 	while (active) {
 
+		if (connect.countTryToConnect > 10) {
+			Logger::Debug("camera stoped, dont have a connection");
+			cout << "camera stoped, dont have a connection" << endl;
+			break;
+		}
 		capture.read(frameWrap.image);
-		//cv::imshow("dsd", frameWrap.image);
-		//waitKey(1);
+
 		if (frameWrap.image.empty()) {
 			cout << "End of stream\n";
 			Logger::Info("End of stream");
 			break;
 		}
 		if (++countFrame == 1 || (countFrame % numFramesCheck == 0 && calcAbsDiff())) {
+			prev = frameWrap.image.clone();
+			frameWrap.timestamp = currentTime();
+			frameWrap.frameNumber = countFrame;
+			connect.sendToServer(frameWrap);
 			Logger::Info("wait 0.3 second");
 			this_thread::sleep_for(chrono::milliseconds(333));
-			prev = frameWrap.image.clone();
-			connect.sendToServer(frameWrap);
 		}
 	}
 }
@@ -79,7 +85,7 @@ std::string currentTime() {
 	std::ostringstream formatted_time;
 	formatted_time << buffer << ":" << std::setfill('0') << std::setw(3) << milliseconds.count();
 
-	std::cout << "The time is " << formatted_time.str() << std::endl;  // Replace with your logging mechanism
+	//std::cout << "The time is " << formatted_time.str() << std::endl;  // Replace with your logging mechanism
 	return formatted_time.str();
 }
 
@@ -92,7 +98,9 @@ void CameraProcessor::setPrev(Mat& p) {
 };
 
 //c'tor
-connectionManager::connectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {}
+connectionManager::connectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
+	countTryToConnect = 0;
+}
 
 void connectionManager::sendToServer(FrameWrap frameWrap) {
 
@@ -110,9 +118,11 @@ void connectionManager::sendToServer(FrameWrap frameWrap) {
 	grpc::Status status = stub->SendCameraData(&context, request, &response);
 
 	if (status.ok()) {
-		std::cout << "Server response: " << response.acknowledgment() << std::endl;
+		cout << "Server response: " << response.acknowledgment() << endl;
 	}
 	else {
-		std::cerr << "RPC failed: " << status.error_message() << std::endl;
+		cerr << "RPC failed: " << status.error_message() << endl;
+		countTryToConnect++;
+		this_thread::sleep_for(chrono::milliseconds(2000));
 	}
 }

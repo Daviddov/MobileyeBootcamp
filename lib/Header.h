@@ -13,7 +13,7 @@
 #include <opencv2/opencv.hpp>
 #include "../sqlite3/sqlite3.h"
 #include "../lib_logger/Logger.h"
-
+#include "FrameWarp.h"
 
 #include <ctime>
 #include <iomanip>
@@ -31,12 +31,13 @@ struct Detection
     cv::Rect box;
 };
 
-struct FrameWrap
-{
-    cv::Mat image;
-    string timestamp;
-    int frameNumber;
-};
+//struct FrameWrap
+//{
+//    cv::Mat image;
+//    string timestamp;
+//    int frameNumber;
+//
+//};
 
 
 

@@ -1,40 +1,40 @@
 
-//#include "gtest/gtest.h"
-//#include "functionForTests.h"
-//using namespace cv;
-//
-//TEST(SqlHandlerTest,  checkIfDataCorrect) {
-//    
-//    SQLHandler sql;
-//    int id = 1;
-//    SentToDataBase sentToDb;
-//   
-//    GetFromDataBase getDb;
-//    createFakeFrameWrapForTest(sentToDb);
-//    createFakeRectForTest(sentToDb);
-//    string test;
-//    
-//   bool isCreate = sql.createTableIfNotExists();
-//   bool isWrite = sql.insertData(sentToDb.rect, sentToDb.fw, sentToDb.objTipe , sentToDb.r, sentToDb.g, sentToDb.b);
-//
-//    sql.getRow(id,getDb);
-//
-//
-//    EXPECT_TRUE(isCreate);
-//    EXPECT_TRUE(isWrite);
-//    EXPECT_FLOAT_EQ(sentToDb.r,getDb.r);
-//    EXPECT_FLOAT_EQ(sentToDb.g, getDb.g);
-//    EXPECT_FLOAT_EQ(sentToDb.b, getDb.b);
-//    EXPECT_EQ(id, getDb.id);
-//    EXPECT_EQ(sentToDb.rect.width, getDb.rect.width);
-//    EXPECT_EQ(sentToDb.rect.height, getDb.rect.height);
-//    EXPECT_EQ(sentToDb.rect.x, getDb.rect.x);
-//    EXPECT_EQ(sentToDb.rect.y, getDb.rect.y);
-//    EXPECT_EQ(sentToDb.fw.frameNumber, getDb.fw.frameNumber);
-//    EXPECT_EQ(sentToDb.objTipe, getDb.typeObject);
-//
-//
-//}
+#include "gtest/gtest.h"
+#include "functionForTests.h"
+using namespace cv;
+
+TEST(SqlHandlerTest,  checkIfDataCorrect) {
+    
+    SQLHandler sql;
+    int id = 1;
+    SentToDataBase sentToDb;
+   
+    GetFromDataBase getDb;
+    createFakeFrameWrapForTest(sentToDb);
+    createFakeRectForTest(sentToDb);
+    string test;
+    
+   bool isCreate = sql.createTableIfNotExists();
+   bool isWrite = sql.insertData(sentToDb.rect, sentToDb.fw, sentToDb.objTipe , sentToDb.r, sentToDb.g, sentToDb.b);
+
+    sql.getRow(id,getDb);
+
+
+    EXPECT_TRUE(isCreate);
+    EXPECT_TRUE(isWrite);
+    EXPECT_FLOAT_EQ(sentToDb.r,getDb.r);
+    EXPECT_FLOAT_EQ(sentToDb.g, getDb.g);
+    EXPECT_FLOAT_EQ(sentToDb.b, getDb.b);
+    EXPECT_EQ(id, getDb.id);
+    EXPECT_EQ(sentToDb.rect.width, getDb.rect.width);
+    EXPECT_EQ(sentToDb.rect.height, getDb.rect.height);
+    EXPECT_EQ(sentToDb.rect.x, getDb.rect.x);
+    EXPECT_EQ(sentToDb.rect.y, getDb.rect.y);
+    EXPECT_EQ(sentToDb.fw.frameNumber, getDb.fw.frameNumber);
+    EXPECT_EQ(sentToDb.objTipe, getDb.typeObject);
+
+
+}
 
 //Do not open this test Aharon needs to finish it
 
