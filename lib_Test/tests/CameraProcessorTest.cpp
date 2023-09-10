@@ -1,32 +1,40 @@
+#include "Header.h"
 #include "CameraProcessor.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
+#include "ConfigurationManager.h"
+
 using namespace cv;
 
 
-//TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
-//
-//    Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
-//    Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
-//
-//    Queue<FrameWrap> queue;
-//    CameraProcessor camera(queue, 2, "123");
-//
-//    camera.setFrameDiffThreshold(0.9);
-//    camera.setFrame(testImage1);
-//    camera.setPrev(testImage2);
-//
-//
-//    ASSERT_FALSE(camera.calcAbsDiff());
-//
-//    Mat testImage3(3, 3, CV_8UC3, Scalar(100, 150, 200));
-//    Mat testImage4(3, 3, CV_8UC3, Scalar(110, 160, 210));
-//
-//    camera.setFrame(testImage3);
-//    camera.setPrev(testImage4);
-//
-//    ASSERT_TRUE(camera.calcAbsDiff());
-//}
+
+
+
+TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
+
+    ConfigurationManager configManager;
+    double frameDiff = configManager.getFieldValue<double>("cameraThreshold");
+    int numFrames = configManager.getFieldValue<int>("numFrames");
+
+    Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
+    Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
+
+    string path = "../../assets/parking.mp4";
+    CameraProcessor camera(path, numFrames, frameDiff);
+
+    camera.setFrame(testImage1);
+    camera.setPrev(testImage2);
+
+    ASSERT_FALSE(camera.calcAbsDiff());
+
+    Mat testImage3(3, 3, CV_8UC3, Scalar(100, 150, 200));
+    Mat testImage4(3, 3, CV_8UC3, Scalar(120, 150, 250));
+
+    camera.setFrame(testImage3);
+    camera.setPrev(testImage4);
+
+    ASSERT_TRUE(camera.calcAbsDiff());
+}
 
 
 TEST(CurrentTimeTest, TestCurrentTime) {
