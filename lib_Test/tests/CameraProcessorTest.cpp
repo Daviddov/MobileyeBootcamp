@@ -1,21 +1,29 @@
+#include "Header.h"
 #include "CameraProcessor.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
+#include "ConfigurationManager.h"
+
+
+
+
 using namespace cv;
 
 
 //TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 //
+//    ConfigurationManager configManager;
+//    double frameDiff = configManager.getFieldValue<double>("cameraThreshold");
+//    int numFrames = configManager.getFieldValue<int>("numFrames");
+//
 //    Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
 //    Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
-//
-//    Queue<FrameWrap> queue;
-//    CameraProcessor camera(queue, 2, "123");
-//
+//   
+//    string path = "../../assets/parking.mp4";
+//    CameraProcessor camera(path, 0.9,30);
 //    camera.setFrameDiffThreshold(0.9);
 //    camera.setFrame(testImage1);
 //    camera.setPrev(testImage2);
-//
 //
 //    ASSERT_FALSE(camera.calcAbsDiff());
 //
