@@ -15,7 +15,7 @@ TEST(SqlHandlerTest,  checkIfDataCorrect) {
     string test;
     
    bool isCreate = sql.createTableIfNotExists();
-   bool isWrite = sql.insertData(sentToDb.rect, sentToDb.fw, sentToDb.objTipe , sentToDb.r, sentToDb.g, sentToDb.b);
+   bool isWrite = sql.insertData(sentToDb.rect, sentToDb.fw, sentToDb.objType , sentToDb.r, sentToDb.g, sentToDb.b);
 
     sql.getRow(id,getDb);
 
@@ -31,7 +31,7 @@ TEST(SqlHandlerTest,  checkIfDataCorrect) {
     EXPECT_EQ(sentToDb.rect.x, getDb.rect.x);
     EXPECT_EQ(sentToDb.rect.y, getDb.rect.y);
     EXPECT_EQ(sentToDb.fw.frameNumber, getDb.fw.frameNumber);
-    EXPECT_EQ(sentToDb.objTipe, getDb.typeObject);
+    EXPECT_EQ(sentToDb.objType, getDb.typeObject);
 
 
 }
