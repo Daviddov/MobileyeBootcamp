@@ -42,8 +42,6 @@ public:
 
 	void setPrev(cv::Mat& p);
 
-	void setFrameDiffThreshold(double frameDiff);
-
 	void run();
 };
 
