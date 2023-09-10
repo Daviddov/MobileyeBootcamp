@@ -2,7 +2,7 @@
 
 using namespace cv;
 
-ListeningManager::ListeningManager(Queue<FrameWrap>& queue) :dataFromCamera(queue) {}
+ListeningManager::ListeningManager(Queue<FrameWrap>& queue,condition_variable& condition):dataFromCamera(queue), conditionVar(condition){}
 
 grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
 
@@ -14,7 +14,11 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 	vector<uint8_t> imageData(imageDataString.begin(), imageDataString.end());
 	frameWrap.image = imdecode(imageData, IMREAD_COLOR);
 
-	dataFromCamera.push(frameWrap);
+	{
+		//lock_guard<std::mutex> lock(dataFromCamera.m);
+		dataFromCamera.push(frameWrap);
+	}
+	conditionVar.notify_one();
 
 	response->set_acknowledgment("successfully.");
 	return grpc::Status::OK;
@@ -22,14 +26,13 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 
 
 
-void startListen(Queue<FrameWrap>& dataFromCamera) {
+void ListeningManager::startListen() {
 	                                           
 	string server_address("0.0.0.0:50051");
-	ListeningManager service(dataFromCamera);
 
 	grpc::ServerBuilder builder;
 	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-	builder.RegisterService(&service);
+	builder.RegisterService(this);
 
 	unique_ptr<grpc::Server> server(builder.BuildAndStart());
 	cout << "Server listening on " << server_address << endl;

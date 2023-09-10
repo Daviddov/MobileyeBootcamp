@@ -7,7 +7,7 @@ template <typename T>
 void Queue<T>::push(T& x)
 {
 	m.lock();
-	//std::unique_lock<std::mutex> lock(m);
+	//unique_lock<mutex> lock(m);
 	
 	// if old data will overwrite:
 	if (to_read > 0 && rearIdx == frontIdx) {
@@ -67,15 +67,15 @@ int Queue<T>::size()
 	return to_read;
 }
 
-template <typename T>
-void Queue<T>::waitUntilNotEmpty() {
-
-	std::unique_lock<std::mutex> lock(m);
-
-	conditionVar.wait(lock, [this]() { 
-		return !this->empty();
-	});
-}
+//template <typename T>
+//void Queue<T>::waitUntilNotEmpty() {
+//	unique_lock<mutex> lock(m);
+//    cout << "the server wait....." << endl;
+//
+//	conditionVar.wait(lock, [this]() { 
+//		return !this->empty();
+//	});
+//}
 
 // Explicitly instantiate for the types you'll use. 
 template class Queue<FrameWrap>;

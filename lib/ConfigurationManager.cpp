@@ -4,10 +4,10 @@ ConfigurationManager::ConfigurationManager() {
     // Initialize default configuration values
     config["cameraThreshold"] = 0.9;
     config["backendQueueSize"] = 5;
-    config["cameraIP"] = "127.0.0.1:50051";
+    config["cameraIP"] = "127.0.0.1";
     config["cameraPort"] = 8080;
-    config["backendIP"] = "127.0.0.1:50051";
-    config["backendPort"] = 8000;
+    config["backendIP"] = "127.0.0.1";
+    config["backendPort"] = "50051";
     config["numFrames"] = 30;
 }
 

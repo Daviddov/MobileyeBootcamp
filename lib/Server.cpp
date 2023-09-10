@@ -3,51 +3,55 @@
 using namespace std::chrono;
 using namespace cv;
 //c'tor
-ServerProcessor::ServerProcessor(Queue<FrameWrap>& queue) :dataFromCamera(queue) {
+ServerProcessor::ServerProcessor(Queue<FrameWrap>& queue, condition_variable& condition):dataFromCamera(queue),conditionVar(condition) {
 	active = true;
-	
 }
 
-void ServerProcessor::detect_with_YOLO5(Yolo5 yolo) {
-	cout << "detact func calls: " << currentTime() << endl;
+void ServerProcessor::detect_with_YOLO5() {
 
 	yolo.setFrame(currFrame);
 
 	yolo.detect();
-	cout << "detact func finish: " << currentTime() << endl;
-	cout << "rect start: " << currentTime() << endl;
 
 	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 
 	rect.toDrawRect();
-	
+
 }
 
 void ServerProcessor::run() {
 
-	while (active)
-	{
-		if (!dataFromCamera.empty())
-		{
-			currFrame = dataFromCamera.pop();
-
-			detect_with_YOLO5();
-
-			Size size(600, 400);
-			resize(currFrame.image, currFrame.image, size, CV_8UC3),
-				cv::imshow("output", currFrame.image);
-
-			if (waitKeyEx(1) == 27)
-			{
-				Logger::Info("part server finished by user");
-				break;
-			}
+	while (active){
+	
+		if(dataFromCamera.empty()){
+			cout << "whit..." << endl;
+			waitForData();
 		}
-		else {
-			Logger::Info("data From Camera empty");
-			//cout << "data From Camera empty" << endl;
-			waitKeyEx(333);
-			//dataFromCamera.waitUntilNotEmpty();
+
+		currFrame = dataFromCamera.pop();
+
+		detect_with_YOLO5();
+
+		Size size(600, 400);
+		resize(currFrame.image, currFrame.image, size, CV_8UC3),
+			cv::imshow("output", currFrame.image);
+
+		if (waitKeyEx(1) == 27){
+		
+			Logger::Info("part server finished by user");
+			break;
 		}
+
 	}
+}
+
+
+
+void ServerProcessor::waitForData() {
+
+	unique_lock<mutex> lock(dataFromCamera.m);
+
+	conditionVar.wait(lock, [this]() {
+		return !dataFromCamera.empty();
+		});
 }

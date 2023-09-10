@@ -1,10 +1,13 @@
 #include "RectHandler.h"
+
 using namespace cv;
+
 //c'tor
 RectHandler::RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler &sqlHandler) :frameWarp(frameW), output(outputP), class_list(class_listP), sqlHandler(sqlHandler)
 {
 	colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 }
+
 void RectHandler::toDrawRect() {
 	// Loop through the detected objects in the 'output' container
 	for (int i = 0; i < output.size(); ++i)
@@ -31,11 +34,16 @@ void RectHandler::toDrawRect() {
 		Logger::Info("Box width is %d Box height is %d ", box.width, box.height);
 
 		//Modify x and y for don't overflow from original frame.
-		box.x < 0 ? box.x = 0 : box.x;
-		box.y < 0 ? box.y = 0 : box.y;
-		box.x > 20 ? box.x -= 20 : box.x;
-		box.y > 20 ? box.y -= 20 : box.y;
+		
+		box.x = max(0, box.x);
+		box.y = max(0, box.y);
 
+		if (box.x + box.width > frameWarp.image.cols) 
+			box.width -= (box.x + box.width - frameWarp.image.cols);
+		
+		if (box.y + box.height > frameWarp.image.rows) 
+			box.height -= (box.y + box.height - frameWarp.image.rows);
+		
 		// Write the bounding box and class name to a database
 		writeRectOnDB(box, class_list[classId]);
 	}
