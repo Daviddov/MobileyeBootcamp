@@ -1,10 +1,11 @@
-//
-////c'tor
-//ConnectionManager::ConnectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
+
+
+
+//connectionManager::connectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
 //	countTryToConnect = 0;
 //}
 //
-//void ConnectionManager::sendToServer(FrameWrap frameWrap) {
+//void connectionManager::sendToServer(FrameWrap frameWrap) {
 //
 //	CameraDataRequest request;
 //	CameraDataResponse response;

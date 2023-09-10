@@ -1,5 +1,6 @@
 #include "CameraProcessor.h" 
 #include "ConfigurationManager.h"
+#include "connectionManager.h"
 
 using namespace cv;
 
@@ -32,7 +33,7 @@ void CameraProcessor::run() {
 	ConfigurationManager configManager;
 	string cameraIP = configManager.getFieldValue<string>("cameraIP");
 
-	connectionManager connect(cameraIP);
+	ConnectionManager connect(cameraIP);
 
 	while (active) {
 
@@ -100,11 +101,11 @@ void CameraProcessor::setPrev(Mat& p) {
 };
 
 //c'tor
-connectionManager::connectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
+ConnectionManager::ConnectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
 	countTryToConnect = 0;
 }
 
-void connectionManager::sendToServer(FrameWrap frameWrap) {
+void ConnectionManager::sendToServer(FrameWrap frameWrap) {
 
 	CameraDataRequest request;
 	CameraDataResponse response;

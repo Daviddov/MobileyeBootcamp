@@ -1,14 +1,6 @@
 #pragma once 
 
 #include "Header.h"
-#include "../protos/service.grpc.pb.h"
-#include <grpc++/grpc++.h>
-//
-//
-using services::CameraService;
-using services::CameraDataRequest;
-using services::CameraDataResponse;
-
 
 class CameraProcessor {
 
@@ -46,21 +38,3 @@ public:
 };
 
 string currentTime();
-
-
-
-class connectionManager {
-
-public:
-
-	connectionManager(const string& server_address);
-
-	void sendToServer(FrameWrap frameWrap);
-
-	int countTryToConnect;
-
-private:
-
-	unique_ptr<services::CameraService::Stub> stub;
-};
-	
