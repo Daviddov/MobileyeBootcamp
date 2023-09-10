@@ -7,7 +7,6 @@ ListeningManager::ListeningManager(Queue<FrameWrap>& queue) :dataFromCamera(queu
 grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
 
 	FrameWrap frameWrap;
-
 	frameWrap.frameNumber = request->framenumber();
 	frameWrap.timestamp = request->timestamp();
 
@@ -15,7 +14,6 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 	vector<uint8_t> imageData(imageDataString.begin(), imageDataString.end());
 	frameWrap.image = imdecode(imageData, IMREAD_COLOR);
 
-	//does need to using in temp??
 	dataFromCamera.push(frameWrap);
 
 	response->set_acknowledgment("successfully.");

@@ -41,7 +41,6 @@ void RectHandler::toDrawRect() {
 	}
 }
 
-
 void RectHandler::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
 
 	float sumB = 0, sumG = 0, sumR = 0;
