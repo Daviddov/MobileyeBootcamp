@@ -1,5 +1,5 @@
 #pragma once
-# include "Camera.h"
+# include "CameraProcessor.h"
 
 enum  {
 	ZERO,
@@ -13,7 +13,6 @@ enum  {
 };
 
 class Yolo5 {
-
 private:
 	 float INPUT_SIZE ;
 	 float SCORE_THRESHOLD ;
@@ -23,9 +22,8 @@ private:
 	 int NUM_OF_DETECT;
 	 int NUM_OF_DATA ;
 
-
-
-	dnn::Net net;
+	
+	 cv::dnn::Net net;
 
 	vector<Detection> output;
 
@@ -37,7 +35,7 @@ private:
 
 	void loadClassList();
 
-	Mat formatInputImage();
+	cv::Mat formatInputImage();
 public:
 
 	Yolo5();

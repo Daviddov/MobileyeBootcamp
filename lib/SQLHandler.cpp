@@ -1,5 +1,5 @@
 #include "SQLHandler.h"
-
+using namespace cv;
 
 //c'tor
 SQLHandler::SQLHandler() : db(nullptr) {
@@ -53,6 +53,7 @@ bool SQLHandler::createTableIfNotExists() {
 
 bool SQLHandler::insertData(Rect rect, FrameWrap& frameWarp, const string& objectType, float R, float G, float B) {
 	char insertDataQuery[256];
+	//cout << "frameWarp.timestamp in insert func" << frameWarp.timestamp << endl;
 	snprintf(insertDataQuery, sizeof(insertDataQuery),
 		"INSERT INTO MyTable (timestamp,\"frame number\","
 		" \"Top left X\",\"Top left Y\","
@@ -122,6 +123,7 @@ GetFromDataBase* SQLHandler::getRow(int rowID, GetFromDataBase& getDb) {
 
 		return nullptr;
 	}
+	return nullptr;
 }
 
 bool SQLHandler::cleanDataBase(){
@@ -173,7 +175,7 @@ bool SQLHandler::checkRectExistsInLastFrame(Rect rect) {
 		//cout << "Checking rectangle: (" << rectInfo.leftX << "," << rectInfo.topY << "," << rectInfo.width << "," << rectInfo.height << ")" << endl;
 		if (middleX >= rectInfo.leftX && middleX <= rectInfo.leftX + rectInfo.width &&
 			middleY >= rectInfo.topY && middleY <= rectInfo.topY + rectInfo.height) {
-			//cout << "Middle point is inside a rectangle" << endl;
+			cout << "new rectangle" << endl;
 			return true;
 		}
 	}

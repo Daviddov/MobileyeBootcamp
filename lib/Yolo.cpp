@@ -2,6 +2,7 @@
 
 
 using namespace std::chrono;
+using namespace cv;
 
 Yolo5::Yolo5() {
     loadNet();
@@ -49,9 +50,9 @@ void Yolo5::detect() {
     net.setInput(blob);
     vector<Mat> outputs;
     
-   // cout << endl <<" start detect" << currentTime() << endl;
+  
     net.forward(outputs, net.getUnconnectedOutLayersNames());
-   // cout << endl << " end detect" << currentTime() << endl;
+   
 
     float xFactor = inputImage.cols / INPUT_SIZE;
     float yFactor = inputImage.rows / INPUT_SIZE;
@@ -118,5 +119,6 @@ vector<string>& Yolo5::getClassList() {
 void Yolo5::setFrame(FrameWrap& currFrame) {
     frameWarp = currFrame;
 }
+
 
 

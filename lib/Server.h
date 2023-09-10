@@ -11,7 +11,7 @@ private:
 
 	FrameWrap currFrame;
 
-	queue<FrameWrap>& dataFromCamera;
+	Queue<FrameWrap>& dataFromCamera;
 
 	SQLHandler sqlHandler;
 
@@ -19,11 +19,9 @@ private:
 
 public:
 
-	ServerProcessor(queue<FrameWrap>& dataFromCamera);
+	ServerProcessor(Queue<FrameWrap>& dataFromCamera);
 
 	void detect_with_YOLO5();
 
 	void run();
-
-  static void  serverPart(ServerProcessor& server);
 };
