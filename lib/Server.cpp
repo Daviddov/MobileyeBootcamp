@@ -12,11 +12,7 @@ void ServerProcessor::detect_with_YOLO5() {
 	yolo.setFrame(currFrame);
 
 	yolo.detect();
-
-	RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
-
-	rect.toDrawRect();
-
+	
 }
 
 void ServerProcessor::run() {
@@ -32,9 +28,12 @@ void ServerProcessor::run() {
 
 		detect_with_YOLO5();
 
-		Size size(600, 400);
-		resize(currFrame.image, currFrame.image, size, CV_8UC3),
-			cv::imshow("output", currFrame.image);
+			RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
+			rect.drawAllDetectsBoxs();
+
+			Size size(800, 600);
+			resize(currFrame.image, currFrame.image, size, CV_8UC3),
+				cv::imshow("output", currFrame.image);
 
 		if (waitKeyEx(1) == 27){
 		
