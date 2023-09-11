@@ -31,16 +31,6 @@ struct Detection
     cv::Rect box;
 };
 
-//struct FrameWrap
-//{
-//    cv::Mat image;
-//    string timestamp;
-//    int frameNumber;
-//
-//};
-
-
-
 struct GetFromDataBase {
     int id;
     string time;

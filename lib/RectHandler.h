@@ -16,14 +16,15 @@ private:
 
 	SQLHandler& sqlHandler;
 
+	void writeRectOnDB(cv::Rect& rect, string objectType);
+	void drawDetectBox(cv::Rect& box, int& classId);
 public:
-	void writeRectOnDB(cv::Rect rect, string objectType);
 
 	RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler& sqlHandler);
-	
-	void toDrawRect();
 
-	 void calcAvgPerChannel(const cv::Mat& img, float* B, float* G, float* R);
+	void drawAllDetectsBoxs();
+
+	void calcAvgPerChannel(const cv::Mat& img, float* B, float* G, float* R);
 
 
 };
