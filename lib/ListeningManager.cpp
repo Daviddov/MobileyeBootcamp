@@ -27,7 +27,6 @@ void startListen(Queue<FrameWrap>& dataFromCamera) {
 	ConfigurationManager configManager;
 	string server_address = configManager.getFieldValue<string>("backendIP");
 
-	//string server_address("0.0.0.0:50051");
 	ListeningManager service(dataFromCamera);
 
 	grpc::ServerBuilder builder;

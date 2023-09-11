@@ -9,9 +9,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install package dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
- protobuf-compiler \
-        libopencv-dev \
-        apt install g++ \
         build-essential \
         software-properties-common \
         autoconf \
@@ -25,8 +22,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         vim \
         gdb \
         valgrind \
-        cmake
-RUN apt-get clean
+        cmake \
+        libgtk2.0-dev \
+        libavcodec-dev \
+        libavformat-dev \
+        libswscale-dev \
+        python3-dev \
+        python3-numpy \
+        libtbb2 \
+        libtbb-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libtiff-dev \
+        libdc1394-22-dev \
+    && apt-get clean
 
 # gRPC
 # https://github.com/grpc/grpc/tree/master/src/cpp
@@ -43,3 +52,12 @@ RUN cd /tmp && \
         ../.. && \
     make -j${NUM_JOBS} && \
     make install
+
+
+# Clone, build, and install OpenCV
+RUN git clone https://github.com/opencv/opencv.git && \
+    cd /opencv && mkdir build && cd build && \
+    cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local .. && \
+    make -j"$(nproc)" && \
+    make install && \
+    rm -rf /opencv
