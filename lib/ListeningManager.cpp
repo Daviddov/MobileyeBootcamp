@@ -1,4 +1,5 @@
 #include "ListeningManager.h"
+#include "ConfigurationManager.h"
 
 using namespace cv;
 
@@ -24,9 +25,13 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 
 
 void ListeningManager::startListen() {
+	ConfigurationManager configManager;
+	string backendIP = configManager.getFieldValue<string>("backendIP");
+	string backendPort = configManager.getFieldValue<string>("backendPort");
+	string server_address = backendIP + ":" + backendPort;
+	
 
-	string server_address("0.0.0.0:50051");
-
+	
 	grpc::ServerBuilder builder;
 	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
 	builder.RegisterService(this);

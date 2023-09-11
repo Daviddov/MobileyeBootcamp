@@ -5,8 +5,8 @@ ConfigurationManager::ConfigurationManager() {
     config["cameraThreshold"] = 0.9;
     config["backendQueueSize"] = 5;
     config["cameraIP"] = "127.0.0.1";
-    config["cameraPort"] = 8080;
-    config["backendIP"] = "127.0.0.1";
+    config["cameraPort"] = "50051";
+    config["backendIP"] = "0.0.0.0";
     config["backendPort"] = "50051";
     config["numFrames"] = 30;
 }

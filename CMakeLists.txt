@@ -31,20 +31,18 @@ else()
 endif()
 
 
-
-# Add example projects
-add_subdirectory(protos)
-
 # Define the directory for copying assets
 set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 
 # Add subdirectories for libraries
 add_subdirectory(lib)
-add_subdirectory(lib_Test)
+add_subdirectory(protos)
 add_subdirectory(lib_logger)
 add_subdirectory(nlohmann)
 add_subdirectory(sqlite3)
+#add_subdirectory(lib_Test)
+
 
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
@@ -61,12 +59,12 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     target_link_libraries(${TARGET_NAME}
         PRIVATE
         lib
+        protos_lib
         ${OpenCV_LIBS}
         sqlite3
         ${_REFLECTION} 
         ${_GRPC_GRPCPP} 
         ${_PROTOBUF_LIBPROTOBUF} 
-        protos_lib
     )
 
     target_include_directories(${TARGET_NAME}
@@ -77,6 +75,8 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} $<TARGET_FILE_DIR:${TARGET_NAME}>/assets
     )
+
+
 endfunction()
 
 # Build ClientMain executable

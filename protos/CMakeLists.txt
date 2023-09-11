@@ -35,6 +35,8 @@ add_custom_command(
 # Include directories
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR} 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+
 )
 
 add_library(${PROJECT_NAME}  STATIC "${proto_srcs}" "${proto_hdrs}" "${grpc_srcs}" "${grpc_hdrs}")
