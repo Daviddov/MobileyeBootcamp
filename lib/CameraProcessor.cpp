@@ -29,7 +29,7 @@ bool CameraProcessor::calcAbsDiff() {
 
 void CameraProcessor::run() {
 
-	connectionManager connect("localhost:50051");
+	connectionManager connect("192.168.8.101:50051");
 
 	while (active) {
 
