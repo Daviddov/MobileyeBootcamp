@@ -5,9 +5,8 @@
 #include "ConfigurationManager.h"
 
 
-
-
 using namespace cv;
+
 
 
 TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
@@ -18,10 +17,12 @@ TEST(CalcAbsDiffTest, TestCalcAbsDiff) {
 
     Mat testImage1(3, 3, CV_8UC3, Scalar(100, 150, 200));
     Mat testImage2(3, 3, CV_8UC3, Scalar(100, 150, 200));
+
    
     string path = "../../assets/parking.mp4";
     CameraProcessor camera(path, numFrames, frameDiff);
    
+
     camera.setFrame(testImage1);
     camera.setPrev(testImage2);
 

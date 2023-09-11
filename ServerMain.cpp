@@ -11,10 +11,12 @@ int main() {
 	Logger::Info("the server process is started");
 
 	Queue<FrameWrap> dataFromCamera;
+	condition_variable conditionVar;
 
-	thread listenThread(startListen,ref(dataFromCamera));
+	ListeningManager service(dataFromCamera, conditionVar);
+	thread listenThread(&ListeningManager::startListen,&service);
 
-	ServerProcessor server(dataFromCamera);
+	ServerProcessor server(dataFromCamera, conditionVar);
 	thread runThread(&ServerProcessor::run, &server);
 
 	listenThread.join();
