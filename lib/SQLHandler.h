@@ -31,7 +31,7 @@ public:
 
 	sqlite3* getDB();
 
-    bool checkRectExistsInLastFrame(cv::Rect rect);
+    bool isObjectExistsInLastRecordsQuery(cv::Rect &rect);
 
 private:
 

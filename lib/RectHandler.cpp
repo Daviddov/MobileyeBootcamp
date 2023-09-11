@@ -1,44 +1,52 @@
 #include "RectHandler.h"
+
 using namespace cv;
+
 //c'tor
 RectHandler::RectHandler(FrameWrap& frameW, vector<Detection>& outputP, vector<string>& class_listP, SQLHandler &sqlHandler) :frameWarp(frameW), output(outputP), class_list(class_listP), sqlHandler(sqlHandler)
 {
 	colors = { Scalar(255, 255, 0),Scalar(0, 255, 0),Scalar(0, 255, 255),Scalar(255, 0, 0) };
 }
-void RectHandler::toDrawRect() {
+
+void RectHandler::drawAllDetectsBoxs() {
 	// Loop through the detected objects in the 'output' container
 	for (int i = 0; i < output.size(); ++i)
 	{
 		// Extract the bounding box and class ID for the current object
 		auto box = output[i].box;
 		auto classId = output[i].class_id;
-
-		// Calculate a color for the object based on its class
-		const auto color = colors[classId % colors.size()];
-
-		// Draw a bordered rectangle around the object
-		rectangle(frameWarp.image, box, color, 3);
-
-		// Draw a filled rectangle above the object for labeling
-		rectangle(frameWarp.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
-
-		// Add the class name as text above the object
-		putText(frameWarp.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
-
-		// Log information about the frame and the detected object
-		Logger::Info("Origin frame width is %d"  " height is %d ", frameWarp.image.cols, frameWarp.image.rows);
-		Logger::Info("Top left x is %d Top left y is %d ", box.x, box.y);
-		Logger::Info("Box width is %d Box height is %d ", box.width, box.height);
-
-		//Modify x and y for don't overflow from original frame.
-		box.x < 0 ? box.x = 0 : box.x;
-		box.y < 0 ? box.y = 0 : box.y;
-		box.x > 20 ? box.x -= 20 : box.x;
-		box.y > 20 ? box.y -= 20 : box.y;
-
+		// Draw the object
+		drawDetectBox(box, classId);
 		// Write the bounding box and class name to a database
 		writeRectOnDB(box, class_list[classId]);
+
 	}
+}
+
+void  RectHandler::drawDetectBox(Rect &box, int &classId) {
+
+	// Calculate a color for the object based on its class
+	const auto color = colors[classId % colors.size()];
+
+	// Draw a bordered rectangle around the object
+	rectangle(frameWarp.image, box, color, 3);
+
+	// Draw a filled rectangle above the object for labeling
+	rectangle(frameWarp.image, Point(box.x, box.y - 5), Point(box.x + box.width, box.y), color, FILLED);
+	if (!sqlHandler.isObjectExistsInLastRecordsQuery(box)) {
+	
+		rectangle(frameWarp.image, box, 55, 3);
+	}
+
+	// Add the class name as text above the object
+	putText(frameWarp.image, class_list[classId].c_str(), Point(box.x, box.y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0));
+	
+		box.x = max(0, box.x);
+		box.y = max(0, box.y);
+		if (box.x + box.width > frameWarp.image.cols) 
+			box.width -= (box.x + box.width - frameWarp.image.cols);
+		if (box.y + box.height > frameWarp.image.rows) 
+			box.height -= (box.y + box.height - frameWarp.image.rows);		
 }
 
 void RectHandler::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R) {
@@ -58,7 +66,7 @@ void RectHandler::calcAvgPerChannel(const Mat& img, float* B, float* G, float* R
 	*R = sumR / size;
 }
 
-void RectHandler::writeRectOnDB(Rect rect, string objectType) {
+void RectHandler::writeRectOnDB(Rect& rect, string objectType) {
 
 	Mat imgFromRect = frameWarp.image(rect);
 
@@ -72,7 +80,8 @@ void RectHandler::writeRectOnDB(Rect rect, string objectType) {
 
 
 	if (sqlHandler.createTableIfNotExists()) {
-			 sqlHandler.checkRectExistsInLastFrame(rect);
+			
+
 		if (sqlHandler.insertData(rect, frameWarp, objectType, R, G, B)) {
 			//sqlHandler.selectMaxID();
 			Logger::Info("write Rect On DB.");

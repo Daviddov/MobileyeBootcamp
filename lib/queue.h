@@ -16,8 +16,8 @@ private:
 	int frontIdx, rearIdx;
 	int to_read;
 	T arr[QUEUE_SIZE];
-	std::mutex m;
-	std::condition_variable conditionVar;
+	//std::mutex m;
+	//std::condition_variable conditionVar;
 
 public:
 	Queue();
@@ -32,7 +32,9 @@ public:
 
 	int size();
 
-    void waitUntilNotEmpty();
+	std::mutex m;
+
+   // void waitUntilNotEmpty();
 };
 
 
