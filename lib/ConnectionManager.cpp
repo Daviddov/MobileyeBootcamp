@@ -24,7 +24,7 @@ void ConnectionManager::sendToServer(FrameWrap frameWrap) {
 		cout << "Server response: " << response.acknowledgment() << endl;
 	}
 	else {
-		cerr << "RPC failed: " << status.error_message() << endl;
+		cout << "RPC failed: " << status.error_message() << endl;
 		countTryToConnect++;
 		this_thread::sleep_for(chrono::milliseconds(2000));
 	}

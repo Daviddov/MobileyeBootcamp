@@ -42,7 +42,7 @@ mkdir -p build && cd build
 rm -rf *
 cmake ..
 make
-./Main
+./ClientMain
 #########
 
 sudo make install
