@@ -31,8 +31,8 @@ bool CameraProcessor::calcAbsDiff() {
 
 void CameraProcessor::run() {
 	ConfigurationManager configManager("config.json");
-	string cameraIP = configManager.getFieldValue<string>("cameraIP");
-	string cameraPort = configManager.getFieldValue<string>("cameraPort");
+	string cameraIP = configManager.getFieldValue<string>("backendIP");
+	string cameraPort = configManager.getFieldValue<string>("backendPort");
 	string camera_address = cameraIP + ":" + cameraPort;
 
 

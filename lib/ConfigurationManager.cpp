@@ -2,7 +2,8 @@
 
 ConfigurationManager::ConfigurationManager(const std::string& filename) {
     // Initialize default configuration values
-    if (!readConfigFromFile(filename)) {
+    //if (!readConfigFromFile(filename)) 
+    {
 
     defaultConfiguration();
     saveConfigToFile(filename);
@@ -11,9 +12,10 @@ ConfigurationManager::ConfigurationManager(const std::string& filename) {
 void ConfigurationManager::defaultConfiguration() {
     config["cameraThreshold"] = 0.9;
     config["backendQueueSize"] = 5;
-    config["cameraIP"] = "127.0.0.1";
+    config["cameraIP"] = "0.0.0.0";
     config["cameraPort"] = "50051";
-    config["backendIP"] = "0.0.0.0";
+    //config["backendIP"] = "192.168.8.101";
+    config["backendIP"] = "192.168.8.100";
     config["backendPort"] = "50051";
     config["numFrames"] = 30;
 }

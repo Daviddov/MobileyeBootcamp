@@ -1,36 +1,27 @@
 FROM ubuntu:20.04
 
-LABEL maintainer="David B"
-
 ARG GPRC_VERSION=1.34.0
 ARG NUM_JOBS=8
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install essential dependencies
+# Install package dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    git \
-    wget \
-    ca-certificates
-
-# Install gRPC dependencies
-RUN apt-get install -y \
-    autoconf \
-    automake \
-    libtool \
-    pkg-config
-
-# Install OpenCV dependencies
-RUN apt-get install -y \
-    libopencv-dev \
-    libgtk2.0-dev \
-    pkg-config \
-    libavcodec-dev \
-    libavformat-dev \
-    libswscale-dev
-
+        build-essential \
+        software-properties-common \
+        autoconf \
+        automake \
+        libtool \
+        pkg-config \
+        ca-certificates \
+        wget \
+        git \
+        curl \
+        vim \
+        gdb \
+        valgrind \
+        cmake \
+        libopencv-dev
 
 # gRPC
 # https://github.com/grpc/grpc/tree/master/src/cpp
@@ -48,6 +39,13 @@ RUN cd /tmp && \
     make -j${NUM_JOBS} && \
     make install
 
-# Clean up
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt install build-essential cmake libgtk2.0-dev pkg-config \
+    libavcodec-dev libavformat-dev libswscale-dev -y && \
+    git clone https://github.com/opencv/opencv.git && \
+    cd opencv && mkdir build && cd build && \
+    cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS=NO .. && \
+    cat /proc/cpuinfo | grep "processor" | wc -l | xargs make -j && \
+    make install && cd ../.. && \
+    rm -rf opencv
+
+RUN apt-get clean

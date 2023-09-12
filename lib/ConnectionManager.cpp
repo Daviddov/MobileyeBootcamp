@@ -3,6 +3,7 @@
 
 ConnectionManager::ConnectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
 	countTryToConnect = 0;
+	cout << "port:" << server_address << endl;
 }
 
 void ConnectionManager::sendToServer(FrameWrap frameWrap) {
@@ -19,7 +20,7 @@ void ConnectionManager::sendToServer(FrameWrap frameWrap) {
 	request.set_framenumber(frameWrap.frameNumber);
 
 	grpc::Status status = stub->SendCameraData(&context, request, &response);
-
+	
 	if (status.ok()) {
 		cout << "Server response: " << response.acknowledgment() << endl;
 	}

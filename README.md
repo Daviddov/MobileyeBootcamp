@@ -58,16 +58,19 @@ git -C opencv checkout 4.x
 export CXX=g++
 
 
-
 ###  docker
 docker build -f docker/grpc.Dockerfile --build-arg GRPC_VERSION=1.34.0 --build-arg NUM_JOBS=8 --tag grpc-cmake:1.34.0 .
-
 
 docker run -it --rm --network host -v $(pwd):/mnt grpc-cmake:1.34.0
 
 ### Build Examples
 
 ```bash
-$ cmake -B build
-$ cmake --build build --config Release --parallel
+cmake -B build && cmake -B build && cmake --build build --config Release --parallel
+cd  build
+./ClientMain
+
+
+
+
 
