@@ -10,8 +10,9 @@ class ConfigurationManager {
 private:
     json config;
 
+    void defaultConfiguration();
 public:
-    ConfigurationManager();
+    ConfigurationManager(const std::string& filename);
 
     bool saveConfigToFile(const std::string& filename);
     bool readConfigFromFile(const std::string& filename);

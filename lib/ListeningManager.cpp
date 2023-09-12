@@ -25,7 +25,7 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 
 
 void ListeningManager::startListen() {
-	ConfigurationManager configManager;
+	ConfigurationManager configManager("config.json");
 	string backendIP = configManager.getFieldValue<string>("backendIP");
 	string backendPort = configManager.getFieldValue<string>("backendPort");
 	string server_address = backendIP + ":" + backendPort;

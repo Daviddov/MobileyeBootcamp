@@ -71,4 +71,3 @@ docker run -it --rm --network host -v $(pwd):/mnt grpc-cmake:1.34.0
 $ cmake -B build
 $ cmake --build build --config Release --parallel
 
-cmake .. -DBUILD_LIB_TEST=OFF

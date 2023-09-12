@@ -5,7 +5,7 @@
 
 
 int main() {
-	ConfigurationManager configManager;
+	ConfigurationManager configManager("config.json");
 	
 	// Retrieve the "cameraThreshold" field as a double
 	double frameDiff = configManager.getFieldValue<double>("cameraThreshold");

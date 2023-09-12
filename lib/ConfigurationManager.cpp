@@ -1,7 +1,14 @@
 #include "ConfigurationManager.h" // Include your header file
 
-ConfigurationManager::ConfigurationManager() {
+ConfigurationManager::ConfigurationManager(const std::string& filename) {
     // Initialize default configuration values
+    if (!readConfigFromFile(filename)) {
+
+    defaultConfiguration();
+    saveConfigToFile(filename);
+    }
+}
+void ConfigurationManager::defaultConfiguration() {
     config["cameraThreshold"] = 0.9;
     config["backendQueueSize"] = 5;
     config["cameraIP"] = "127.0.0.1";
@@ -163,15 +170,3 @@ void ConfigurationManager::printConfig() {
 }
 
 
-
-void configRun() {
-	ConfigurationManager j;
-	j.saveConfigToFile("config.json");
-	j.readConfigFromFile("config.json");
-	j.printConfig();
-	j.editConfig();
-	j.printConfig();
-
-	//j.editSingleConfigField();
-	j.printConfig();
-}

@@ -1,31 +1,36 @@
 FROM ubuntu:20.04
 
-LABEL maintainer="Lei Mao <dukeleimao@gmail.com>"
+LABEL maintainer="David B"
 
 ARG GPRC_VERSION=1.34.0
 ARG NUM_JOBS=8
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install package dependencies
+# Install essential dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        build-essential \
-        software-properties-common \
-        autoconf \
-        automake \
-        libtool \
-        pkg-config \
-        ca-certificates \
-        wget \
-        git \
-        curl \
-        vim \
-        gdb \
-        valgrind \
-        cmake \
-        libopencv-dev  # Add libopencv-dev here
+    build-essential \
+    cmake \
+    git \
+    wget \
+    ca-certificates
 
-RUN apt-get clean
+# Install gRPC dependencies
+RUN apt-get install -y \
+    autoconf \
+    automake \
+    libtool \
+    pkg-config
+
+# Install OpenCV dependencies
+RUN apt-get install -y \
+    libopencv-dev \
+    libgtk2.0-dev \
+    pkg-config \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev
+
 
 # gRPC
 # https://github.com/grpc/grpc/tree/master/src/cpp
@@ -42,3 +47,7 @@ RUN cd /tmp && \
         ../.. && \
     make -j${NUM_JOBS} && \
     make install
+
+# Clean up
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
