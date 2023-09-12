@@ -6,7 +6,7 @@ ConnectionManager::ConnectionManager(const string& server_address) : stub(Camera
 	cout << "port:" << server_address << endl;
 }
 
-void ConnectionManager::sendToServer(FrameWrap frameWrap) {
+void ConnectionManager::sendToServer(FrameWrap& frameWrap) {
 
 	CameraDataRequest request;
 	CameraDataResponse response;

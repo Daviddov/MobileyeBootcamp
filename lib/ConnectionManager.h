@@ -13,7 +13,7 @@ public:
 
 	ConnectionManager(const string& server_address);
 
-	void sendToServer(FrameWrap frameWrap);
+	void sendToServer(FrameWrap &frameWrap);
 
 	int countTryToConnect;
 

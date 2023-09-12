@@ -14,8 +14,8 @@ void ConfigurationManager::defaultConfiguration() {
     config["backendQueueSize"] = 5;
     config["cameraIP"] = "0.0.0.0";
     config["cameraPort"] = "50051";
-    //config["backendIP"] = "192.168.8.101";
-    config["backendIP"] = "192.168.8.100";
+    config["backendIP"] = "127.0.0.1";
+    //config["backendIP"] = "192.168.8.100";
     config["backendPort"] = "50051";
     config["numFrames"] = 30;
 }
