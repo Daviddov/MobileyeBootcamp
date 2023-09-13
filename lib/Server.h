@@ -27,5 +27,5 @@ public:
 
 	void run();
 
-	void ServerProcessor::waitForData();
+	void waitForData();
 };

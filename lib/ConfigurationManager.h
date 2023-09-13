@@ -1,5 +1,5 @@
 #pragma once
-#include "../nlohmann/json.hpp"
+#include "../nlohmann_json/json.hpp"
 #include <fstream>
 #include <iostream>
 #include <string> // Add this for string data type
@@ -10,8 +10,10 @@ class ConfigurationManager {
 private:
     json config;
 
+    void defaultConfiguration();
 public:
     ConfigurationManager();
+    ConfigurationManager(const std::string& filename);
 
     bool saveConfigToFile(const std::string& filename);
     bool readConfigFromFile(const std::string& filename);

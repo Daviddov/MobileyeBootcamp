@@ -5,7 +5,6 @@ project(Main VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-
 set(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(Protobuf CONFIG REQUIRED)
 message(STATUS "Using protobuf ${Protobuf_VERSION}")
@@ -30,22 +29,18 @@ else()
   set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
 endif()
 
-
-
-# Add example projects
-add_subdirectory(protos)
-
 # Define the directory for copying assets
 set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
-
 # Add subdirectories for libraries
 add_subdirectory(lib)
-add_subdirectory(lib_Test)
+add_subdirectory(protos)
 add_subdirectory(lib_logger)
-add_subdirectory(nlohmann)
+add_subdirectory(nlohmann_json)
 add_subdirectory(sqlite3)
-
+if(WIN32)
+add_subdirectory(lib_Test)
+endif()
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
 
@@ -61,12 +56,12 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     target_link_libraries(${TARGET_NAME}
         PRIVATE
         lib
+        protos_lib
         ${OpenCV_LIBS}
         sqlite3
         ${_REFLECTION} 
         ${_GRPC_GRPCPP} 
         ${_PROTOBUF_LIBPROTOBUF} 
-        protos_lib
     )
 
     target_include_directories(${TARGET_NAME}
@@ -79,10 +74,12 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     )
 endfunction()
 
-# Build ClientMain executable
-add_common_executable(ClientMain ClientMain.cpp)
-# Build ServerMain executable
-add_common_executable(ServerMain ServerMain.cpp)
-
-
-
+# Conditionally build ServerMain or ClientMain based on the platform
+if(WIN32)
+    # If on Windows, build ServerMain
+    add_common_executable(ServerMain ServerMain.cpp)
+    add_common_executable(ClientMain ClientMain.cpp)
+else()
+    # If not on Windows, build ClientMain
+    add_common_executable(ClientMain ClientMain.cpp)
+endif()

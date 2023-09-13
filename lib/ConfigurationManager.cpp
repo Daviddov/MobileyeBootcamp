@@ -1,14 +1,28 @@
 #include "ConfigurationManager.h" // Include your header file
 
 ConfigurationManager::ConfigurationManager() {
+
+    defaultConfiguration();
+    saveConfigToFile("config.json");  
+}
+
+ConfigurationManager::ConfigurationManager(const std::string& filename) {
     // Initialize default configuration values
+    if (!readConfigFromFile(filename)) 
+    {
+    defaultConfiguration();
+    saveConfigToFile(filename);
+    }
+}
+void ConfigurationManager::defaultConfiguration() {
     config["cameraThreshold"] = 0.9;
     config["backendQueueSize"] = 5;
-    config["cameraIP"] = "127.0.0.1";
-    config["cameraPort"] = 8080;
+    config["cameraIP"] = "0.0.0.0";
+    config["cameraPort"] = "50051";
     config["backendIP"] = "127.0.0.1";
     config["backendPort"] = "50051";
     config["numFrames"] = 30;
+    config["videoPath"] = "assets/parking.mp4";
 }
 
 bool ConfigurationManager::saveConfigToFile(const std::string& filename) {
@@ -56,7 +70,8 @@ void ConfigurationManager::editConfig() {
         std::cout << "5. Backend IP" << std::endl;
         std::cout << "6. Backend Port" << std::endl;
         std::cout << "7. Number of Frames" << std::endl;
-        std::cout << "8. Exit" << std::endl;
+        std::cout << "8. video Path" << std::endl;
+        std::cout << "9. Exit" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> choice;
 
@@ -111,14 +126,21 @@ void ConfigurationManager::editConfig() {
             std::cin >> numFrames;
             editSingleConfigField("numFrames", numFrames);
             break;
+        } 
+        case 8: {
+            std::string videoPath;
+            std::cout << "Enter new video Path: ";
+            std::cin >> videoPath;
+            editSingleConfigField("videoPath", videoPath);
+            break;
         }
-        case 8:
+        case 9:
             // Exit the editing menu
             break;
         default:
             std::cout << "Invalid choice. Please enter a valid option." << std::endl;
         }
-    } while (choice != 8);
+    } while (choice != 9);
 }
 
 void ConfigurationManager::editSingleConfigField(const std::string& fieldName, double newValue) {
@@ -163,15 +185,3 @@ void ConfigurationManager::printConfig() {
 }
 
 
-
-void configRun() {
-	ConfigurationManager j;
-	j.saveConfigToFile("config.json");
-	j.readConfigFromFile("config.json");
-	j.printConfig();
-	j.editConfig();
-	j.printConfig();
-
-	//j.editSingleConfigField();
-	j.printConfig();
-}

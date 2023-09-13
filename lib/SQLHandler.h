@@ -1,6 +1,15 @@
 #pragma once
 #include "Header.h"
 
+struct GetFromDataBase {
+	int id;
+	string time;
+	cv::Rect rect;
+	FrameWrap fw;
+	string typeObject;
+	float r, g, b;
+};
+
 class SQLHandler {
 
 public:

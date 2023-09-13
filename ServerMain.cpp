@@ -1,6 +1,5 @@
 #include "Server.h"
-#include "ListeningManager.h"
-
+#include "ServerListeningManager.h"
 
 int main() {
 	//log init
@@ -13,8 +12,8 @@ int main() {
 	Queue<FrameWrap> dataFromCamera;
 	condition_variable conditionVar;
 
-	ListeningManager service(dataFromCamera, conditionVar);
-	thread listenThread(&ListeningManager::startListen,&service);
+	ServerListeningManager service(dataFromCamera, conditionVar);
+	thread listenThread(&ServerListeningManager::startListen,&service);
 
 	ServerProcessor server(dataFromCamera, conditionVar);
 	thread runThread(&ServerProcessor::run, &server);
