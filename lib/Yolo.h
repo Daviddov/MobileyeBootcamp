@@ -1,5 +1,6 @@
 #pragma once
 # include "CameraProcessor.h"
+#include "Detection.h"
 
 enum  {
 	ZERO,

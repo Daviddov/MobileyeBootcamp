@@ -1,6 +1,10 @@
 #pragma once 
+#include "FrameWarp.h"
+#include "../lib_logger/Logger.h"
 
-#include "Header.h"
+using namespace std;
+
+//#include "Header.h"
 
 class CameraProcessor {
 

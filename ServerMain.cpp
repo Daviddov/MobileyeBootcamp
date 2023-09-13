@@ -4,12 +4,12 @@
 int main() {
 	//log init
 	LogPriority priority = InfoPriority;
-	mutex log_mutex;
+	mutex logMutex;
 	Logger::EnableFileOutput();
 
 	Logger::Info("the server process is started");
 
-	Queue<FrameWrap> dataFromCamera;
+	QueueSafe<FrameWrap> dataFromCamera;
 	condition_variable conditionVar;
 
 	ServerListeningManager service(dataFromCamera, conditionVar);

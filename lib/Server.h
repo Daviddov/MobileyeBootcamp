@@ -1,7 +1,8 @@
 #pragma once
 #include "Yolo.h"
 #include "RectHandler.h"
-
+#include <chrono>
+#include "QueueSafe.h"
 
 class ServerProcessor {
 
@@ -11,7 +12,7 @@ private:
 
 	FrameWrap currFrame;
 
-	Queue<FrameWrap>& dataFromCamera;
+	QueueSafe<FrameWrap>& dataFromCamera;
 
 	condition_variable& conditionVar;
 
@@ -21,7 +22,7 @@ private:
 
 public:
 
-	ServerProcessor(Queue<FrameWrap>& dataFromCamera, condition_variable& condition);
+	ServerProcessor(QueueSafe<FrameWrap>& dataFromCamera, condition_variable& condition);
 
 	void detect_with_YOLO5();
 

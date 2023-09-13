@@ -1,7 +1,8 @@
 #pragma once
-#include "Header.h"
+//#include "Header.h"
 #include <mutex>
 #include <condition_variable>
+#include "FrameWarp.h"
 
 #ifndef _SAFE_QUEUE_H_
 #define _SAFE_QUEUE_H_
@@ -10,7 +11,7 @@
 #define QUEUE_SIZE 5
 
 template <typename T>
-class Queue
+class QueueSafe
 {
 private:
 	int frontIdx, rearIdx;
@@ -20,7 +21,7 @@ private:
 	//std::condition_variable conditionVar;
 
 public:
-	Queue();
+	QueueSafe();
 
 	void push(T& x);
 

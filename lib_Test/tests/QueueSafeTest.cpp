@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include "Queue.h"  // Include the header file for your Queue class
+#include "QueueSafe.h"  // Include the header file for your Queue class
 #include "CameraProcessor.h" 
 
 using namespace cv;
 
 class QueueTest : public ::testing::Test {
 protected:
-    Queue<FrameWrap> queue;
+    QueueSafe<FrameWrap> queue;
     FrameWrap frameWarp1;
     FrameWrap frameWarp2;
 

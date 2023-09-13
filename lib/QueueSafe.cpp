@@ -1,10 +1,11 @@
-#include "Queue.h"
+#include "QueueSafe.h"
+using namespace std;
 
 template <typename T>
-Queue<T>::Queue() : frontIdx(0), rearIdx(0), to_read(0) {}
+QueueSafe<T>::QueueSafe() : frontIdx(0), rearIdx(0), to_read(0) {}
 
 template <typename T>
-void Queue<T>::push(T& x)
+void QueueSafe<T>::push(T& x)
 {
 	m.lock();
 	
@@ -21,7 +22,7 @@ void Queue<T>::push(T& x)
 }
 
 template <typename T>
-T Queue<T>::pop()
+T QueueSafe<T>::pop()
 {
     m.lock();
     if (to_read < 1) // queue is empty
@@ -38,7 +39,7 @@ T Queue<T>::pop()
 }
 
 template <typename T>
-T Queue<T>::front()
+T QueueSafe<T>::front()
 {
     m.lock();
     if (to_read < 1) // queue is empty
@@ -54,18 +55,18 @@ T Queue<T>::front()
 }
 
 template <typename T>
-bool Queue<T>::empty()
+bool QueueSafe<T>::empty()
 {
 	return (to_read < 1);
 }
 
 template <typename T>
-int Queue<T>::size()
+int QueueSafe<T>::size()
 {
 	return to_read;
 }
 
 
 // Explicitly instantiate for the types you'll use. 
-template class Queue<FrameWrap>;
+template class QueueSafe<FrameWrap>;
 

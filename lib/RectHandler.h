@@ -1,5 +1,6 @@
 #pragma once
 #include "SQLHandler.h"
+#include "Detection.h"
 
 
 class RectHandler {

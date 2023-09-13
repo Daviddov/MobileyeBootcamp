@@ -1,5 +1,5 @@
 
-#include "Header.h"
+//#include "Header.h"
 #include "CameraProcessor.h"
 #include "ConfigurationManager.h"
 
@@ -14,7 +14,7 @@ int main() {
 	cout << videoPath << endl;
 	//log init
 	LogPriority priority = InfoPriority;
-	mutex log_mutex;
+	mutex logMutex;
 	Logger::EnableFileOutput();
 
 	Logger::Info("the camera process is started");

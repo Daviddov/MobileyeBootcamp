@@ -1,9 +1,9 @@
 #include "ServerListeningManager.h"
-#include "ConfigurationManager.h"
+
 
 using namespace cv;
 
-ServerListeningManager::ServerListeningManager(Queue<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition) {}
+ServerListeningManager::ServerListeningManager(QueueSafe<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition) {}
 
 grpc::Status ServerListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
 
