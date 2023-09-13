@@ -7,11 +7,11 @@ using services::CameraDataRequest;
 using services::CameraDataResponse;
 
 
-class ConnectionManager {
+class CameraConnectionManager {
 
 public:
 
-	ConnectionManager(const string& server_address);
+	CameraConnectionManager(const string& server_address);
 
 	void sendToServer(FrameWrap &frameWrap);
 

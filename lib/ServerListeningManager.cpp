@@ -1,11 +1,11 @@
-#include "ListeningManager.h"
+#include "ServerListeningManager.h"
 #include "ConfigurationManager.h"
 
 using namespace cv;
 
-ListeningManager::ListeningManager(Queue<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition) {}
+ServerListeningManager::ServerListeningManager(Queue<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition) {}
 
-grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
+grpc::Status ServerListeningManager::SendCameraData(grpc::ServerContext* context, const services::CameraDataRequest* request, services::CameraDataResponse* response) {
 
 	FrameWrap frameWrap;
 	frameWrap.frameNumber = request->framenumber();
@@ -24,7 +24,7 @@ grpc::Status ListeningManager::SendCameraData(grpc::ServerContext* context, cons
 
 
 
-void ListeningManager::startListen() {
+void ServerListeningManager::startListen() {
 	ConfigurationManager configManager("config.json");
 	string serverIP = configManager.getFieldValue<string>("cameraIP");
 	string serverPort = configManager.getFieldValue<string>("cameraPort");

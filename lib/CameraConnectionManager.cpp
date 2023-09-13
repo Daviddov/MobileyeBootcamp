@@ -1,12 +1,12 @@
 
-#include "ConnectionManager.h"
+#include "CameraConnectionManager.h"
 
-ConnectionManager::ConnectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
+CameraConnectionManager::CameraConnectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
 	countTryToConnect = 0;
 	cout << "port:" << server_address << endl;
 }
 
-void ConnectionManager::sendToServer(FrameWrap& frameWrap) {
+void CameraConnectionManager::sendToServer(FrameWrap& frameWrap) {
 
 	CameraDataRequest request;
 	CameraDataResponse response;
