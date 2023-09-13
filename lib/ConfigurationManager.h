@@ -12,6 +12,7 @@ private:
 
     void defaultConfiguration();
 public:
+    ConfigurationManager();
     ConfigurationManager(const std::string& filename);
 
     bool saveConfigToFile(const std::string& filename);

@@ -18,27 +18,14 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
-
+#include "Detection.h"
 
 
 //using namespace cv;
 using namespace std;
 
-struct Detection
-{
-    int class_id;
-    float confidence;
-    cv::Rect box;
-};
 
-struct GetFromDataBase {
-    int id;
-    string time;
-    cv::Rect rect;
-    FrameWrap fw;
-    string typeObject;
-    float r, g, b;
-};
+
 
 
 

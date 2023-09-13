@@ -1,5 +1,11 @@
 #include "ConfigurationManager.h" // Include your header file
 
+ConfigurationManager::ConfigurationManager() {
+
+    defaultConfiguration();
+    saveConfigToFile("config.json");  
+}
+
 ConfigurationManager::ConfigurationManager(const std::string& filename) {
     // Initialize default configuration values
     //if (!readConfigFromFile(filename)) 

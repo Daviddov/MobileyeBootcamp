@@ -1,6 +1,6 @@
 #include "CameraProcessor.h" 
 #include "ConfigurationManager.h"
-#include "connectionManager.h"
+#include "CameraConnectionManager.h"
 
 using namespace cv;
 
@@ -36,7 +36,7 @@ void CameraProcessor::run() {
 	string camera_address = cameraIP + ":" + cameraPort;
 
 
-	ConnectionManager connect(camera_address);
+	CameraConnectionManager connect(camera_address);
 
 	while (active) {
 
