@@ -8,9 +8,8 @@ ConfigurationManager::ConfigurationManager() {
 
 ConfigurationManager::ConfigurationManager(const std::string& filename) {
     // Initialize default configuration values
-    //if (!readConfigFromFile(filename)) 
+    if (!readConfigFromFile(filename)) 
     {
-
     defaultConfiguration();
     saveConfigToFile(filename);
     }
