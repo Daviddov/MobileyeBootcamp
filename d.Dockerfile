@@ -1,4 +1,4 @@
-# Use an official Ubuntu as a parent image
+ Use an official Ubuntu as a parent image
 FROM ubuntu:latest
 
 # Set the working directory inside the container
