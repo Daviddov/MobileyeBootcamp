@@ -20,7 +20,6 @@ void ConfigurationManager::defaultConfiguration() {
     config["cameraIP"] = "0.0.0.0";
     config["cameraPort"] = "50051";
     config["backendIP"] = "127.0.0.1";
-    //config["backendIP"] = "192.168.8.100";
     config["backendPort"] = "50051";
     config["numFrames"] = 30;
 }
