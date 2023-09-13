@@ -10,9 +10,8 @@ int main() {
 	// Retrieve the "cameraThreshold" field as a double
 	double frameDiff = configManager.getFieldValue<double>("cameraThreshold");
 	int numFrames = configManager.getFieldValue<int>("numFrames");
-
-	string path = "assets/parking.mp4";
-
+	string videoPath = configManager.getFieldValue<string>("videoPath");
+	cout << videoPath << endl;
 	//log init
 	LogPriority priority = InfoPriority;
 	mutex log_mutex;
@@ -20,7 +19,7 @@ int main() {
 
 	Logger::Info("the camera process is started");
 
-	CameraProcessor camera(path, numFrames, frameDiff);
+	CameraProcessor camera(videoPath, numFrames, frameDiff);
 	if (!camera.capture.isOpened()) {
 		Logger::Critical("Error opening video file");
 		return 1;

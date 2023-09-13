@@ -1,7 +1,6 @@
 #include "Server.h"
 #include "ServerListeningManager.h"
 
-
 int main() {
 	//log init
 	LogPriority priority = InfoPriority;
