@@ -47,7 +47,7 @@ TEST_F(ConfigurationManagerTest, EditConfig) {
     ConfigurationManager manager(filename);
 
     // Set up input stream for simulating user input
-    std::istringstream input_stream("2\n100\n8\n");
+    std::istringstream input_stream("2\n100\n9\n");
     std::cin.rdbuf(input_stream.rdbuf()); // Redirect std::cin to input_stream
 
     // Edit the configuration (change Backend Queue Size)
