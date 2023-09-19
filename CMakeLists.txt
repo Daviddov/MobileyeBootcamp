@@ -35,9 +35,8 @@ set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 # Add subdirectories for libraries
 add_subdirectory(lib)
 add_subdirectory(protos)
-add_subdirectory(lib_logger)
-add_subdirectory(nlohmann_json)
-add_subdirectory(sqlite3)
+add_subdirectory(thirdParty)
+
 if(WIN32)
 add_subdirectory(lib_Test)
 endif()

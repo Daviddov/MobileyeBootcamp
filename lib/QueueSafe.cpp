@@ -28,7 +28,8 @@ T QueueSafe<T>::pop()
     if (to_read < 1) // queue is empty
     {
         m.unlock();
-        cout << "queue is empty" << endl;
+        //cout << "queue is empty" << endl;
+        Logger::Info("queue is empty");
         return T();
     }
     T poppedValue = arr[frontIdx];
@@ -45,7 +46,8 @@ T QueueSafe<T>::front()
     if (to_read < 1) // queue is empty
     {
         m.unlock();
-        cout << "queue is empty" << endl;
+        //cout << "queue is empty" << endl;
+        Logger::Info("queue is empty");
         return T();
     }
     T frontValue = arr[this->frontIdx];

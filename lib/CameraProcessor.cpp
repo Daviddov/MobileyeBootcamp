@@ -41,14 +41,14 @@ void CameraProcessor::run() {
 	while (active) {
 
 		if (connect.countTryToConnect > 10) {
-			Logger::Debug("camera stoped, dont have a connection");
-			cout << "camera stoped, dont have a connection" << endl;
+			Logger::Info("camera stoped, dont have a connection");
+			//cout << "camera stoped, dont have a connection" << endl;
 			break;
 		}
 		capture.read(frameWrap.image);
 
 		if (frameWrap.image.empty()) {
-			cout << "End of stream\n";
+			//cout << "End of stream\n";
 			Logger::Info("End of stream");
 			break;
 		}

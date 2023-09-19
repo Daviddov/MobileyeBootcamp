@@ -28,8 +28,8 @@ void Yolo5::loadClassList() {
 
 void Yolo5::loadNet() {
     net = dnn::readNet("./assets/yolov5n.onnx");
-
-    cout << "Running on CPU\n";
+    Logger::Info("Running on CPU");
+    //cout << "Running on CPU\n";
     net.setPreferableBackend(dnn::DNN_BACKEND_OPENCV);
     net.setPreferableTarget(dnn::DNN_TARGET_CPU);
 }

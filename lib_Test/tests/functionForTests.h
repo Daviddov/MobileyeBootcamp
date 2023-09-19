@@ -4,7 +4,7 @@
 #include "../../lib/RectHandler.h"
 #include "opencv2/opencv.hpp"
 #include "gtest/gtest.h"
-#include "../../sqlite3/sqlite3.h"
+#include "../../thirdParty/sqlite3/sqlite3.h"
 
 struct SentToDataBase {
 

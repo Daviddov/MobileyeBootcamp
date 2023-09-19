@@ -1,8 +1,9 @@
 #pragma once
-//#include "Header.h"
+
 #include <mutex>
 #include <condition_variable>
 #include "FrameWarp.h"
+#include "../thirdParty/lib_logger/Logger.h"
 
 #ifndef _SAFE_QUEUE_H_
 #define _SAFE_QUEUE_H_

@@ -75,7 +75,6 @@ int SQLHandler::callbackFunction(void* data, int argc, char** argv, char** azCol
 	for (int i = 0; i < argc; ++i) {
 		cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
 	}
-	cout << endl;
 	return 0;
 }
 
@@ -168,7 +167,8 @@ bool SQLHandler::isObjectExistsInLastRecordsQuery(Rect& rect) {
 	int result = sqlite3_exec(db, selectLast100RecordsQuery, processQueryResults, &last100RecordsQuery, nullptr);
 
 	if (result != SQLITE_OK) {
-		cout << "Error occurred while retrieving data" << endl;
+		//cout << "Error occurred while retrieving data" << endl;
+		Logger::Error("Error occurred while retrieving data");
 		return false;
 	}
 
