@@ -39,7 +39,11 @@ add_subdirectory(lib)
 add_subdirectory(protos)
 add_subdirectory(thirdParty)
 
-if(WIN32)
+# Add an option to enable/disable building the tests
+option(BUILD_TESTS "Build the tests" ON)
+
+
+if(BUILD_TESTS)
 add_subdirectory(lib_Test)
 endif()
 # Find and link OpenCV
@@ -75,12 +79,15 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
     )
 endfunction()
 
-# Conditionally build ServerMain or ClientMain based on the platform
-if(WIN32)
-    # If on Windows, build ServerMain
+# Add options to build server, client, or both
+option(BUILD_SERVER "Build the server" ON)
+option(BUILD_CLIENT "Build the client" ON)
+
+# Conditionally build ServerMain and/or ClientMain based on the options
+if(BUILD_SERVER)
     add_common_executable(ServerMain ServerMain.cpp)
-    add_common_executable(ClientMain ClientMain.cpp)
-else()
-    # If not on Windows, build ClientMain
+endif()
+
+if(BUILD_CLIENT)
     add_common_executable(ClientMain ClientMain.cpp)
 endif()
