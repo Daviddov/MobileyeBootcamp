@@ -49,3 +49,9 @@ RUN apt install build-essential cmake libgtk2.0-dev pkg-config \
     rm -rf opencv
 
 RUN apt-get clean
+
+RUN cd mnt && cmake -B build && cmake --build build --config Release --parallel 
+
+WORKDIR /mnt/build/
+
+CMD ./ClientMain

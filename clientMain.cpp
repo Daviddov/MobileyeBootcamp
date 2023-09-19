@@ -11,7 +11,7 @@ int main() {
 	double frameDiff = configManager.getFieldValue<double>("cameraThreshold");
 	int numFrames = configManager.getFieldValue<int>("numFrames");
 	string videoPath = configManager.getFieldValue<string>("videoPath");
-	cout << videoPath << endl;
+	
 	//log init
 	LogPriority priority = InfoPriority;
 	mutex logMutex;

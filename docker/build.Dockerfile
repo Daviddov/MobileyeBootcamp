@@ -9,3 +9,7 @@ RUN apt-get update && apt-get install -y \
     libavformat-dev \
     libswscale-dev \
     libdc1394-22 
+    
+WORKDIR /mnt/build
+
+CMD ./ClientMain

@@ -17,7 +17,8 @@ ConfigurationManager::ConfigurationManager(const std::string& filename) {
 void ConfigurationManager::defaultConfiguration() {
     config["cameraThreshold"] = 0.9;
     config["backendQueueSize"] = 5;
-    config["cameraIP"] = "0.0.0.0";
+    config["cameraIP"] = "192.168.8.101";
+    //config["cameraIP"] = "0.0.0.0";
     config["cameraPort"] = "50051";
     config["backendIP"] = "127.0.0.1";
     config["backendPort"] = "50051";

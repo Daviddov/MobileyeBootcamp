@@ -63,10 +63,10 @@ docker build -f docker/grpc.Dockerfile --build-arg GRPC_VERSION=1.34.0 --build-a
 
 docker run -it --rm --network host -v $(pwd):/mnt grpc-cmake:1.34.0
 
-### Build Examples
 
-```bash
-cmake -B build && cmake -B build && cmake --build build --config Release --parallel
+
+### bash
+cmake -B build && cmake --build build --config Release --parallel
 cd  build
 ./ClientMain
 
