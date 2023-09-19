@@ -1,6 +1,6 @@
 #pragma once
-#include "../thirdParty/nlohmann_json/json.hpp"
-#include "../thirdParty/lib_logger/Logger.h"
+#include "json.hpp"
+#include "Logger.h"
 #include <fstream>
 #include <iostream>
 #include <string> // Add this for string data type

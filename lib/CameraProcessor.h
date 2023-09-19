@@ -1,7 +1,8 @@
 #pragma once 
 #include "FrameWarp.h"
-#include "../thirdParty/lib_logger/Logger.h"
+#include "Logger.h"
 #include <thread>
+
 using namespace std;
 
 //#include "Header.h"

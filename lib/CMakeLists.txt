@@ -30,6 +30,9 @@ target_include_directories(${PROJECT_NAME}
 PRIVATE ${OpenCV_INCLUDE_DIRS}
 PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/lib_logger 
+PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/nlohmann_json
+PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/sqlite3
 )
 
 

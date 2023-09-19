@@ -3,7 +3,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "FrameWarp.h"
-#include "../thirdParty/lib_logger/Logger.h"
+#include "Logger.h"
 
 #ifndef _SAFE_QUEUE_H_
 #define _SAFE_QUEUE_H_

@@ -1,9 +1,8 @@
 #pragma once
 //#include "Header.h"
 #include <opencv2/opencv.hpp>
-#include "../thirdParty/sqlite3/sqlite3.h"
-#include "../thirdParty/sqlite3/sqlite3.h"
-#include "../thirdParty/lib_logger/Logger.h"
+#include "sqlite3.h"
+#include "Logger.h"
 #include "FrameWarp.h"
 
 struct GetFromDataBase {
