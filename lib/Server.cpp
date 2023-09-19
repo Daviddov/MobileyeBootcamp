@@ -22,9 +22,11 @@ void ServerProcessor::run() {
 	while (active) {
 
 		if (dataFromCamera.empty()) {
-			cout << "whit..." << endl;
+			//cout << "whit..." << endl;
+			Logger::Info("whit...");
 			waitForData();
-			cout << "continue..." << endl;
+			//cout << "continue..." << endl;
+			Logger::Info("continue...");
 		}
 		currFrame = dataFromCamera.pop();
 
