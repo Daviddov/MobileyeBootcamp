@@ -39,10 +39,10 @@ add_subdirectory(lib)
 add_subdirectory(thirdParty)
 
 # Add an option to enable/disable building the tests
-option(BUILD_TESTS "Build the tests" ON)
+option(DBUILD_TESTS "Build the tests" ON)
 
 
-if(BUILD_TESTS)
+if(DBUILD_TESTS)
 add_subdirectory(lib_Test)
 endif()
 # Find and link OpenCV
@@ -79,14 +79,14 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
 endfunction()
 
 # Add options to build server, client, or both
-option(BUILD_SERVER "Build the server" ON)
-option(BUILD_CLIENT "Build the client" ON)
+option(DBUILD_SERVER "Build the server" ON)
+option(DBUILD_CLIENT "Build the client" ON)
 
 # Conditionally build ServerMain and/or ClientMain based on the options
-if(BUILD_SERVER)
+if(DBUILD_SERVER)
     add_common_executable(ServerMain ServerMain.cpp)
 endif()
 
-if(BUILD_CLIENT)
+if(DBUILD_CLIENT)
     add_common_executable(ClientMain ClientMain.cpp)
 endif()
