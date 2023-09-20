@@ -36,7 +36,6 @@ set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 # Add subdirectories for libraries
 add_subdirectory(lib)
-add_subdirectory(protos)
 add_subdirectory(thirdParty)
 
 # Add an option to enable/disable building the tests

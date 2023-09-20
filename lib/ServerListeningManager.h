@@ -1,7 +1,7 @@
 #pragma once
 //#include "Header.h"
 #include <grpc++/grpc++.h>
-#include "../protos/service.grpc.pb.h"
+#include "../thirdParty/protos/service.grpc.pb.h"
 #include "ConfigurationManager.h"
 #include "QueueSafe.h"
 #include "FrameWarp.h"
