@@ -7,7 +7,7 @@
 class ServerProcessor {
 
 private:
-
+	int countDetects;
 	bool active;
 
 	FrameWrap currFrame;

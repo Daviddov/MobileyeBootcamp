@@ -5,7 +5,7 @@ using namespace std::chrono;
 using namespace cv;
 
 //c'tor
-ServerProcessor::ServerProcessor(QueueSafe<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition) {
+ServerProcessor::ServerProcessor(QueueSafe<FrameWrap>& queue, condition_variable& condition) :dataFromCamera(queue), conditionVar(condition), countDetects(0) {
 	active = true;
 }
 
@@ -31,7 +31,8 @@ void ServerProcessor::run() {
 		currFrame = dataFromCamera.pop();
 
 		detect_with_YOLO5();
-
+		countDetects++;
+		Logger::Info("counter Detects:", countDetects);
 		RectHandler rect(currFrame, yolo.getOutput(), yolo.getClassList(), sqlHandler);
 		rect.drawAllDetectsBoxs();
 

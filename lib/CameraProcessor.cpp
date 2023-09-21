@@ -7,6 +7,7 @@ using namespace cv;
 //c'tor
 CameraProcessor::CameraProcessor(string path, int numFrames, double frameDiff) {
 	countFrame = 0;
+	countSend = 0;
 	active = true;
 	capture.open(path);
 	numFramesCheck = numFrames;
@@ -52,13 +53,17 @@ void CameraProcessor::run() {
 			Logger::Info("End of stream");
 			break;
 		}
+
 		if (++countFrame == 1 || (countFrame % numFramesCheck == 0 && calcAbsDiff())) {
 			prev = frameWrap.image.clone();
 			frameWrap.timestamp = currentTime();
 			frameWrap.frameNumber = countFrame;
 			connect.sendToServer(frameWrap);
+			 countSend++;
+			 
+			Logger::Info("counter Send:",countSend);
 			Logger::Info("wait 0.3 second");
-			this_thread::sleep_for(chrono::milliseconds(333));
+			this_thread::sleep_for(chrono::milliseconds(666));
 		}
 	}
 }

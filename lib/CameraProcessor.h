@@ -10,7 +10,7 @@ using namespace std;
 class CameraProcessor {
 
 private:
-
+	int countSend;
 	int countFrame;
 
 	string path;
