@@ -66,10 +66,13 @@ docker run -it --rm --network host -v $(pwd):/mnt grpc-cmake:1.34.0
 
 
 ### bash
-cmake -B build -DBUILD_TEST=OFF -DBUILD_SERVER=OFF && cmake --build build --config Release --parallel
+rm -r build/*
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=rp.cmake -DBUILD_TEST=OFF -DBUILD_SERVER=OFF && cmake --build build --config Release --parallel
 cd  build
 ./ClientMain
 
+
+cmake -DCMAKE_TOOLCHAIN_FILE=rp.cmake ..&& make
 
 
 

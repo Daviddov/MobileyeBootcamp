@@ -1,5 +1,5 @@
 # Use a specific Ubuntu LTS version for stability
-FROM ubuntu:20.04
+FROM arm32v7/ubuntu:20.04
 
 # Update the package list and install necessary dependencies in a single RUN step
 RUN apt-get update && \
@@ -15,6 +15,9 @@ RUN apt-get update && \
 # Clean up package cache to reduce image size
 RUN apt-get clean
 
-#WORKDIR /mnt/build
+COPY /build /app
+# You might want to set a working directory if needed
+ WORKDIR /app
 
-#CMD ./ClientMain
+# Specify the command to run when the container starts
+ CMD ["./ClientMain"]
