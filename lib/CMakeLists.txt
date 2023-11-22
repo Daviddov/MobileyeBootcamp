@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(lib VERSION 1.0)
 
+
 # Find and link OpenCV
 find_package(OpenCV REQUIRED)
 
@@ -34,9 +35,11 @@ PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/nlohmann_json
 PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/sqlite3
 )
 
+
 target_link_libraries(${PROJECT_NAME} 
 PRIVATE 
 	${OpenCV_LIBS}
+
 	gRPC::grpc++_reflection
     protobuf::libprotobuf
 )
