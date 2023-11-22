@@ -31,7 +31,7 @@ add_subdirectory(lib)
 add_subdirectory(thirdParty)
 
 # Add an option to enable/disable building the tests
-option(DBUILD_TESTS "Build the tests" ON)
+option(DBUILD_TESTS "Build the tests" OFF)
 
 if(DBUILD_TESTS)
   add_subdirectory(lib_Test)
@@ -71,7 +71,7 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
 endfunction()
 
 # Add options to build server, client, or both
-option(DBUILD_SERVER "Build the server" ON)
+option(DBUILD_SERVER "Build the server" OFF)
 option(DBUILD_CLIENT "Build the client" ON)
 
 # Conditionally build ServerMain and/or ClientMain based on the options
