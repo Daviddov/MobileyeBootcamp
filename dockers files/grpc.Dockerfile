@@ -1,10 +1,7 @@
 FROM ubuntu:20.04
-
 ARG GPRC_VERSION=1.34.0
 ARG NUM_JOBS=8
-
 ENV DEBIAN_FRONTEND noninteractive
-
 # Install package dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
@@ -22,7 +19,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         valgrind \
         cmake \
         libopencv-dev
-
 # gRPC
 # https://github.com/grpc/grpc/tree/master/src/cpp
 # https://github.com/grpc/grpc/blob/master/BUILDING.md
@@ -39,19 +35,4 @@ RUN cd /tmp && \
     make -j${NUM_JOBS} && \
     make install
 
-RUN apt install build-essential cmake libgtk2.0-dev pkg-config \
-    libavcodec-dev libavformat-dev libswscale-dev -y && \
-    git clone https://github.com/opencv/opencv.git && \
-    cd opencv && mkdir build && cd build && \
-    cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS=NO .. && \
-    cat /proc/cpuinfo | grep "processor" | wc -l | xargs make -j && \
-    make install && cd ../.. && \
-    rm -rf opencv
-
 RUN apt-get clean
-
-RUN cd mnt && cmake -B build && cmake --build build --config Release --parallel 
-
-WORKDIR /mnt/build/
-
-CMD ./ClientMain
