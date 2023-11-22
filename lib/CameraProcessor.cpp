@@ -9,7 +9,7 @@ CameraProcessor::CameraProcessor(string path, int numFrames, double frameDiff) {
 	countFrame = 0;
 	countSend = 0;
 	active = true;
-	capture.open(0);
+	capture.open(path);
 	numFramesCheck = numFrames;
 	frameDiffThreshold = frameDiff;
 }
@@ -60,15 +60,7 @@ void CameraProcessor::run() {
 			frameWrap.frameNumber = countFrame;
 			connect.sendToServer(frameWrap);
 			 countSend++;
-			 Size size(800, 600);
-			 resize(frameWrap.image, frameWrap.image, size, CV_8UC3),
-				 cv::imshow("output", frameWrap.image);
-
-			 if (waitKeyEx(1) == 27) {
-
-				 Logger::Info("part server finished by user");
-				 break;
-			 }
+			 
 			Logger::Info("counter Send:",countSend);
 			Logger::Info("wait 0.3 second");
 			this_thread::sleep_for(chrono::milliseconds(666));
