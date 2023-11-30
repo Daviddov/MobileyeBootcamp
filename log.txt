@@ -1,4 +1,0 @@
-
-Tue Oct 24 22:34:23 2023	[Info]	the camera process is started
-
-Tue Oct 24 22:34:23 2023	[Critical]	Error opening video file
