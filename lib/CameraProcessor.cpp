@@ -60,9 +60,9 @@ void CameraProcessor::run() {
 			frameWrap.frameNumber = countFrame;
 			connect.sendToServer(frameWrap);
 			 countSend++;
-			 Size size(800, 600);
+			/* Size size(800, 600);
 			 resize(frameWrap.image, frameWrap.image, size, CV_8UC3),
-				 cv::imshow("output", frameWrap.image);
+				 cv::imshow("output", frameWrap.image);*/
 
 			 if (waitKeyEx(1) == 27) {
 
@@ -70,7 +70,7 @@ void CameraProcessor::run() {
 				 break;
 			 }
 			Logger::Info("counter Send:",countSend);
-			Logger::Info("wait 0.3 second");
+			Logger::Info("wait 0.6 second");
 			this_thread::sleep_for(chrono::milliseconds(666));
 		}
 	}
