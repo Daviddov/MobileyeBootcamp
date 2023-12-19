@@ -3,7 +3,6 @@
 
 CameraConnectionManager::CameraConnectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
 	countTryToConnect = 0;
-	//cout << "port:" << server_address << endl;
 	Logger::Info("port:", server_address);
 }
 
@@ -23,11 +22,11 @@ void CameraConnectionManager::sendToServer(FrameWrap& frameWrap) {
 	grpc::Status status = stub->SendCameraData(&context, request, &response);
 	
 	if (status.ok()) {
-		//cout << "Server response: " << response.acknowledgment() << endl;
 		Logger::Info("Server response: " , response.acknowledgment());
 	}
 	else {
-		//cout << "RPC failed: " << status.error_message() << endl;
+
+
 		Logger::Info("RPC failed: " , status.error_message());
 		countTryToConnect++;
 		this_thread::sleep_for(chrono::milliseconds(2000));

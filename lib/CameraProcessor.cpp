@@ -9,7 +9,7 @@ CameraProcessor::CameraProcessor(string path, int numFrames, double frameDiff) {
 	countFrame = 0;
 	countSend = 0;
 	active = true;
-	capture.open(0);
+	capture.open(0); //for web camera index 0
 	numFramesCheck = numFrames;
 	frameDiffThreshold = frameDiff;
 }
@@ -41,15 +41,14 @@ void CameraProcessor::run() {
 
 	while (active) {
 
-		if (connect.countTryToConnect > 10) {
-			Logger::Info("camera stoped, dont have a connection");
-			//cout << "camera stoped, dont have a connection" << endl;
+		if (connect.countTryToConnect > 4) {
+			Logger::Info("camera stoped, no connection");
 			break;
 		}
 		capture.read(frameWrap.image);
 
 		if (frameWrap.image.empty()) {
-			//cout << "End of stream\n";
+	
 			Logger::Info("End of stream");
 			break;
 		}

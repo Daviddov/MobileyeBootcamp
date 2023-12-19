@@ -5,7 +5,6 @@
 
 using namespace std;
 
-//#include "Header.h"
 
 class CameraProcessor {
 
