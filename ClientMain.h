@@ -1,3 +1,4 @@
+#include "IPAddressFinder.h"
 #include "CameraProcessor.h"
 #include "ConfigurationManager.h"
 
@@ -26,6 +27,10 @@ public:
             return;
         }
 
+        IPAddressFinder ipAddressFinder;
+
+        std::string localIPv4 = ipAddressFinder.getLocalIPv4Address();
+        configManager.editSingleConfigField("backendIP", localIPv4);
         camera.run();
         Logger::Info("The camera process is finished");
     }

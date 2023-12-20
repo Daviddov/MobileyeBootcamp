@@ -43,10 +43,6 @@ void CameraProcessor::run() {
 	string cameraPort = configManager.getFieldValue<string>("backendPort");
 	string backendIP = configManager.getFieldValue<string>("backendIP");
 
-	IPAddressFinder ipAddressFinder;
-
-	std::string localIPv4 = ipAddressFinder.getLocalIPv4Address();//just print to console
-
 	string camera_address = backendIP + ":" + cameraPort;
 
 
