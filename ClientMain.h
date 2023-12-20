@@ -1,6 +1,7 @@
 #include "CameraProcessor.h"
 #include "ConfigurationManager.h"
 
+
 class ClientMain {
 private:
     ConfigurationManager& configManager;  // Reference to the singleton instance
@@ -56,4 +57,5 @@ public:
             }
         } while (choice != 9);
     }
+
 };

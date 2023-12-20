@@ -41,19 +41,13 @@ bool CameraProcessor::calcAbsDiff() {
 void CameraProcessor::run() {
 	ConfigurationManager & configManager = ConfigurationManager::getInstance(); 
 	string cameraPort = configManager.getFieldValue<string>("backendPort");
-	//string localIPv4 = configManager.getFieldValue<string>("backendIP");
+	string backendIP = configManager.getFieldValue<string>("backendIP");
 
 	IPAddressFinder ipAddressFinder;
 
-	std::string localIPv4 = ipAddressFinder.getLocalIPv4Address();
+	std::string localIPv4 = ipAddressFinder.getLocalIPv4Address();//just print to console
 
-	if (!localIPv4.empty()) {
-		std::cout << "Local IPv4 Address: " << localIPv4 << std::endl;
-	}
-	else {
-		std::cerr << "Unable to determine local IPv4 address." << std::endl;
-	}
-	string camera_address = localIPv4 + ":" + cameraPort;
+	string camera_address = backendIP + ":" + cameraPort;
 
 
 	CameraConnectionManager connect(camera_address);
