@@ -20,6 +20,7 @@ void ConfigurationManager::defaultConfiguration() {
     config["cameraIP"] = "0.0.0.0";
     config["cameraPort"] = "50051";
     config["backendPort"] = "50051";
+    config["backendIP"] = "10.0.0.7";
     config["numFrames"] = 30;
     config["videoPath"] = "assets/parking.mp4";
 }
@@ -66,7 +67,7 @@ void ConfigurationManager::editConfig() {
         std::cout << "2. Backend Queue Size" << std::endl;
         std::cout << "3. Camera IP" << std::endl;
         std::cout << "4. Camera Port" << std::endl;
-       // std::cout << "5. Backend IP" << std::endl;
+        std::cout << "5. Backend IP" << std::endl;
         std::cout << "6. Backend Port" << std::endl;
         std::cout << "7. Number of Frames" << std::endl;
         std::cout << "8. video Path" << std::endl;
@@ -104,14 +105,14 @@ void ConfigurationManager::editConfig() {
             editSingleConfigField("cameraPort", cameraPort);
             break;
         }
-        /*case 5: {
+        case 5: {
             std::string backendIP;
             std::cout << "Enter new Backend IP: ";
             std::cin.ignore();
             std::getline(std::cin, backendIP);
             editSingleConfigField("backendIP", backendIP);
             break;
-        }*/
+        }
         case 6: {
             int backendPort;
             std::cout << "Enter new Backend Port: ";
@@ -133,6 +134,7 @@ void ConfigurationManager::editConfig() {
             editSingleConfigField("videoPath", videoPath);
             break;
         }
+
         case 9:
             // Exit the editing menu
             break;

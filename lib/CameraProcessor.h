@@ -29,6 +29,8 @@ public:
 	cv::VideoCapture capture;
 
 	CameraProcessor(string path, int numFrames, double frameDiff);
+	CameraProcessor(int cameraID, int numFrames, double frameDiff);
+	
 
 	~CameraProcessor();
 

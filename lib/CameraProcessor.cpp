@@ -10,11 +10,18 @@ CameraProcessor::CameraProcessor(string path, int numFrames, double frameDiff) {
 	countFrame = 0;
 	countSend = 0;
 	active = true;
-	capture.open(0); //for web camera index 0
+	capture.open(path); 
 	numFramesCheck = numFrames;
 	frameDiffThreshold = frameDiff;
 }
-
+CameraProcessor::CameraProcessor(int cameraID, int numFrames, double frameDiff) {
+	countFrame = 0;
+	countSend = 0;
+	active = true;
+	capture.open(cameraID); //for web camera index 0
+	numFramesCheck = numFrames;
+	frameDiffThreshold = frameDiff;
+}
 //d'tor
 CameraProcessor::~CameraProcessor() {
 	capture.release();
@@ -34,6 +41,7 @@ bool CameraProcessor::calcAbsDiff() {
 void CameraProcessor::run() {
 	ConfigurationManager & configManager = ConfigurationManager::getInstance(); 
 	string cameraPort = configManager.getFieldValue<string>("backendPort");
+	//string localIPv4 = configManager.getFieldValue<string>("backendIP");
 
 	IPAddressFinder ipAddressFinder;
 

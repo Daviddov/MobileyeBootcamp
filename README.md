@@ -61,11 +61,14 @@ export CXX=g++
 ###  docker
 docker build -f docker/grpc.Dockerfile --build-arg GRPC_VERSION=1.34.0 --build-arg NUM_JOBS=8 --tag grpc-cmake:1.34.0 .
 
-docker run -it --rm --network host -v $(pwd):/mnt grpc-cmake:1.34.0
+## define ip for automatic find ip
+docker network create --subnet=10.0.0.0/24 mynetwork
+docker run -it --network mynetwork --ip 10.0.0.7 -v ${PWD}:/mnt f1f
 
 
 
 ### bash
+cd mnt
 rm -r build/*
 cmake -B build  -DBUILD_TEST=OFF -DBUILD_SERVER=OFF && cmake --build build --config Release --parallel
 cd  build

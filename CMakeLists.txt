@@ -71,7 +71,7 @@ function(add_common_executable TARGET_NAME SOURCE_FILE)
 endfunction()
 
 # Add options to build server, client, or both
-option(DBUILD_SERVER "Build the server" ON)
+option(DBUILD_SERVER "Build the server" OFF)
 option(DBUILD_CLIENT "Build the client" ON)
 
 # Conditionally build ServerMain and/or ClientMain based on the options
