@@ -1,6 +1,7 @@
 #include "CameraProcessor.h" 
 #include "ConfigurationManager.h"
 #include "CameraConnectionManager.h"
+#include "IPAddressFinder.h"
 
 using namespace cv;
 
@@ -32,10 +33,19 @@ bool CameraProcessor::calcAbsDiff() {
 
 void CameraProcessor::run() {
 	ConfigurationManager & configManager = ConfigurationManager::getInstance(); 
-
-	string cameraIP = configManager.getFieldValue<string>("backendIP");
 	string cameraPort = configManager.getFieldValue<string>("backendPort");
-	string camera_address = cameraIP + ":" + cameraPort;
+
+	IPAddressFinder ipAddressFinder;
+
+	std::string localIPv4 = ipAddressFinder.getLocalIPv4Address();
+
+	if (!localIPv4.empty()) {
+		std::cout << "Local IPv4 Address: " << localIPv4 << std::endl;
+	}
+	else {
+		std::cerr << "Unable to determine local IPv4 address." << std::endl;
+	}
+	string camera_address = localIPv4 + ":" + cameraPort;
 
 
 	CameraConnectionManager connect(camera_address);

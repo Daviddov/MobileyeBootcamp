@@ -3,6 +3,7 @@
 
 CameraConnectionManager::CameraConnectionManager(const string& server_address) : stub(CameraService::NewStub(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {
 	countTryToConnect = 0;
+
 	Logger::Info("port:", server_address);
 }
 
